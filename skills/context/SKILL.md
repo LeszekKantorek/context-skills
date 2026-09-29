@@ -9,7 +9,7 @@ Keep project memory small enough to retrieve and specific enough to change a fut
 
 ## Start work
 
-1. Read `.context/INDEX.md` when present. Follow only links whose short `Use when…` instruction matches the current task. Check the selected entry's frontmatter status before using its body; `observed` is a lead requiring verification, and `superseded` must not guide new work.
+1. When project memory may help, read a known entry directly or use the short `.context/INDEX.md` to select an obvious match. Use `context-find-related` for a broad or ambiguous search across many entries; delegate that search to one read-only subagent when available. Do not spawn an agent for a known file or a quick index lookup. Treat `observed` as a lead requiring verification and do not use `superseded` entries as current guidance.
 2. Verify a critical claim against current code, tests, or an authoritative source when it may have changed. Treat an entry as a lead, not stronger evidence than the source it describes.
 3. If the index is absent, continue the task. Initialize `.context/` only when the user requests memory or the work yields a clear first durable entry. Do not create an empty taxonomy.
 
@@ -50,6 +50,7 @@ Report what was retrieved, written, updated, proposed, or deliberately skipped, 
 
 ## Companions
 
+- `context-find-related` delegates broad memory searches while leaving simple reads with the main agent.
 - `context-harvest` reviews completed sessions across tasks.
 - `context-feedback` checks whether prior entries help in practice.
 - `context-maintenance` reconciles accumulated memory and its index.

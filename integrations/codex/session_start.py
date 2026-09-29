@@ -38,8 +38,9 @@ def main():
         "hookSpecificOutput": {
             "hookEventName": "SessionStart",
             "additionalContext": (
-                "This project has .context/INDEX.md. Follow only links whose "
-                "Use when instruction matches this task; check entry status."
+                "This project has .context/INDEX.md. Read a known relevant "
+                "entry directly; use context-find-related and a read-only subagent "
+                "only for a broad or ambiguous search across many entries."
             ),
         }
     }
