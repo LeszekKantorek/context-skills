@@ -1,0 +1,16 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Context",
+      "description": "Selective project memory: capture durable knowledge, review sessions, verify usefulness, and maintain the collection.",
+      "skills": [
+        "context",
+        "context-harvest",
+        "context-feedback",
+        "context-maintenance"
+      ]
+    }
+  ]
+}

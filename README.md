@@ -1,0 +1,56 @@
+# context-skills
+
+Project memory that agents can retrieve selectively and keep useful over time.
+
+The skill family follows a simple loop: capture evidence, decide whether it is durable, write the smallest useful memory, check whether it helped, and maintain the collection. It borrows that loop from [reflect](https://github.com/ckorhonen/reflect), while focusing on project knowledge rather than improvements to the agent itself.
+
+## Skills
+
+| Skill | Use it for |
+| --- | --- |
+| [`context`](skills/context/SKILL.md) | Retrieve relevant project memory and consolidate a completed task, experiment, incident, or decision. |
+| [`context-harvest`](skills/context-harvest/SKILL.md) | Review completed sessions together for durable knowledge that was missed during work. |
+| [`context-feedback`](skills/context-feedback/SKILL.md) | Check whether entries were retrieved and helped, using direct, inferred, or unknown usage evidence. |
+| [`context-maintenance`](skills/context-maintenance/SKILL.md) | Resolve duplicate, stale, contradictory, and oversized memory. |
+
+Install all four skills with `npx skills add LeszekKantorek/context-skills`, or select one with `npx skills add LeszekKantorek/context-skills@context` (likewise for the other names).
+
+## Memory belongs to the project
+
+The only fixed retrieval file is `.context/INDEX.md`. Each line contains a link (with the entry title) and a specific `Use when…` instruction of at most two sentences. No index tags, types, or status fields. Projects choose the remaining paths to match their own domains and navigation habits:
+
+```text
+.context/
+├── INDEX.md
+├── architecture/read-model.md
+├── operations/local-release.md
+└── product/freshness.md
+```
+
+An entry may describe a fact, model, constraint, procedure, experience, lesson, decision, convention, preference, or another useful type. The type guides what the entry should explain; it does not choose a directory. Empty category folders are never required.
+
+Each entry starts with minimal YAML frontmatter: `description` (at most four sentences) and `status` (`observed`, `active`, or `superseded`). The index answers *when to open it*; the description answers *what is inside*. An `observed` entry is a useful but unconfirmed lead, not established guidance. Evidence and details belong in the entry body. Superseded entries can remain for history, but are not listed in the index. There are no separate `observations.md` or `changes.md` ledgers; Git records edits.
+
+At task start, read the index and only entries whose `Use when…` instruction matches the work. At a meaningful boundary, compare new evidence with existing memory and write only what would change a future decision or action. Current goals, progress, ownership, and blockers stay in the task's issue or plan.
+
+## Hooks
+
+The optional [Codex hook configuration](integrations/codex/hooks.json) and scripts provide inexpensive retrieval and queue updates:
+
+- `SessionStart` injects a short reminder to consult `.context/INDEX.md` when that file exists.
+- `Stop`, `Interrupt`, `PreCompact`, and `SessionEnd` queue session metadata in Git's private directory. They do not read or commit transcripts, invoke a model, or create memory entries. Harvest lists the latest checkpoint once per session.
+
+To enable these hooks in a project, copy the configuration and scripts as described in [hook setup](integrations/codex/README.md). Codex requires project hook trust review. The skills work without hooks; `context-harvest` can inspect sessions supplied explicitly.
+
+## Safety and cadence
+
+The agent may add a new, evidence-backed entry or update a clearly owned entry within the requested project. It proposes changes to conflicting accepted decisions, user-authored instruction files, hook settings, permissions, and broad reorganizations. It never stores secrets or raw conversation text in `.context/`.
+
+Run `context-harvest` after a set of completed sessions, `context-feedback` periodically when there is usage evidence, and `context-maintenance` when the collection becomes stale or hard to navigate. An empty review is a valid result.
+
+## Development checks
+
+```bash
+python3 -m unittest discover -s tests
+python3 -m py_compile integrations/codex/*.py skills/context-harvest/scripts/*.py
+```
