@@ -9,8 +9,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-START = ROOT / "integrations" / "codex" / "session_start.py"
-END = ROOT / "integrations" / "codex" / "queue_session.py"
+START = ROOT / "integrations" / "codex" / "context_session_start.py"
+END = ROOT / "integrations" / "codex" / "context_queue_session.py"
 SCAN = ROOT / "skills" / "context-harvest" / "scripts" / "scan_queue.py"
 
 

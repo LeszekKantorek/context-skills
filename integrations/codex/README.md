@@ -4,7 +4,7 @@ These optional project hooks implement a cheap start reminder and frequent metad
 
 ## Install in a project
 
-Copy `hooks.json` to the target project's `.codex/hooks.json`, `session_start.py` to `.codex/hooks/context_session_start.py`, and `queue_session.py` to `.codex/hooks/context_queue_session.py`. Review and merge an existing `.codex/hooks.json`; do not overwrite other hooks. If upgrading the previous SessionEnd-only configuration, replace its handler rather than adding a second SessionEnd handler. The commands resolve the project Git root, so they work when Codex starts from a subdirectory.
+Copy `hooks.json` to the target project's `.codex/hooks.json`, and copy `context_session_start.py` and `context_queue_session.py` to `.codex/hooks/` without renaming them. Review and merge an existing `.codex/hooks.json`; do not overwrite other hooks. If upgrading the previous SessionEnd-only configuration, replace its handler rather than adding a second SessionEnd handler. The commands resolve the project Git root, so they work when Codex starts from a subdirectory.
 
 Use `/hooks` in Codex to review and trust the exact project hook definitions. [Official Codex hook documentation](https://learn.chatgpt.com/docs/hooks) describes trust, event timing, and output contracts. Hook settings are project configuration; installation should be a deliberate project choice.
 
