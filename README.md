@@ -2,7 +2,7 @@
 
 Project memory that agents can retrieve selectively and keep useful over time.
 
-The skill family follows a simple loop: capture evidence, decide whether it is durable, write the smallest useful memory, check whether it helped, and maintain the collection. It borrows that loop from [reflect](https://github.com/ckorhonen/reflect), while focusing on project knowledge rather than improvements to the agent itself.
+The skill family follows a simple loop: capture evidence, decide whether it is durable, write the smallest useful memory, check whether it helped, and maintain the collection. It focuses on project knowledge.
 
 ## Skills
 
