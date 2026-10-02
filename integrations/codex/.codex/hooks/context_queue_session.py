@@ -4,8 +4,10 @@
 import datetime
 import json
 import os
+import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 QUEUE_EVENTS = {"Stop", "Interrupt", "PreCompact", "SessionEnd"}
@@ -14,7 +16,7 @@ QUEUE_EVENTS = {"Stop", "Interrupt", "PreCompact", "SessionEnd"}
 def git_paths(cwd):
     try:
         result = subprocess.run(
-            ["git", "-C", str(cwd), "rev-parse", "--show-toplevel", "--git-common-dir"],
+            ["git", "-C", str(cwd), "rev-parse", "--show-toplevel"],
             check=True,
             capture_output=True,
             text=True,
@@ -23,13 +25,10 @@ def git_paths(cwd):
     except (OSError, subprocess.SubprocessError):
         return None
     lines = result.stdout.splitlines()
-    if len(lines) != 2:
+    if len(lines) != 1:
         return None
     root = Path(lines[0]).resolve()
-    common = Path(lines[1])
-    if not common.is_absolute():
-        common = (cwd / common).resolve()
-    return root, common
+    return root
 
 
 def main():
@@ -41,7 +40,9 @@ def main():
         return 0
     session_id = event.get("session_id")
     cwd_value = event.get("cwd")
-    if not isinstance(session_id, str) or not 0 < len(session_id) <= 256:
+    if (not isinstance(session_id, str)
+            or not re.fullmatch(r"[A-Za-z0-9_-]{1,128}", session_id)
+            or re.fullmatch(r"(?i:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])", session_id)):
         return 0
     if not isinstance(cwd_value, str) or not cwd_value:
         return 0
@@ -49,7 +50,7 @@ def main():
     paths = git_paths(cwd)
     if paths is None:
         return 0
-    root, common = paths
+    root = paths
     transcript = event.get("transcript_path")
     if not isinstance(transcript, str):
         transcript = None
@@ -61,19 +62,25 @@ def main():
         "cwd": str(cwd),
         "repo_root": str(root),
         "queued_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "reviewed_at": None,
     }
-    queue_dir = common / "context-skills"
+    queue_dir = root / ".context" / "sessions"
+    temporary_path = None
     try:
-        queue_dir.mkdir(mode=0o700, exist_ok=True)
-        queue_path = queue_dir / "queue.jsonl"
-        descriptor = os.open(queue_path, os.O_WRONLY | os.O_APPEND | os.O_CREAT, 0o600)
-        try:
-            os.write(descriptor, (json.dumps(item, ensure_ascii=False) + "\n").encode("utf-8"))
-        finally:
-            os.close(descriptor)
+        queue_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
+        queue_path = queue_dir / (session_id + ".json")
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=queue_dir,
+                                         suffix=".tmp", delete=False) as handle:
+            temporary_path = Path(handle.name)
+            json.dump(item, handle, ensure_ascii=False, indent=2)
+            handle.write("\n")
+        os.replace(temporary_path, queue_path)
     except OSError as exc:
         print("context-skills: could not queue session: %s" % exc, file=sys.stderr)
         return 1
+    finally:
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
     if event["hook_event_name"] in {"Stop", "PreCompact"}:
         print("{}")
     return 0

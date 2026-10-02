@@ -36,10 +36,10 @@ When the relevant entry is known, the main agent reads it directly. It can also 
 
 ## Hooks
 
-The optional [Codex hook configuration](integrations/codex/hooks.json) and scripts provide inexpensive retrieval and queue updates:
+The optional [Codex hook configuration](integrations/codex/.codex/hooks.json) and scripts provide inexpensive retrieval and queue updates:
 
 - `SessionStart` notes that `.context/INDEX.md` exists; it does not require a subagent or any memory read when irrelevant.
-- `Stop`, `Interrupt`, `PreCompact`, and `SessionEnd` queue session metadata in Git's private directory. They do not read or commit transcripts, invoke a model, or create memory entries. Harvest lists the latest checkpoint once per session.
+- `Stop`, `Interrupt`, `PreCompact`, and `SessionEnd` update session metadata in `.context/sessions/<session-id>.json`. They do not read or commit transcripts, invoke a model, or create memory entries. Harvest lists the latest checkpoint once per session.
 
 To enable these hooks in a project, copy the configuration and scripts as described in [hook setup](integrations/codex/README.md). Codex requires project hook trust review. The skills work without hooks; `context-harvest` can inspect sessions supplied explicitly.
 
@@ -53,5 +53,5 @@ Run `context-harvest` after a set of completed sessions, `context-feedback` peri
 
 ```bash
 python3 -m unittest discover -s tests
-python3 -m py_compile integrations/codex/*.py skills/context-harvest/scripts/*.py
+python3 -m py_compile integrations/codex/.codex/hooks/*.py skills/context-harvest/scripts/*.py
 ```

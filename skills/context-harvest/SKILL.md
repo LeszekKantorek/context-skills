@@ -19,10 +19,10 @@ Use the local helper for queue bookkeeping:
 
 ```bash
 python3 scripts/scan_queue.py <project-root>
-python3 scripts/scan_queue.py <project-root> --mark-reviewed <session-id>
+python3 scripts/scan_queue.py <project-root> --mark-reviewed <session-id> --queued-at <reviewed-checkpoint-timestamp>
 ```
 
-The inventory shows identifiers and transcript availability. Read the corresponding metadata records in `<git-common-dir>/context-skills/queue.jsonl` to locate the selected sources; obtain the common directory with `git rev-parse --git-common-dir`. The second command records the queued revision reviewed; it does not read or delete a transcript. If a resumed session is queued again, review its new evidence on a later pass.
+The inventory shows identifiers and transcript availability. Read `.context/sessions/<session-id>.json` in the target worktree to locate each selected source and retain its `queued_at` timestamp. The second command checks that timestamp and sets `reviewed_at` in the same session file; it does not read or delete a transcript. Each new checkpoint resets `reviewed_at` to `null`. If a resumed session is queued again, review its new evidence on a later pass. Keep `.context/sessions/` ignored by Git; each worktree has its own queue.
 
 ## Boundaries and report
 

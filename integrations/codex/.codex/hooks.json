@@ -8,6 +8,7 @@
           {
             "type": "command",
             "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/context_session_start.py\"",
+            "commandWindows": "powershell.exe -NoProfile -Command \"& python ((git rev-parse --show-toplevel) + '/.codex/hooks/context_session_start.py')\"",
             "statusMessage": "Finding relevant project context",
             "additionalContextLimit": 300
           }
@@ -20,6 +21,7 @@
           {
             "type": "command",
             "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/context_queue_session.py\"",
+            "commandWindows": "powershell.exe -NoProfile -Command \"& python ((git rev-parse --show-toplevel) + '/.codex/hooks/context_queue_session.py')\"",
             "timeout": 3
           }
         ]
@@ -31,6 +33,7 @@
           {
             "type": "command",
             "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/context_queue_session.py\"",
+            "commandWindows": "powershell.exe -NoProfile -Command \"& python ((git rev-parse --show-toplevel) + '/.codex/hooks/context_queue_session.py')\"",
             "timeout": 3
           }
         ]
@@ -42,6 +45,7 @@
           {
             "type": "command",
             "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/context_queue_session.py\"",
+            "commandWindows": "powershell.exe -NoProfile -Command \"& python ((git rev-parse --show-toplevel) + '/.codex/hooks/context_queue_session.py')\"",
             "timeout": 3
           }
         ]
@@ -53,6 +57,7 @@
           {
             "type": "command",
             "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/context_queue_session.py\"",
+            "commandWindows": "powershell.exe -NoProfile -Command \"& python ((git rev-parse --show-toplevel) + '/.codex/hooks/context_queue_session.py')\"",
             "timeout": 3
           }
         ]
