@@ -38,7 +38,7 @@ When the relevant entry is known, the main agent reads it directly. It can also 
 
 The optional [Codex hook configuration](integrations/codex/.codex/hooks.json) and scripts provide inexpensive retrieval and queue updates:
 
-- `SessionStart` notes that `.context/INDEX.md` exists; it does not require a subagent or any memory read when irrelevant.
+- `SessionStart` prints a short reminder to use `context` for relevant project memory and durable learning; it does not require a memory read when irrelevant.
 - `Stop`, `Interrupt`, `PreCompact`, and `SessionEnd` update session metadata in `.context/sessions/<session-id>.json`. They do not read or commit transcripts, invoke a model, or create memory entries. Harvest lists the latest checkpoint once per session.
 
 To enable these hooks in a project, copy the configuration and scripts as described in [hook setup](integrations/codex/README.md). Codex requires project hook trust review. The skills work without hooks; `context-harvest` can inspect sessions supplied explicitly.

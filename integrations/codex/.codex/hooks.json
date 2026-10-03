@@ -7,9 +7,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/context_session_start.py\"",
-            "commandWindows": "powershell.exe -NoProfile -Command \"& python ((git rev-parse --show-toplevel) + '/.codex/hooks/context_session_start.py')\"",
-            "statusMessage": "Finding relevant project context",
+            "command": "echo \"Use context for project memory in .context/INDEX.md: retrieve relevant entries and record durable, evidence-backed learning at meaningful boundaries. Read known entries directly; use context-find-related for broad or ambiguous searches.\"",
+            "commandWindows": "echo \"Use context for project memory in .context/INDEX.md: retrieve relevant entries and record durable, evidence-backed learning at meaningful boundaries. Read known entries directly; use context-find-related for broad or ambiguous searches.\"",
+            "statusMessage": "Loading project context guidance",
             "additionalContextLimit": 300
           }
         ]

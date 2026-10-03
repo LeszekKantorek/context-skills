@@ -10,7 +10,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CODEX = ROOT / "integrations" / "codex" / ".codex"
-START = CODEX / "hooks" / "context_session_start.py"
 END = CODEX / "hooks" / "context_queue_session.py"
 SCAN = ROOT / "skills" / "context-harvest" / "scripts" / "scan_queue.py"
 
@@ -37,8 +36,7 @@ class HookTests(unittest.TestCase):
     def test_windows_commands_from_subdirectory_with_spaces(self):
         hook_dir = self.repo / ".codex" / "hooks"
         hook_dir.mkdir(parents=True)
-        for script in (START, END):
-            (hook_dir / script.name).write_bytes(script.read_bytes())
+        (hook_dir / END.name).write_bytes(END.read_bytes())
         context = self.repo / ".context"
         context.mkdir()
         (context / "INDEX.md").write_text("# Index\n", encoding="utf-8")
@@ -59,17 +57,6 @@ class HookTests(unittest.TestCase):
         item = json.loads(queue.read_text())
         self.assertEqual(item["hook_event_name"], "SessionEnd")
         self.assertEqual(len(list(queue.parent.glob("*.json"))), 1)
-
-    def test_start_only_points_to_existing_index(self):
-        event = {"hook_event_name": "SessionStart", "cwd": str(self.repo)}
-        self.assertEqual(self.invoke(START, event).stdout, "")
-        context = self.repo / ".context"
-        context.mkdir()
-        (context / "INDEX.md").write_text("secret-canary\n", encoding="utf-8")
-        output = self.invoke(START, event).stdout
-        self.assertIn(".context/INDEX.md", output)
-        self.assertNotIn("secret-canary", output)
-        self.assertEqual(json.loads(output)["hookSpecificOutput"]["hookEventName"], "SessionStart")
 
     def test_end_queues_metadata_and_scan_marks_reviewed(self):
         transcript = self.repo / "session.jsonl"
