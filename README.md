@@ -1,57 +1,93 @@
 # context-skills
 
-Project memory that agents can retrieve selectively and keep useful over time.
+Gather, apply, consolidate, and review project knowledge in `.context/`.
 
-The skill family follows a simple loop: capture evidence, decide whether it is durable, write the smallest useful memory, check whether it helped, and maintain the collection. It focuses on project knowledge.
+The four skills support a context lifecycle, not a mandatory sequence. Read a known entry directly, use it in the current action, record durable learning when it occurs, and review the collection when there is a reason to question its quality or usefulness.
 
 ## Skills
 
-| Skill | Use it for |
-| --- | --- |
-| [`context`](skills/context/SKILL.md) | Consolidate durable project knowledge and retrieve relevant entries. |
-| [`context-find-related`](skills/context-find-related/SKILL.md) | Find related project-memory entries through a broad search delegated to a small read-only subagent. |
-| [`context-harvest`](skills/context-harvest/SKILL.md) | Review completed sessions together for durable knowledge that was missed during work. |
-| [`context-feedback`](skills/context-feedback/SKILL.md) | Check whether entries were retrieved and helped, using direct, inferred, or unknown usage evidence. |
-| [`context-maintenance`](skills/context-maintenance/SKILL.md) | Resolve duplicate, stale, contradictory, and oversized memory. |
+| Skill | Use it for | Result |
+| --- | --- | --- |
+| [context-gather](skills/context-gather/SKILL.md) | Unknown, missing, scattered, or conflicting knowledge | Relevant sources, findings, and classified gaps |
+| [context-apply](skills/context-apply/SKILL.md) | Using a known or readily found entry in the current task | A concrete consequence for the action, plan, or check |
+| [context-consolidate](skills/context-consolidate/SKILL.md) | Initial collection, new learning, changed decisions, or selected session review | A small useful memory update, or no change |
+| [context-review](skills/context-review/SKILL.md) | Stale, conflicting, hard-to-find, or misapplied context | Evidence-backed findings and scoped repairs |
 
-Install all five skills with `npx skills add LeszekKantorek/context-skills`, or select one with `npx skills add LeszekKantorek/context-skills@context-find-related` (likewise for the other names). Install `context` and `context-find-related` together for broad-search delegation.
+Install the set with `npx skills add LeszekKantorek/context-skills`, or select one with `npx skills add LeszekKantorek/context-skills@context-apply` (likewise for the other names). Each skill includes its essential instructions; companions can be used when available without requiring the entire sequence.
 
 ## Memory belongs to the project
 
-The only fixed retrieval file is `.context/INDEX.md`. Each line contains a link (with the entry title) and a specific `Use when…` instruction of at most two sentences. No index tags, types, or status fields. Projects choose the remaining paths to match their own domains and navigation habits:
+The project chooses filenames, folders, body layout, and navigation. Start with a useful note. Add an index, links, or topic folders when they help actual work. No index, category tree, or body template is required.
 
-```text
-.context/
-├── INDEX.md
-├── architecture/read-model.md
-├── operations/local-release.md
-└── product/freshness.md
+Each knowledge entry has a small YAML frontmatter:
+
+| Field | Required | Meaning |
+| --- | --- | --- |
+| `description` | Yes | Short explanation of content and use |
+| `status` | Yes | `active`, `deprecated`, or `superseded` |
+| `related` | No | List of useful related-entry paths |
+| `superseded_by` | When superseded | Path to the replacement entry |
+
+Paths in `related` and `superseded_by` are relative to the containing entry. Relations need not be reciprocal. Keep links working after moving a file and avoid replacement cycles.
+
+`active` means current and useful; an explicitly uncertain claim stays uncertain. `deprecated` means withdrawn without a direct successor. `superseded` means replaced by the linked entry. Sources, rationale, hypotheses, and evidence limits belong in ordinary prose.
+
+```markdown
+---
+description: How to preserve an export snapshot when reopening a completed export.
+status: active
+related:
+  - export-requests.md
+---
+
+# Reopening an export
+
+Reopening preserves the snapshot associated with the accepted request.
+Obtaining current data requires a new request. See the adopted product
+decision for its rationale and applicability.
 ```
 
-An entry may describe a fact, model, constraint, procedure, experience, lesson, decision, convention, preference, or another useful type. The type guides what the entry should explain; it does not choose a directory. Empty category folders are never required.
+This is an illustrative form, not a required body template. [Entry examples](skills/context-consolidate/references/entry-examples.md) show different shapes, including uncertain observations and replacement links. The [writing prompts](skills/context-consolidate/SKILL.md#select-and-reconcile-knowledge) help choose what is worth retaining without turning information types into folders.
 
-Each entry starts with minimal YAML frontmatter: `description` (at most four sentences) and `status` (`observed`, `active`, or `superseded`). The index answers *when to open it*; the description answers *what is inside*. An `observed` entry is a useful but unconfirmed lead, not established guidance. Evidence and details belong in the entry body. Superseded entries can remain for history, but are not listed in the index. There are no separate `observations.md` or `changes.md` ledgers; Git records edits.
+## From knowledge to action
 
-When the relevant entry is known, the main agent reads it directly. It can also scan a short index for an obvious match. `context-find-related` delegates only broad or ambiguous searches across many entries to one read-only subagent when the host supports delegation; the parent receives concise findings instead of the entire scan. Separate context can keep a large search out of the parent conversation, but does not guarantee fewer total tokens. At a meaningful boundary, compare new evidence with existing memory and write only what would change a future decision or action. Current goals, progress, ownership, and blockers stay in the task's issue or plan.
+For a snapshot requirement, gather finds the adopted decision and its basis. Apply connects it to behavior: reopening an export must retain its original snapshot. Consolidate records a new supported finding when it changes future work. Review asks whether later work can find and use the current rule.
 
-## Hooks
+A source being available, read, cited, or correctly applied are different observations. Passing implementation checks does not establish a good product effect. Preserve those distinctions and avoid claiming a skill caused an improvement without evidence.
 
-The optional [Codex hook configuration](integrations/codex/.codex/hooks.json) and scripts provide inexpensive retrieval and queue updates:
+Keep task progress, blockers, and next steps in the task's plan or handoff. Record only durable knowledge useful to future work. Do not store secrets or raw conversations in memory. An unresolved conflict between accepted decisions needs a decision within the appropriate authority. Report-only requests remain report-only; use existing authorization for requested updates.
 
-- `SessionStart` prints a short reminder to use `context` for relevant project memory and durable learning; it does not require a memory read when irrelevant.
-- `Stop`, `Interrupt`, `PreCompact`, and `SessionEnd` update session metadata in `.context/sessions/<session-id>.json`. They do not read or commit transcripts, invoke a model, or create memory entries. Harvest lists the latest checkpoint once per session.
+## Working with Context-Driven Engineering
 
-To enable these hooks in a project, copy the configuration and scripts as described in [hook setup](integrations/codex/README.md). Codex requires project hook trust review. The skills work without hooks; `context-harvest` can inspect sessions supplied explicitly.
+Context-skills gives CDE durable, retrievable project knowledge. CDE handles intent, investigations, decisions, implementation evidence, effects, and task coordination. Both can be used independently.
 
-## Safety and cadence
+When both are present:
 
-The agent may add a new, evidence-backed entry or update a clearly owned entry within the requested project. It proposes changes to conflicting accepted decisions, user-authored instruction files, hook settings, permissions, and broad reorganizations. It never stores secrets or raw conversation text in `.context/`.
+- CDE discovery reuses gather findings and application consequences.
+- CDE context maintenance uses consolidate for a single update to `.context/`.
+- CDE context audits reuse review findings without repeating the same scan.
+- Experiments and adopted decisions may feed consolidation; task handoffs retain transient execution state.
 
-Run `context-harvest` after a set of completed sessions, `context-feedback` periodically when there is usage evidence, and `context-maintenance` when the collection becomes stale or hard to navigate. An empty review is a valid result.
+No CDE installation or private research directory is required. This repository implements the context side of that relationship; it does not change a separately installed CDE library.
+
+## Optional hooks and session review
+
+The [Codex integration](integrations/codex/README.md) provides a short start reminder and session metadata registration:
+
+- `SessionStart` reminds the agent to apply relevant context, gather missing knowledge, and consolidate durable learning.
+- `Stop`, `Interrupt`, `PreCompact`, and `SessionEnd` run `context_queue_session.py`.
+- Each session has one JSON record under `.context/sessions/`, with `session_id`, `updated_at`, `transcript_path`, and `reviewed_at`.
+- Files have storage names such as `session-000001.json`. Identity comes from `session_id`, including after a file is renamed.
+- Registration does not open transcripts, invoke a model, or schedule consolidation.
+
+The `sessions/` directory is technical state, excluded from knowledge retrieval and frontmatter requirements. Ignore it in Git. Consolidate can review queued checkpoints using its [queue helper](skills/context-consolidate/scripts/scan_queue.py), or review explicitly supplied sessions without hooks.
 
 ## Development checks
 
-```bash
-python3 -m unittest discover -s tests
-python3 -m py_compile integrations/codex/.codex/hooks/*.py skills/context-harvest/scripts/*.py
+The scripts use Python's standard library. Run from the repository root:
+
+```text
+python -m unittest discover -s tests -v
 ```
+
+Use `python3` where that is the Python 3 executable. These automated checks exercise the hook and queue behavior. They do not evaluate an agent's skill selection, application of knowledge, or quality of consolidation. Structural validation does not by itself prove that an agent follows the skills.

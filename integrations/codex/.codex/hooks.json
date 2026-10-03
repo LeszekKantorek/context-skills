@@ -7,8 +7,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"Use context for project memory in .context/INDEX.md: retrieve relevant entries and record durable, evidence-backed learning at meaningful boundaries. Read known entries directly; use context-find-related for broad or ambiguous searches.\"",
-            "commandWindows": "echo \"Use context for project memory in .context/INDEX.md: retrieve relevant entries and record durable, evidence-backed learning at meaningful boundaries. Read known entries directly; use context-find-related for broad or ambiguous searches.\"",
+            "command": "echo \"Use context-apply for relevant knowledge in .context; context-gather when sources are missing or unclear; context-consolidate for durable learning. Read only what the task needs. No index or full skill sequence is required. Exclude .context/sessions from knowledge retrieval.\"",
+            "commandWindows": "echo \"Use context-apply for relevant knowledge in .context; context-gather when sources are missing or unclear; context-consolidate for durable learning. Read only what the task needs. No index or full skill sequence is required. Exclude .context/sessions from knowledge retrieval.\"",
             "statusMessage": "Loading project context guidance",
             "additionalContextLimit": 300
           }

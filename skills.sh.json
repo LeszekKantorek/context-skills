@@ -4,13 +4,12 @@
   "groupings": [
     {
       "title": "Context",
-      "description": "Selective project memory: capture durable knowledge, review sessions, verify usefulness, and maintain the collection.",
+      "description": "Gather, apply, consolidate, and review project knowledge in .context.",
       "skills": [
-        "context",
-        "context-find-related",
-        "context-harvest",
-        "context-feedback",
-        "context-maintenance"
+        "context-gather",
+        "context-apply",
+        "context-consolidate",
+        "context-review"
       ]
     }
   ]
