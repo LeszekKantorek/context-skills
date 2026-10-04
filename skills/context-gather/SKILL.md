@@ -10,7 +10,7 @@ Return enough grounded context to choose the next action. Start with the questio
 ## Find and interpret sources
 
 1. Identify the decision or action the missing knowledge should support. For initial collection, use realistic future tasks to select useful topics.
-2. Read known relevant files or search `.context/` through the project's own navigation. An index is optional. Exclude `.context/sessions/`, which contains integration metadata. If memory is absent or insufficient, follow relevant project documentation, accepted decisions, code, and available evidence.
+2. Read known relevant files or search `.context/` through the project's own navigation. Exclude `.context/sessions/`, which contains integration metadata. If memory is absent or insufficient, follow relevant project documentation, accepted decisions, code, and available evidence.
 3. Use entry descriptions to select what to read. Follow `related` only when it helps answer the question. Check the original source when an important claim may have changed.
 4. Distinguish implemented behavior from intended behavior, and hypotheses or proposals from accepted decisions. Resolve authority and applicability from evidence, not the newest date. Preserve unresolved contradictions.
 5. Classify remaining gaps: an existing fact to retrieve, an empirical claim to investigate, or a choice requiring a decision. Stop searching when further reading cannot settle the next action, unless the user requested complete coverage.

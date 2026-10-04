@@ -39,7 +39,7 @@ Every knowledge entry starts with YAML frontmatter:
 
 Active means current and useful, not that every statement is confirmed. Deprecated means withdrawn without a direct successor. Superseded means another entry replaces it. Keep uncertainty, sources, and rationale in ordinary prose. See [entry examples](references/entry-examples.md) when choosing a form or linking replacements.
 
-The project chooses filenames, folders, body layout, and navigation. An index is optional. Start with a useful note; expand or split it when the project's needs justify that. Do not add fields or a fixed taxonomy merely to make entries uniform. `.context/sessions/` is reserved for optional integration records and does not use knowledge frontmatter.
+The project chooses filenames, folders, body layout, and navigation. Start with a useful note; expand or split it when the project's needs justify that. Do not add fields or a fixed taxonomy merely to make entries uniform. `.context/sessions/` is reserved for optional integration records and does not use knowledge frontmatter.
 
 When replacing an entire entry, mark it superseded and link to its successor; when correcting the same topic, update it in place. Preserve useful history and fix affected links after renaming. Do not introduce replacement cycles or infer supersession solely from dates.
 
