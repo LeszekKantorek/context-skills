@@ -10,8 +10,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CODEX = ROOT / "integrations" / "codex" / ".codex"
-HOOK = CODEX / "hooks" / "context_queue_session.py"
-SCAN = ROOT / "skills" / "context-consolidate" / "scripts" / "scan_queue.py"
+HOOK = CODEX / "hooks" / "context_register_session.py"
+SCAN = ROOT / "skills" / "context-import-sessions" / "scripts" / "context_read_sessions.py"
 FIELDS = {"session_id", "updated_at", "transcript_path", "reviewed_at"}
 
 

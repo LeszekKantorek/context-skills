@@ -4,12 +4,11 @@
   "groupings": [
     {
       "title": "Context",
-      "description": "Gather, apply, consolidate, and review project knowledge in .context.",
+      "description": "Apply project knowledge, gather and maintain context, and import saved sessions.",
       "skills": [
         "context-gather",
         "context-apply",
-        "context-consolidate",
-        "context-review"
+        "context-import-sessions"
       ]
     }
   ]
