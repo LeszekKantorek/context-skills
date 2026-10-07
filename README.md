@@ -71,13 +71,6 @@ npx skills add LeszekKantorek/context-skills
 * Do not copy secrets or raw transcripts into knowledge entries.
 * A successful retrieval check does not prove a future agent will apply the knowledge correctly.
 
-## Working with Context-Driven Engineering
-
-* CDE discovery can reuse the knowledge and consequences identified by apply.
-* CDE context maintenance and audits can use gather for writing and collection review.
-* Saved session processing uses import sessions, followed by gather.
-* Reuse supplied decisions and evidence; do not repeat their investigation merely to save them.
-
 ## Optional Codex hooks
 
 * The [Codex integration](integrations/codex/README.md) adds a startup reminder and session registration.
