@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Register a session checkpoint without opening its transcript."""
+"""Read session checkpoint records or mark a checkpoint processed by context-gather."""
 
+import argparse
 import datetime
 import json
 import os
@@ -73,63 +74,56 @@ def write_record(path, row):
             temporary.unlink(missing_ok=True)
 
 
-QUEUE_EVENTS = {"Stop", "Interrupt", "PreCompact", "SessionEnd"}
 
-
-def register(directory, session_id, transcript_path):
-    directory.mkdir(parents=True, exist_ok=True)
+def inventory(directory, session_id=None, expected_update=None):
+    if not directory.exists():
+        if session_id:
+            raise ValueError("session is not in the queue")
+        return {}
     with queue_lock(directory):
         sessions = read_sessions(directory)
-        previous = sessions.get(session_id)
-        now = datetime.datetime.now(datetime.timezone.utc)
-        if previous:
-            path, row = previous
-            # Keep distinct checkpoints if the clock repeats or moves back.
-            last = datetime.datetime.fromisoformat(row["updated_at"].replace("Z", "+00:00"))
-            now = max(now, last + datetime.timedelta(microseconds=1))
-        else:
-            number = len(sessions) + 1
-            path = directory / ("session-%06d.json" % number)
-            while path.exists():
-                number += 1
-                path = directory / ("session-%06d.json" % number)
-        write_record(path, {
-            "session_id": session_id,
-            "updated_at": now.isoformat(),
-            "transcript_path": transcript_path,
-            "reviewed_at": None,
-        })
+        if session_id:
+            if expected_update is None:
+                raise ValueError("--updated-at is required when marking a review")
+            if session_id not in sessions:
+                raise ValueError("session is not in the queue")
+            path, row = sessions[session_id]
+            if row["updated_at"] != expected_update:
+                raise ValueError("session checkpoint changed; review its new evidence first")
+            if row["reviewed_at"] is None:
+                row["reviewed_at"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+                write_record(path, row)
+        return sessions
 
 
 def main():
-    try:
-        event = json.load(sys.stdin)
-    except (ValueError, OSError):
-        return 0
-    if not isinstance(event, dict) or event.get("hook_event_name") not in QUEUE_EVENTS:
-        return 0
-    session_id, cwd = event.get("session_id"), event.get("cwd")
-    if not isinstance(session_id, str) or not session_id or not isinstance(cwd, str) or not cwd:
-        return 0
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("project_root", type=Path)
+    parser.add_argument("--mark-reviewed", metavar="SESSION_ID")
+    parser.add_argument("--updated-at", help="Exact updated_at of the checkpoint actually reviewed")
+    args = parser.parse_args()
+    if bool(args.mark_reviewed) != (args.updated_at is not None):
+        parser.error("--mark-reviewed and --updated-at must be supplied together")
     try:
         result = subprocess.run(
-            ["git", "-C", cwd, "rev-parse", "--show-toplevel"], check=True,
-            capture_output=True, text=True, timeout=1,
+            ["git", "-C", str(args.project_root.resolve()), "rev-parse", "--show-toplevel"],
+            check=True, capture_output=True, text=True, timeout=1,
         )
-    except (OSError, subprocess.SubprocessError):
-        return 0
-    transcript = event.get("transcript_path")
-    if isinstance(transcript, str) and transcript:
-        transcript = str((Path(cwd) / transcript).resolve())
-    else:
-        transcript = None
-    try:
-        register(Path(result.stdout.strip()) / ".context" / "sessions", session_id, transcript)
-    except (OSError, ValueError, TypeError) as exc:
-        print("context-skills: could not register session: %s" % exc, file=sys.stderr)
-        return 1
-    if event["hook_event_name"] in {"Stop", "PreCompact"}:
-        print("{}")
+        directory = Path(result.stdout.strip()) / ".context" / "sessions"
+        sessions = inventory(directory, args.mark_reviewed, args.updated_at)
+    except (OSError, ValueError, subprocess.SubprocessError) as exc:
+        print("context-skills: could not inspect queue: %s" % exc, file=sys.stderr)
+        return 2
+    pending = [(path, row) for path, row in sessions.values() if row["reviewed_at"] is None]
+    print("queued: %d, reviewed: %d, pending: %d" % (
+        len(sessions), len(sessions) - len(pending), len(pending)))
+    for path, row in pending:
+        transcript = row["transcript_path"]
+        available = bool(transcript) and Path(transcript).is_file()
+        print("%s  %s  transcript=%s  record=%s" % (
+            row["session_id"], row["updated_at"],
+            "available" if available else "missing", path,
+        ))
     return 0
 
 

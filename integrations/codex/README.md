@@ -1,31 +1,44 @@
 # Codex hooks for context-skills
 
-The optional integration keeps a short context reminder and a local queue of session checkpoints. Registration stores metadata only; context-consolidate performs the actual session review when requested.
-
 ## Install in a project
 
-Copy the `.codex` directory from `integrations/codex/` into the target project's root:
+* Copy the `.codex` directory from `integrations/codex/` into the target project.
+* Merge with existing configuration without overwriting unrelated hooks.
+* When upgrading, replace references to `context_queue_session.py` with `context_register_session.py`.
+* Add `.context/sessions/` to the project's `.gitignore`.
+* Use `/hooks` in Codex to review and trust the project definitions.
+* See the [official hook documentation](https://learn.chatgpt.com/docs/hooks) for the host contract.
 
 ```text
 .codex/
-├── hooks.json
-└── hooks/
-    └── context_queue_session.py
+  hooks.json
+  hooks/
+    context_register_session.py
 ```
 
-Merge with existing project configuration without overwriting unrelated hooks. Add `.context/sessions/` to the target project's `.gitignore`. Use `/hooks` in Codex to review and trust the project definitions. See the [official hook documentation](https://learn.chatgpt.com/docs/hooks) for the host's input and output contract.
+* Require Git and Python 3 on `PATH`.
+* Use `python3` on Linux/macOS; Windows commands use PowerShell and `python`.
+* Commands resolve the Git root even from subdirectories with spaces.
+* The registration hook exits quietly outside a Git checkout.
 
-The registration hooks require Git and Python 3 on `PATH`: `python3` on Linux/macOS or `python` on Windows. Windows commands use `commandWindows` with PowerShell. Commands resolve the repository root, including when work starts in a subdirectory containing spaces. The hook exits quietly outside a Git checkout; the skills can still work with explicitly supplied context and sessions.
+## Hook responsibilities
 
-## What runs
+| Hook | Action |
+| --- | --- |
+| `SessionStart` | Explain apply, gather, import sessions, and the required context index. |
+| `Stop`, `Interrupt`, `PreCompact`, `SessionEnd` | Register a session checkpoint through `context_register_session.py`. |
 
-`SessionStart` uses `echo` to remind the agent to apply relevant context, gather missing sources, and consolidate durable learning. It does not require an index or a full memory read.
-
-`Stop`, `Interrupt`, `PreCompact`, and `SessionEnd` run the registration script synchronously with a three-second timeout. They do not open transcripts or create knowledge entries. The script returns no continuation or blocking decisions.
+* Registration runs synchronously with a three-second timeout.
+* It does not open transcripts, create the knowledge index, or invoke skills.
+* Gather creates the index when processing knowledge.
+* Import sessions reads selected transcripts and invokes gather.
+* Hooks do not schedule imports or return continuation or blocking decisions.
 
 ## Session records
 
-The queue lives in `.context/sessions/` for the current worktree. It is technical state, excluded from knowledge retrieval and entry frontmatter rules. Each record has exactly four fields:
+* Store records in `.context/sessions/` for the current Git worktree.
+* Exclude this directory from knowledge retrieval, index rows, and article frontmatter rules.
+* Keep exactly these four fields:
 
 ```json
 {
@@ -36,30 +49,41 @@ The queue lives in `.context/sessions/` for the current worktree. It is technica
 }
 ```
 
-`session_id` identifies the session. It is never inferred from the filename. New records use names such as `session-000001.json`; registration also finds and updates an existing renamed record by its JSON identity.
+* Identify sessions by `session_id`, never by filename.
+* New files use names such as `session-000001.json`; renamed records retain their identity.
+* Each registration advances `updated_at` and resets `reviewed_at` to null.
+* `transcript_path` is absolute when supplied; otherwise it is null.
+* Do not store transcript text or message content in these records.
 
-`updated_at` identifies the latest registered checkpoint. Each new event updates it and resets `reviewed_at` to null. `transcript_path` is an absolute path when supplied, otherwise null. No transcript content, message text, event name, turn ID, or project-directory metadata is stored in the record.
+## Import selected checkpoints
 
-Both the registration hook and review helper use the same OS-backed `.queue.lock` and replace JSON records through temporary files. The lock makes checking a checkpoint and marking it reviewed one operation relative to registration. It is automatically released on process exit; the small lock file remains and should not be deleted while helpers are running. A busy queue produces an explicit error after a bounded wait.
-
-Malformed records and duplicate `session_id` values produce an error rather than silently choosing a record or overwriting ambiguous state. The four-field record format is the only supported format.
-
-## Review selected checkpoints
-
-Run the helper shipped with context-consolidate, using its installed path:
-
-```text
-python /path/to/context-consolidate/scripts/scan_queue.py /path/to/project
-```
-
-The inventory shows each pending session's identity, checkpoint, transcript availability, and record path. It does not analyze session content. Inspect selected project-relevant sessions, retain their `updated_at` values, and consolidate useful evidence.
-
-After actually reviewing a checkpoint:
+* Use `context-import-sessions` with `context-gather` installed.
+* Inventory records through the helper shipped with the import skill:
 
 ```text
-python /path/to/context-consolidate/scripts/scan_queue.py /path/to/project --mark-reviewed SESSION_ID --updated-at CHECKPOINT_TIMESTAMP
+python /path/to/context-import-sessions/scripts/context_read_sessions.py /path/to/project
 ```
 
-Both options are required together. If a newer event was registered, the helper refuses to mark the old checkpoint as reviewed. Do not substitute the newer timestamp without inspecting its evidence. Repeating a mark for the same checkpoint is harmless.
+* Retain the selected checkpoint's `updated_at` and read its transcript.
+* Invoke gather with the loaded material and source locations.
+* Mark the checkpoint only after gather completes successfully:
 
-Checkpoints can belong to active sessions. Review an idle session or a stable snapshot; a missing transcript is missing evidence, not a completed review. Each worktree owns its local queue. Registration does not schedule a review, and abrupt termination can prevent the final hook from running.
+```text
+python /path/to/context-import-sessions/scripts/context_read_sessions.py /path/to/project --mark-reviewed SESSION_ID --updated-at CHECKPOINT_TIMESTAMP
+```
+
+* Both options are required together.
+* Leave missing evidence, incomplete processing, and report-only imports pending.
+* A completed gather pass with no durable findings may still mark the checkpoint.
+* A changed checkpoint remains pending; inspect new evidence before retrying.
+* Repeating a mark for the same checkpoint is harmless.
+
+## Storage guarantees
+
+* Registration and import bookkeeping share an OS-backed `.queue.lock`.
+* JSON updates replace files through temporary files.
+* The lock prevents an old import from overwriting a newly registered checkpoint.
+* A busy queue returns an error after a bounded wait.
+* Malformed records and duplicate session IDs return errors instead of overwriting ambiguous state.
+* The lock file remains after process exit; do not delete it while helpers are running.
+* Each worktree owns its local queue; abrupt termination can prevent the final registration.

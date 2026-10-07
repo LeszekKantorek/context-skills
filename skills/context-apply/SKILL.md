@@ -1,26 +1,41 @@
 ---
 name: context-apply
-description: Apply relevant project knowledge from .context to the current action, plan, or validation. Use for a known entry, an obvious match, resumed work, or a changed constraint. For discovering missing or conflicting sources, use context-gather.
+description: Read the .context index and relevant knowledge entries, then apply them to the current task. Use when planning, implementing, validating, or resuming work. Use context-gather to create, update, or review stored knowledge.
 ---
 
 # Apply Context
 
-Connect relevant knowledge to observable behavior in the current task. Reading or citing an entry alone does not establish that the result follows it.
+## Step 1: Read the index
 
-## Use only what the action needs
+* **Start with `.context/INDEX.md`.** Reuse an existing project index if it has another name.
+* Select entries by their `Use when` conditions and the current task.
+* Open the linked entries before acting; the index is a navigation table, not the full knowledge.
+* If the index is missing, inspect relevant `.context/` files directly and report the missing index.
+* Exclude `.context/sessions/`; session files belong to `context-import-sessions`.
 
-1. Read the known entry or obvious match through the project's navigation. Reuse sources already read when still applicable. A prior gather step is optional; exclude `.context/sessions/` from knowledge retrieval.
-2. Check scope and status. Every entry has `description` and `status` (`active`, `deprecated`, or `superseded`) in YAML frontmatter. Optional `related` lists entry-relative paths. A superseded entry requires an entry-relative `superseded_by` path: follow it to current knowledge, stopping at a broken link or cycle. Deprecated entries are withdrawn. Active does not turn a hypothesis into a fact.
-3. Check consequential premises against current evidence when they may have changed. Code describes implementation, not necessarily accepted intent. Resolve conflicts from their authority and scope rather than silently choosing the easiest interpretation.
-4. State the practical consequence where it matters: the behavior to preserve, the option ruled out, or the condition the next action must satisfy. Put it in the existing plan, change, or result; no separate application report is required.
-5. Continue the authorized task. Tie meaningful validation to that consequence and distinguish planned checks from executed evidence.
+## Step 2: Resolve the applicable knowledge
 
-For example, an adopted decision that an export preserves the snapshot at request acceptance means reopening it must preserve that snapshot. Requesting current data is a separate action. Merely mentioning the decision while changing reopening to use current records fails to apply it.
+* Read each selected entry's `description`, `status`, and relevant content.
+* Reuse knowledge already read in this session when it still applies.
+* Check important claims against current evidence when they may have changed.
+* Preserve the distinction between an accepted decision, implemented behavior, and a hypothesis.
+* If knowledge is missing, inspect the necessary project sources and state unresolved gaps.
 
-## Handle gaps without expanding the workflow
+| Status | Action |
+| --- | --- |
+| `active` | Apply within its stated scope; preserve any uncertainty. |
+| `superseded` | Follow `superseded_by`, relative to the entry, to its replacement. |
+| `deprecated` | Treat the entry as withdrawn. |
 
-If information must be discovered, use `context-gather` when available or search the necessary sources directly. If the source does not contain an adopted choice, identify the unresolved decision; do not invent it. A check can resolve an empirical claim but cannot grant decision authority.
+* Stop a replacement chain at a broken link or cycle and report the defect.
+* Resolve conflicting claims from their evidence and authority; do not invent a missing decision.
 
-When CDE skills are present, pass the already-retrieved constraint or unresolved gap to the relevant investigation, decision, or validation workflow. Do not repeat retrieval or require every CDE step. Preserve previously granted authorization.
+## Step 3: Apply the knowledge
 
-If no context affects the task, proceed without an artificial constraint. If work produces durable learning, consolidate it within scope, using `context-consolidate` when available. Describe actual impact and remaining limits; do not equate a declaration of use with proven compliance or a successful product outcome.
+* **Turn each relevant rule into an action or check.** State the consequence in the task's plan, change, or result.
+* Example: if reopening an export must preserve its original snapshot, implement and check that behavior.
+* Continue the requested task without a separate context report.
+* Distinguish checks actually run from checks merely planned.
+* Use `context-gather` when durable learning should be saved or stored knowledge needs repair.
+
+> Reading an entry is not enough. The resulting action must respect it.
