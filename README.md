@@ -76,7 +76,8 @@ npx skills add LeszekKantorek/context-skills
 * The [Codex integration](integrations/codex/README.md) adds a startup reminder and session registration.
 * `SessionStart` reminds the agent of the three skill roles and the required index.
 * `Stop`, `Interrupt`, `PreCompact`, and `SessionEnd` run `context_register_session.py`.
-* Each session has one record under `.context/sessions/`.
+* Each session with a supplied or previously known transcript path has one record
+  under `.context/sessions/`; new sessions without a path are skipped.
 * Registration stores metadata only; it does not read transcripts or invoke skills.
 * Ignore `.context/sessions/` in Git; it is excluded from knowledge entries and the index.
 * Use [context-import-sessions](skills/context-import-sessions/SKILL.md) to process selected checkpoints.

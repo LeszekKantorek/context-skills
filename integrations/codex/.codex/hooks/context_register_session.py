@@ -46,7 +46,8 @@ def queue_lock(directory):
 def read_sessions(directory):
     sessions = {}
     for path in sorted(directory.glob("*.json")):
-        row = json.loads(path.read_text(encoding="utf-8"))
+        with path.open(encoding="utf-8") as handle:
+            row = json.load(handle)
         if (not isinstance(row, dict) or set(row) != FIELDS
                 or not isinstance(row["session_id"], str) or not row["session_id"]
                 or not isinstance(row["updated_at"], str)
@@ -67,7 +68,17 @@ def write_record(path, row):
             temporary = Path(handle.name)
             json.dump(row, handle, ensure_ascii=False, indent=2)
             handle.write("\n")
-        os.replace(temporary, path)
+        # Unlocked readers can briefly prevent replacement on Windows.
+        deadline = time.monotonic() + 1
+        while True:
+            try:
+                os.replace(temporary, path)
+                break
+            except OSError as error:
+                if (os.name != "nt" or getattr(error, "winerror", None) not in (5, 32, 33)
+                        or time.monotonic() >= deadline):
+                    raise
+                time.sleep(0.02)
     finally:
         if temporary is not None:
             temporary.unlink(missing_ok=True)
@@ -77,10 +88,20 @@ REGISTER_EVENTS = {"Stop", "Interrupt", "PreCompact", "SessionEnd"}
 
 
 def register(directory, session_id, transcript_path):
+    if not isinstance(transcript_path, str) or not transcript_path.strip():
+        transcript_path = None
+    if not transcript_path and not directory.exists():
+        return
     directory.mkdir(parents=True, exist_ok=True)
     with queue_lock(directory):
         sessions = read_sessions(directory)
         previous = sessions.get(session_id)
+        if not transcript_path:
+            # A pathless event cannot create importable evidence. Existing
+            # sessions may temporarily omit the path, so retain a known one.
+            if not previous or not previous[1]["transcript_path"]:
+                return
+            transcript_path = previous[1]["transcript_path"]
         now = datetime.datetime.now(datetime.timezone.utc)
         if previous:
             path, row = previous
@@ -119,7 +140,7 @@ def main():
     except (OSError, subprocess.SubprocessError):
         return 0
     transcript = event.get("transcript_path")
-    if isinstance(transcript, str) and transcript:
+    if isinstance(transcript, str) and transcript.strip():
         transcript = str((Path(cwd) / transcript).resolve())
     else:
         transcript = None

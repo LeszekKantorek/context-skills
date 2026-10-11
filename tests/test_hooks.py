@@ -37,7 +37,7 @@ class HookTests(unittest.TestCase):
 
     def event(self, session_id="session-123", name="Stop", **extra):
         return {"hook_event_name": name, "session_id": session_id,
-                "cwd": str(self.repo), **extra}
+                "cwd": str(self.repo), "transcript_path": "session.jsonl", **extra}
 
     def invoke(self, event, check=True):
         return subprocess.run(
@@ -131,7 +131,7 @@ class HookTests(unittest.TestCase):
                 self.assertGreater(row["updated_at"], last)
             last = row["updated_at"]
             self.assertEqual(set(row), FIELDS)
-            self.assertIsNone(row["transcript_path"])
+            self.assertEqual(row["transcript_path"], str(self.repo / "session.jsonl"))
             self.assertNotIn("secret-canary", path.read_text(encoding="utf-8"))
         self.assertEqual(len(self.records()), 1)
         self.assertIn("queued: 1, reviewed: 0, pending: 1", self.scan().stdout)
@@ -156,9 +156,9 @@ class HookTests(unittest.TestCase):
         self.assertFalse((self.repo / ".context" / "escaped.json").exists())
 
     def test_missing_or_relative_transcript(self):
-        self.invoke(self.event("missing"))
-        self.assertIsNone(self.records()["missing"][1]["transcript_path"])
-        self.assertIn("transcript=missing", self.scan().stdout)
+        self.invoke(self.event("missing", transcript_path=None))
+        self.assertFalse(self.state.exists())
+        self.assertEqual(self.records(), {})
         self.invoke(self.event("relative", transcript_path="logs/session.jsonl"))
         self.assertEqual(self.records()["relative"][1]["transcript_path"],
                          str((self.repo / "logs" / "session.jsonl").resolve()))
@@ -173,6 +173,48 @@ class HookTests(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertIn("checkpoint changed", result.stderr)
         self.assertIsNone(self.records()["session-123"][1]["reviewed_at"])
+
+    def test_pathless_events_skip_new_records_but_keep_known_path(self):
+        for name in ("Stop", "Interrupt", "PreCompact", "SessionEnd"):
+            for transcript in (None, "", "   ", 42):
+                with self.subTest(name=name, transcript=transcript):
+                    result = self.invoke(self.event(name=name, transcript_path=transcript))
+                    self.assertEqual(result.stdout.strip(), "{}" if name in {"Stop", "PreCompact"} else "")
+                    self.assertFalse((self.repo / ".context").exists())
+        # A path is sufficient even before the transcript appears on disk.
+        self.invoke(self.event())
+        _, original = self.records()["session-123"]
+        self.mark("session-123", original["updated_at"])
+        self.invoke(self.event("unknown", transcript_path=None))
+        self.assertEqual(len(self.records()), 1)
+        self.assertTrue(self.records()["session-123"][1]["reviewed_at"])
+        for transcript in (None, "", "   "):
+            self.invoke(self.event(transcript_path=transcript))
+            _, updated = self.records()["session-123"]
+            self.assertEqual(updated["transcript_path"], original["transcript_path"])
+            self.assertGreater(updated["updated_at"], original["updated_at"])
+            self.assertIsNone(updated["reviewed_at"])
+            original = updated
+
+    def test_legacy_pathless_record_waits_for_evidence(self):
+        self.state.mkdir(parents=True)
+        path = self.state / "legacy.json"
+        original = {"session_id": "session-123", "updated_at": "2026-10-11T10:00:00+00:00",
+                    "transcript_path": None, "reviewed_at": None}
+        path.write_text(json.dumps(original), encoding="utf-8")
+        before = path.read_bytes()
+        self.invoke(self.event(transcript_path=None))
+        self.assertEqual(path.read_bytes(), before)
+        self.assertIn("transcript=missing-path", self.scan().stdout)
+        self.invoke(self.event(transcript_path="recovered.jsonl"))
+        current_path, row = self.records()["session-123"]
+        self.assertEqual(current_path, path)
+        self.assertEqual(row["transcript_path"], str(self.repo / "recovered.jsonl"))
+        self.assertIn("transcript=missing-file", self.scan().stdout)
+
+    def test_transcript_backed_subagent_is_not_filtered_by_session_source(self):
+        self.invoke(self.event("subagent", source={"subagent": {"thread_spawn": {}}}))
+        self.assertIn("subagent", self.records())
 
     def test_empty_inventory_does_not_create_queue(self):
         self.assertIn("queued: 0", self.scan().stdout)
