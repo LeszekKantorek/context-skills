@@ -18,6 +18,12 @@ python <skill-directory>/scripts/context_read_sessions.py <project-root>
 ```
 
 * The helper lists records; it does not read or analyze transcripts.
+* Listing is read-only and reports `available`, `missing-path`, or `missing-file`.
+* For `missing-path`, look for an exact session ID in saved or archived transcripts
+  only when discovery is within the requested scope; verify the session and project
+  identity before importing an explicitly recovered path. Do not invent paths or
+  mark unknown sessions reviewed. Internal prediction sessions may have no saved
+  transcript; absence alone does not establish that classification.
 * Identify records by `session_id`, never by filename.
 * Retain each selected record's `updated_at` value before reading its transcript.
 
