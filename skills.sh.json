@@ -4,8 +4,9 @@
   "groupings": [
     {
       "title": "Context",
-      "description": "Apply project knowledge, gather and maintain context, and import saved sessions.",
+      "description": "Map project routing, apply knowledge, gather context, and import saved sessions.",
       "skills": [
+        "context-map",
         "context-gather",
         "context-apply",
         "context-import-sessions"

@@ -1,11 +1,12 @@
 # context-skills
 
-Apply project knowledge, gather durable learning, and import saved sessions into `.context/`.
+Map project sources and tasks, apply project knowledge, gather durable learning, and import saved sessions into `.context/`.
 
 ## Choose a skill
 
 | Need | Skill | Result |
 | --- | --- | --- |
+| Build or repair project routing | [context-map](skills/context-map/SKILL.md) | Maintain a source index and task routes with first sources and conditional extensions. |
 | Use stored knowledge in the current task | [context-apply](skills/context-apply/SKILL.md) | Read the index and relevant entries; reflect their rules in actions and checks. |
 | Save session learning or review existing knowledge | [context-gather](skills/context-gather/SKILL.md) | Create, update, merge, or withdraw entries; create and maintain the index. |
 | Process saved sessions or pending checkpoints | [context-import-sessions](skills/context-import-sessions/SKILL.md) | Load session material, invoke gather, and mark completed checkpoints. |
@@ -25,7 +26,18 @@ npx skills add LeszekKantorek/context-skills
 * Install `context-gather` alongside `context-import-sessions`.
 * When updating an existing installation, remove the retired `context-consolidate` and `context-review` skill copies.
 
-## Context index
+## Task routing with context-map
+
+* `context-map` manages two views: a source map for knowledge discovery and a task map for selecting guidance.
+* Keep the source map in the project's index. Include relevant sources outside `.context/`.
+* Put new task maps in `AGENTS.md`. Reuse existing task guidance instead of copying the same table into another file.
+* A known task route leads directly to its sources. Reading both maps is not a required sequence.
+* Use Map when maintaining routing, not before every task. Do not require a row for every document.
+* Definitions, examples, and selection checks are contained in the single `SKILL.md`.
+* Apply, Gather, the session importer, and hooks retain their existing behavior in this iteration.
+* Adding Map does not migrate a project's existing index dependencies. Check callers before retiring old routers; report any compatibility content that still has to remain.
+
+## Existing context index workflow
 
 * **Gather creates `.context/INDEX.md` when no context index exists.** An existing index is updated in place.
 * The index contains only a table with `Entry` and `Use when` columns.
