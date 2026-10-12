@@ -1,195 +1,245 @@
 ---
 name: context-map
-description: Create or update source maps and task maps. Use to organize project knowledge and task guidance, not to execute mapped tasks.
+description: Understand project knowledge and when it changes decisions or actions. Use to organize project guidance, choose navigation entry points, or fix context routing.
 ---
 
 # Map Project Context
 
-* Build a source map that answers: "Where is the knowledge for this situation?"
-* Build a task map that answers: "Where do I start this task, and when do I need more information?"
-* Keep definitions, examples, and instructions in this skill document.
-* Preserve project requirements and unrelated content.
-* For a report-only request, propose changes without editing files.
+## Goal
+
+Understand what project knowledge means, when it applies, and how it changes an agent's decisions or actions.
+Organize access to that knowledge around the situations in which agents need it.
+
+* Choose entry points and map structures from actual project needs.
+* Use the smallest structure that preserves useful conditions and leads to the needed sources.
+* Keep the knowledge and procedure steps at their existing sources.
+* Preserve project requirements, evidence limits, and unresolved decisions.
 
 ## Steps
 
-1. Select the maps and their locations.
+1. Understand the knowledge before choosing its place in a map.
 
-* Use the project and scope from the user's request.
-* If the user does not name a project, use the current project.
-* Read the applicable `AGENTS.md` and existing maps.
-* Use the table to select which maps need work.
+* Identify the project and the scope of the request.
+* Read the supplied article, document, entry, or procedure for its meaning.
+* For a collection, use headings and existing navigation to select relevant content.
+* Read enough of each selected source to understand its claim, conditions, and evidence.
+* Identify the problem that the source addresses.
+* Distinguish what the source states from what you infer about its use.
+* Compare its assumptions with the project's constraints and accepted decisions.
+* Use these questions to identify what the source contributes.
 
-| Need | Map | What each row represents |
+| Question | Identify | Example |
 | --- | --- | --- |
-| Find knowledge about a subject or constraint | Source map | A source and the conditions that make it useful |
-| Select guidance for a recurring task | Task map | A task, its first source, and conditional additional sources |
-| Improve both discovery and task guidance | Both maps | Two views of the same source content |
+| What problem does this knowledge address? | The situation and desired outcome | Repeated calculations delay a response. |
+| What does the source explain or recommend? | A claim, constraint, decision, or procedure | Reuse a calculated result for a limited time. |
+| Under which conditions does it apply? | Assumptions, boundaries, and exceptions | Reuse is acceptable only within the allowed freshness limit. |
+| What supports the claim? | Evidence and its limits | Measurements concern one workload, not every request. |
+| What would an agent do differently? | A decision, action, or check | Check freshness requirements before choosing a cache lifetime. |
 
-* Reuse the existing source index, including its filename and letter case.
-* If no source index exists, use `.context/index.md` unless the user specifies another location.
-* Put a new task map in the applicable `AGENTS.md`.
-* If the project already maintains task guidance elsewhere, update that map instead of creating a duplicate.
-* In that case, keep one link to the task map in `AGENTS.md`.
+* Treat the examples as illustrations, not project facts.
+* Do not turn an article's recommendation into an accepted project rule.
+
+2. Examine the reasoning with 5W and Socratic questions.
+
+* Use 5W, or 5 Whys, when a claim does not explain why a recommendation fits the problem.
+* Ask why the desired outcome matters.
+* Ask why the proposed action could produce that outcome.
+* Continue with another why only when the answer leaves a relevant cause or assumption unclear.
+* Stop when the explanation supports a use condition or the available evidence cannot support another answer.
+* Do not require five questions or invent answers to complete the sequence.
+
+| Example why | Possible source-supported answer | Consequence for mapping |
+| --- | --- | --- |
+| Why reuse calculated results? | Repeated calculations contribute to response delay. | Consider the source for response-performance tasks. |
+| Why can a previous result serve a new request? | The relevant inputs remain valid during reuse. | Include input validity in the use condition. |
+| Why is that reuse period acceptable here? | The article does not establish the project's freshness requirements. | Consult the project contract before adopting the recommendation. |
+
+* Use Socratic questions to challenge the interpretation where it can change the route.
+
+| Question type | Ask yourself | Effect on the route |
+| --- | --- | --- |
+| Clarification | What does this term mean in this source? | Preserve its precise meaning in the condition. |
+| Assumptions | What must be true for this advice to work? | Make relevant preconditions explicit. |
+| Evidence | Why is this evidence sufficient for the claimed use? | Keep the condition within the evidence's scope. |
+| Alternatives | Could another source or method satisfy the task with fewer assumptions? | Select the source that fits the actual need. |
+| Consequences | What could fail if an agent applies this advice? | Add the necessary constraint or conditional source. |
+| Counterexample | When would this recommendation be wrong or unnecessary? | Exclude that situation from the route. |
+
+* Answer these questions from the available sources and project context.
+* Ask the user only when a missing decision prevents a supported mapping choice.
+* Use only questions that can change your understanding or the route.
+* Do not produce a questionnaire for every source.
+
+3. Derive situations in which the knowledge changes work.
+
+* Name a concrete decision, action, or check that the knowledge changes.
+* Identify the situation in which an agent needs that contribution.
+* Identify a similar situation in which the contribution does not apply.
+* Compare the contribution with existing knowledge for the same situation.
+* If sources disagree, keep the disagreement explicit instead of choosing a new project policy.
+* If no useful application emerges, leave the source outside the maps.
+* A missing application is not a reason to invent a broad task category.
+
+| Source content | Useful situation | Avoid |
+| --- | --- | --- |
+| An article explains cache lifetime trade-offs. | Choose a cache lifetime under freshness constraints. | Read this for all backend work. |
+| A context entry records accepted freshness limits. | Change or diagnose the age of displayed data. | Replace the accepted limits with the article's example values. |
+| A procedure defines how to isolate response delays. | Investigate a delayed response. | Run the procedure merely because its document exists. |
+
+* Identify what an agent knows when it starts: a question, task, symptom, decision, or affected area.
+* Use actual requests, recurring work, and source applications as evidence for these entry points.
+* Use the following terms when translating situations into routes.
+
+| Term | Meaning |
+| --- | --- |
+| Entry point | The recognizable situation from which an agent starts looking for guidance |
+| Route | A connection from an entry point to sources, with any conditions needed to select them |
+| Source | A document, section, available skill, or external reference that supplies relevant information |
+| Task | A requested outcome or recurring kind of work |
+| Procedure | An established sequence of actions with conditions and an expected result |
+| Read first | The source needed to understand task constraints or choose the next action |
+| Additional | A supporting source whose relevance depends on a stated condition |
+| Extend when | The condition that makes an additional source necessary |
+
+* A task can need knowledge without having an established procedure.
+* Do not invent procedure steps to complete a route.
+* One source can serve several situations.
+* One task can need several sources.
+* Stop discovery when the application is clear or a specific missing fact prevents a conclusion.
+
+4. Choose entry points, map structures, and locations that fit those situations.
+
+* Compare the identified situations with the project's existing navigation.
+* Reuse effective entry points and structures.
+* Choose labels that an agent can recognize from its request.
+* Avoid making the agent translate a symptom into an invented task category.
+* Use the following options as examples, not a required set.
+
+| Agent starts with | Possible structure | Use it when |
+| --- | --- | --- |
+| A question | Question → answer source | The agent needs a specific fact or explanation. |
+| A task | Task → Read first → Extend when | The outcome identifies prerequisites and conditional guidance. |
+| A symptom | Symptom → first check → conditional source | The next source depends on an observed result. |
+| A decision | Decision → constraints → criteria → evidence | The agent must compare options within accepted limits. |
+| A change area | Area → contracts → dependencies → applicable checks | The affected component determines relevant obligations. |
+| A need to discover knowledge | Source → Use when | The agent needs to identify what available knowledge can contribute. |
+
+* Choose fields that preserve the conditions established during analysis.
+* Do not create a map type merely because this skill lists it.
+* Use one map when its entries need the same fields and selection rules.
+* Separate maps when their entry points need different fields or navigation.
+* Use branches when a source choice depends on an earlier answer or observation.
+* Do not force dependent choices into an unconditional reading list.
+* Keep a missing branch justification explicit as a knowledge gap.
+* Do not invent diagnostic steps to complete a tree.
+* Keep each map in one location.
+* Reuse an existing index or guidance file when it fits the chosen structure.
+* Preserve its filename and letter case.
+* Place compact project routing in the applicable `AGENTS.md`.
+* Link to a separate map when its detail would obscure the agent file's other instructions.
 * Keep nested agent files within their directory scope.
-* Update only the requested scope.
+* Avoid creating files when an existing location serves the need.
+* Before changing an existing format, inspect its readers and writers, including installed skills and hooks.
+* Preserve the old format when a dependency's migration remains outside scope.
 
-2. Identify the tasks, procedures, and sources.
+5. Write routes that preserve the knowledge's conditions and authority.
 
-* Find candidate sources through file listings, headings, existing links, and supplied tasks.
-* Read the sections that establish their purpose and conditions.
-* Include useful sources outside `.context/`, such as contracts, contribution guides, available skills, and external specifications.
-* Use these definitions consistently.
+* Link the section that supplies the needed knowledge.
+* Include relevant sources from `.context/`, `docs/`, contribution guides, available skills, and external references.
+* Keep facts and procedures at their sources.
+* Write use conditions from the applications established in Step 3.
+* Distinguish accepted requirements from advice, evidence, and unresolved choices.
+* When a route needs Read first, select its source with this table.
 
-| Term | Meaning | Example |
+| Candidate for Read first | Select it when | Make it conditional when |
 | --- | --- | --- |
-| Source | A document, section, available skill, or external specification that supplies relevant information | An API contract section about response states |
-| Task | A requested outcome or recurring kind of work | Diagnose a delayed API response |
-| Procedure | An established sequence of actions with conditions and an expected result | Reproduce the delay, isolate its cause, and check the fix |
-| Read first | The source needed to understand the task's constraints or select its procedure | A diagnostic procedure for response failures |
-| Extend when | A condition that makes an additional source necessary | Read the queue contract when the delay occurs before processing |
+| Accepted constraint or decision | It determines which actions are valid. | Only a possible dependency makes it relevant. |
+| Procedure | The task requires its established sequence. | Only a later stage or failure requires it. |
+| Available skill | The skill owns the required procedure. | A stated condition determines whether the task needs it. |
+| Explanation or study | The agent needs its reasoning before choosing an approach. | It helps compare alternatives after constraints are clear. |
 
-* A task does not need an existing procedure to qualify for the task map.
-* A contract or decision can be the first source when it supplies the information needed to proceed.
-* A procedure can serve several tasks.
-* One task can require several sources.
-* Do not invent a procedure to complete a table row.
-* Exclude raw transcripts, secrets, and temporary progress records.
-* Preserve uncertainty when source content states a hypothesis or an unresolved decision.
-* Stop discovery when you identify a supported destination or a specific unresolved issue for each task.
-* Expand discovery only for missing information, conflicts, or dependencies that can change a map.
+* Read first applies to the matching situation, not every task in the project.
+* Select several first sources only when the next action needs each one.
+* Give additional sources explicit selection conditions.
+* Link a known procedure or skill directly.
+* Avoid requiring another map when the destination is already known.
+* If no useful source exists, preserve the gap instead of adding filler.
+* Use the examples below only where their structure fits.
+* Replace fictional paths and conditions with verified project sources.
 
-3. Build or update the source map.
-
-* Link each useful source to a concrete condition for reading it.
-* Select the document or section that contains the information.
-* Preserve existing column names when current tools depend on them.
-* Do not require knowledge-entry metadata on ordinary documents.
-* Do not add every repository file merely to complete an inventory.
-* If sections of one document serve different situations, give those sections distinct conditions.
-
-| Source content | Useful condition | Weak condition |
-| --- | --- | --- |
-| An API contract defines response states. | Change or diagnose API response states. | Work on the backend. |
-| A testing guide defines when earlier results remain usable. | Decide whether previous test results still apply. | Run tests. |
-| A decision explains ownership of a queue. | Change queue ownership or its consumers. | Read architecture. |
-
-* Example source map at `.context/index.md`:
+* Example: a source index at `.context/index.md` supports knowledge discovery.
 
 ```markdown
 | Source | Use when |
 | --- | --- |
-| [API contract](../docs/api.md#response-states) | Change or diagnose API response states. |
-| [Diagnosis](../docs/diagnosis.md#response-failures) | Investigate failed or delayed responses. |
-| [Queue contract](../docs/queue.md#ownership-and-delivery) | Change queue ownership or diagnose delivery delays. |
-| [Evidence reuse](../docs/testing.md#evidence-reuse) | Decide whether previous test results still apply. |
+| [Freshness limits](cache-freshness.md) | Change or diagnose the age of displayed data. |
+| [Cache lifetime study](../docs/cache-study.md) | Compare cache lifetimes within accepted freshness limits. |
+| [Response diagnosis](../docs/diagnosis.md#response-delays) | Investigate delayed responses. |
 ```
 
-* These paths illustrate a fictional project.
-* Replace example paths and conditions with sources that exist in the target project.
-* Keep facts and procedure steps in their sources.
-
-4. Build or update the task map.
-
-* Name each task through its outcome or affected behavior.
-* Select the first source through the criteria below.
-* Put additional sources behind explicit conditions.
-
-| Candidate for Read first | Select it when | Put it under Extend when if |
-| --- | --- | --- |
-| Procedure | The task requires its established sequence. | Only a later stage or failure requires it. |
-| Contract or accepted decision | Its constraints determine the next action. | Only one possible dependency makes it relevant. |
-| Available skill | The skill owns the requested procedure. | The task needs that skill only under a stated condition. |
-| General overview | The task requires orientation that specific sources do not supply. | It provides useful background but does not determine the next action. |
-
-* Read first is a prerequisite for the matching task, not a command to read every first-source cell.
-* Select a source that supplies useful information, rather than another map that only repeats the destination.
-* If a source is already current in the conversation, do not require another read merely to satisfy the label.
-* Use several first sources only when the task needs each one before its next action.
-* If no useful first source exists, record the gap instead of adding a broad document as filler.
-* Keep distinct task conditions when they require different starting points.
-
-| Weak task | Useful task | Reason |
-| --- | --- | --- |
-| Backend work | Diagnose failed or delayed API responses | The condition identifies a problem and selects a diagnostic procedure. |
-| Documentation | Update issue or PR acceptance records | The condition selects a specific contribution procedure. |
-| Quality | Select checks for a code change | The condition identifies a decision with a defined source. |
-
-* Example task map in a root `AGENTS.md`:
+* Example: task routes in a root `AGENTS.md` identify prerequisites and conditional sources.
 
 ```markdown
 ## Task routing
 
 Select the rows that match the task.
-Use each applicable row when the task crosses boundaries.
-Read the source sections needed for the next action.
 Reuse current information from the conversation.
-Use the [source index](.context/index.md) when no task row identifies the needed knowledge.
-Links do not require recursive reading.
+Read the required sections without recursively reading every linked document.
 Stop when the outcome, constraints, and required evidence are clear.
 Expand the search for missing information, conflicts, or changed scope.
 
 | Task | Read first | Extend when |
 | --- | --- | --- |
-| Diagnose failed or delayed API responses | [Diagnosis](docs/diagnosis.md#response-failures) | Read the [API contract](docs/api.md#response-states) for state mismatches. Read the [queue contract](docs/queue.md#ownership-and-delivery) for delivery delays. |
-| Select checks for a code change | [Validation scope](docs/testing.md#validation-by-change-scope) | Read [evidence reuse](docs/testing.md#evidence-reuse) when considering previous results. |
-| Update issue or PR acceptance records | [Acceptance procedure](CONTRIBUTING.md#acceptance) | Read [manual checks](docs/testing.md#manual-checks) when criteria need manual evidence. |
+| Choose a cache lifetime | [Freshness limits](.context/cache-freshness.md) | Read the [cache study](docs/cache-study.md) when comparing lifetimes within those limits. |
+| Select checks for a change | [Validation scope](docs/testing.md#validation-by-change-scope) | Read [evidence reuse](docs/testing.md#evidence-reuse) when considering previous results. |
 ```
 
-* Use the source map for discovery when a task route is absent or insufficient.
-* Use a known task route directly without reading the source map first.
-* Do not make the source map and task map point to each other as mandatory reading steps.
-* Both maps can link the same source because they answer different questions.
-* Keep each map in one location instead of copying it into AGENTS and task guidance.
+* Example: a symptom route in a root `AGENTS.md` selects guidance from an observed result.
+* Its branches require support from the linked diagnosis procedure.
 
-5. Save the maps and preserve their dependencies.
+```markdown
+## Displayed data appears stale
 
-* Check files, section anchors, external sources, and skill availability before adding destinations.
-* Write local links relative to the file that contains each map.
-* For a skill destination, name its available invocation.
-* Do not install or create destination skills as part of mapping.
-* For a retired entry, follow its replacement path.
-* Report missing replacements and replacement cycles.
-* Do not present an unchecked destination as an established route.
-* Preserve substantive knowledge and source history when removing old navigation.
-* Before changing an existing map's format, inspect its readers and writers.
-* Include installed skills and startup hooks in that dependency check.
-* Update dependencies only within the requested scope.
-* If a dependency requires the old format, preserve that format until its migration enters scope.
-* Report incompatible readers or writers instead of claiming that the migration is complete.
-* Current Apply, Gather, and the startup hook still depend on the legacy context index.
-* Do not change those skills or integrations unless the user includes them in scope.
+Start with the [age check](docs/diagnosis.md#check-data-age).
+Compare the observed age with the [accepted limit](.context/cache-freshness.md).
 
-6. Check both map views with representative requests.
+* If the age exceeds the limit, use [refresh diagnosis](docs/diagnosis.md#refresh-failures).
+* If the age meets the limit, use [freshness expectations](docs/diagnosis.md#freshness-expectations).
+* If the age cannot be established, use [measurement gaps](docs/diagnosis.md#measurement-gaps).
+```
 
-* Establish each request's required information from the source content.
-* Select destinations through the relevant map.
-* Compare the selected information with the required information.
-* Check both necessary sources found and unrelated sources avoided.
-* For a local fix, use the original failing request and a similar request that should not select the route.
+* These examples are alternatives that can coexist when the project needs them.
+* Do not copy all examples as a default architecture.
+* Add local selection and stopping guidance only where agents need it.
+* Do not make maps require each other as repeated navigation steps.
+* Do not require knowledge-entry metadata on ordinary documents.
+* Exclude raw transcripts, secrets, and temporary progress records.
 
-| Example request | Expected selection | Defect to detect |
+6. Check that the chosen structure leads to the intended knowledge.
+
+* Compare each route with the source's claim, conditions, authority, and evidence limits.
+* Start from realistic requests without assuming the agent already knows the destination.
+* Check a matching situation and a similar situation that should not select the route.
+* Check each conditional branch against its supporting source.
+* Check where reading stops and what would justify expanding it.
+* Check combined routes when a task needs several sources.
+
+| Example request | Expected selection | Meaning to preserve |
 | --- | --- | --- |
-| Find the allowed API response states | Source map: API contract | The index requires a diagnostic workflow just to find a fact. |
-| Diagnose a delayed response | Task map: diagnosis | The task requires reading the whole source index first. |
-| Investigate a delay before queue delivery | Diagnosis, then queue contract | The conditional destination is missing. |
-| Select checks using previous results | Validation scope, then evidence reuse | Previous results bypass the conditions for reuse. |
-| Fix a typo in a local document | Local text and applicable writing guidance | An unrelated task route requires API diagnosis. |
+| Find the accepted freshness limit | Question route or source index: freshness limits | Find the project decision without reading the cache study. |
+| Choose a cache lifetime | Task map: freshness limits, then the cache study when needed | Advice from a study does not override accepted constraints. |
+| Investigate displayed data within the freshness limit | Symptom route: freshness expectations | Do not select refresh-failure guidance without its condition. |
+| Fix a spelling error in a document | Local text and applicable writing guidance | A nearby performance topic does not activate a diagnostic procedure. |
 
-* Treat these rows as examples of expected choices, not evidence of completed agent runs.
-* If a required source is absent, add or change the relevant condition or destination.
-* If a route selects unrelated information, narrow its condition.
-* If navigation repeats, link the required source directly.
-* If sources conflict, report the unresolved decision without inventing project policy.
+* Treat these examples as expected choices, not evidence of completed agent runs.
+* Fix routes that omit necessary information or select unrelated sources.
 * Repeat the affected checks after a fix.
 * Check selection without executing destination procedures.
-
-7. Report the changes and remaining issues.
-
-* State which maps changed and where they reside.
-* For each check, report the request, selected sources, and result.
-* Distinguish inspection of a table from an observed agent run.
-* List missing sources, unchecked destinations, conflicts, and remaining migration dependencies.
-* For report-only work, return the proposed maps.
-* Do not create a separate report file unless the user requests one.
-* Leave knowledge gathering, content deduplication, document restructuring, session review, and procedure compilation outside this skill.
+* Check file paths, section anchors, external sources, and skill availability.
+* Write local paths relative to the file that contains each map.
+* For retired entries, follow valid replacement paths.
+* Keep broken replacements, cycles, and inaccessible sources explicit as unresolved gaps.
+* Do not present unchecked destinations as established routes.
+* Preserve substantive knowledge and unrelated instructions when removing duplicate navigation.
+* Save the maps within the user's authorized scope.
+* If the user requests suggestions only, return proposed maps without editing files.

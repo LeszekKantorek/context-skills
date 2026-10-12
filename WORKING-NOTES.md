@@ -7,26 +7,50 @@ Stan na 2026-10-12. Notatka do kontynuowania pracy po długiej sesji lub zmianie
 * Repozytorium: `LeszekKantorek/context-skills`.
 * Lokalna gałąź: `codex/context-v-proposal`, utworzona z bieżącego checkoutu na `c5014a9`.
 * Zgłoszenie #6 jest propozycją do dyskusji, nie zatwierdzoną specyfikacją całej przebudowy. Użytkownik wyraźnie skorygował początkową interpretację jako zadania wdrożeniowego.
-* Użytkownik zatwierdził przygotowanie `context-map`, a następnie doprecyzował zakres: dwie mapy, definicje i przykłady w jednym `SKILL.md`.
+* Użytkownik zatwierdził `context-map` dobierający punkty wejścia i strukturę map do potrzeb projektu. Zastępuje to wcześniejsze wymaganie dwóch map. Definicje i przykłady pozostają w jednym `SKILL.md`.
 * Pozostałe skills i integracje mają na razie pozostać bez zmian.
-* Zmiany pozostają lokalne, bez commita i publikacji. Nie wykonano migracji innych repozytoriów.
+* Stan sprzed ponownego ustalenia celu zapisano lokalnym commitem `62434ff`. Nie publikowano zmian ani nie migrowano innych repozytoriów.
+* `.local/` i `.agents/` są ignorowane. Obecna rewizja celu jest zmianą roboczą po tym commicie.
+
+## Cel skilla po doprecyzowaniu
+
+Użytkownik zatwierdził cel: zrozumieć znaczenie wiedzy projektu, warunki jej zastosowania oraz wpływ na decyzje lub działania agenta. Dobór punktów wejścia i struktury map wynika z tego rozpoznania. Samo formatowanie tabel i sprawdzanie linków nie realizuje celu.
+
+* Kolejność pracy: zrozumienie źródła, badanie uzasadnienia, rozpoznanie zastosowań i punktów wejścia, dobór struktury i miejsca, zapis tras, sprawdzenie.
+* 5W oznacza tu 5 Whys: pogłębianie przyczyn i założeń. Nie trzeba zadawać wszystkich pięciu pytań ani wymyślać brakujących odpowiedzi.
+* Pytania sokratejskie dotyczą pojęć, założeń, dowodów, alternatyw, konsekwencji i kontrprzykładów.
+* Agent wybiera pytania, które mogą zmienić interpretację lub trasę. Nie przekazuje użytkownikowi obowiązkowego kwestionariusza.
+* Przy artykule trzeba odróżnić zalecenie autora od zaakceptowanej reguły projektu. Brak lokalnego uzasadnienia pozostaje brakiem, nie nową regułą.
+* Map nie tworzy raportów. Jego wynikiem są mapy, a nie dokument opisujący przebieg pracy.
+* Wymagania dotyczące sposobu napisania skilla nie są poleceniami dla agenta wykonującego skill. Usunięto instrukcję nakazującą trzymanie definicji i przykładów w tym dokumencie.
+* Cała treść skilla nadal pozostaje w jednym `SKILL.md`, z jawnym `Goal` i uzgodnionym układem `Steps`.
+* Użytkownik wyraźnie zachował linki do `docs/`. Przykłady łączą je z wpisami w `.context/`.
 
 ## Przyjęty kierunek routingu
 
-Aktualna decyzja zastępuje wcześniejsze założenie jednej wspólnej tabeli. `context-map` zarządza dwiema mapami o różnych funkcjach.
+Aktualna decyzja zastępuje wymaganie dwóch map. Skill rozpoznaje, z czym agent zaczyna pracę, i dobiera strukturę pozwalającą dotrzeć do potrzebnej wiedzy.
 
-| Mapa | Pytanie | Format | Miejsce |
-| --- | --- | --- | --- |
-| Mapa źródeł | Gdzie znajdę wiedzę przydatną w tej sytuacji? | `Source / Use when`, z zachowaniem istniejących nazw kolumn potrzebnych odbiorcom | Istniejący indeks projektu, a przy jego braku domyślnie `.context/index.md` |
-| Mapa zadań | Od czego zacząć dane zadanie i kiedy potrzebuję dodatkowych źródeł? | `Task / Read first / Extend when` | Nowa mapa w AGENTS lub istniejący plik task guidance, bez drugiej kopii tabeli |
+| Punkt wejścia | Przykładowa struktura |
+| --- | --- |
+| Pytanie | Pytanie → źródło odpowiedzi |
+| Zadanie | Task → Read first → Extend when |
+| Objaw | Objaw → pierwsze sprawdzenie → źródło zależne od wyniku |
+| Decyzja | Decyzja → ograniczenia → kryteria → dowody |
+| Obszar zmiany | Obszar → kontrakty → zależności → właściwe sprawdzenia |
+| Odkrywanie wiedzy | Source → Use when |
 
+* To przykłady do wyboru, nie komplet obowiązkowych map ani zamknięta lista typów.
+* Jedna mapa wystarcza, gdy wpisy potrzebują podobnych pól i reguł wyboru. Osobne mapy mają sens przy różnych potrzebach nawigacji.
+* Rozgałęzienie ma sens, gdy dalsze źródło zależy od odpowiedzi lub obserwacji. Brak uzasadnienia gałęzi to luka w wiedzy.
+* Zachowujemy skuteczną istniejącą nawigację. Zwięzły routing trafia do właściwego `AGENTS.md`; obszerniejsza mapa może mieć osobne miejsce i odnośnik.
+* Skill nie wymaga utworzenia indeksu ani osobnej mapy zadań. Nie tworzy nowego pliku tylko dla zgodności z przykładem.
 * `Task` oznacza oczekiwany wynik lub powtarzalny rodzaj pracy.
 * `Procedure` oznacza ustaloną sekwencję działań z warunkami i oczekiwanym rezultatem.
 * `Read first` wskazuje źródło potrzebne do zrozumienia ograniczeń zadania lub wyboru procedury. Może to być procedura, kontrakt, decyzja albo dostępny skill.
 * `Extend when` wiąże dodatkowe źródło z konkretnym warunkiem.
 * Znana trasa zadania prowadzi bezpośrednio do źródeł. Agent nie musi najpierw czytać indeksu.
 * Indeks służy do odkrywania wiedzy, gdy trasa zadania nie istnieje lub nie wystarcza.
-* Obie mapy mogą wskazywać to samo źródło, ale nie powinny wymuszać przechodzenia od jednej mapy do drugiej i z powrotem.
+* Jeżeli istnieje kilka map, mogą wskazywać to samo źródło. Nie powinny wymuszać powtarzanego przechodzenia między nimi.
 * Mapy obejmują źródła poza `.context/`. Nie są obowiązkowym katalogiem każdego pliku.
 * Procedury i wiedza pozostają w źródłach. W tabelach zapisujemy warunki i odnośniki.
 * Przed zmianą formatu indeksu trzeba sprawdzić zarówno jego czytelników, jak i narzędzia, które go zapisują.
@@ -36,7 +60,7 @@ Aktualna decyzja zastępuje wcześniejsze założenie jednej wspólnej tabeli. `
 
 Użytkownik zmienił wcześniejszą koncepcję Apply: agent potrafi już stosować wiedzę, a potrzebny skill ma zarządzać jej routingiem. Dla tej odpowiedzialności przyjęto nazwę `context-map` i przygotowano osobny skill. Dotychczasowy `context-apply` nie został usunięty ani przemianowany.
 
-Map przekształca dokumenty i procedury w mapę źródeł oraz mapę zadań. Uruchamia się przy tworzeniu lub poprawianiu routingu, nie przed każdym zadaniem projektowym. Dla lokalnej poprawki bada odpowiednie trasy; przy budowie pierwszej mapy rozpoznaje szerszy zbiór źródeł.
+Map rozpoznaje zastosowania wiedzy i organizuje dostęp do dokumentów oraz procedur przez dobrane punkty wejścia. Uruchamia się przy tworzeniu lub poprawianiu routingu, nie przed każdym zadaniem projektowym. Dla lokalnej poprawki bada odpowiednie trasy; przy budowie pierwszej mapy rozpoznaje szerszy zbiór źródeł.
 
 Weryfikacja obejmuje trafność warunków, poprawność celów, pominięte potrzebne źródła, zbędne odczyty i zapętlenia nawigacji. Sprawdzanie tras nie oznacza wykonywania wskazanych procedur.
 
@@ -104,7 +128,7 @@ Asystent zaproponował porównanie wariantu obecnego, uproszczonego i rozbudowan
 ## Przygotowane pliki i sprawdzenia
 
 * [Nowy skill](skills/context-map/SKILL.md) zawiera zakres, selekcję źródeł, budowanie tabeli, zasady migracji i sprawdzanie tras.
-* Definicje, dwa ogólne przykłady map i scenariusze wyboru znajdują się bezpośrednio w `SKILL.md`. Osobny materiał referencyjny usunięto.
+* Definicje, przykłady indeksu, tras zadań i rozgałęzienia po objawie oraz scenariusze wyboru znajdują się bezpośrednio w `SKILL.md`. Osobny materiał referencyjny usunięto.
 * [README](README.md) opisuje pierwszą wersję i współistnienie ze starym przepływem indeksu.
 * [Katalog skills](skills.sh.json) zawiera `context-map`.
 * Standardowy `quick_validate.py` przeszedł. Brakujący PyYAML pobrano do katalogu tymczasowego, bez dodawania zależności projektu.
@@ -119,9 +143,9 @@ Użytkownik dostarczył trzy przykłady w `.local/` oraz skill `asd-ste100` w `.
 
 | Przykład | Mechanizm pisania | Zastosowanie w Map |
 | --- | --- | --- |
-| `actionable-skill-example-1.md` — execute-plan | Cel, konkretny wynik, rozdzielenie obserwacji i decyzji, dowody przy wyniku sprawdzenia | Jawny wynik pracy oraz raport z zadaniem, wybranymi celami, wynikiem i dowodem lub ograniczeniem. |
+| `actionable-skill-example-1.md` — execute-plan | Cel, konkretny wynik, rozdzielenie obserwacji i decyzji, dowody przy wyniku sprawdzenia | Jasny wynik pracy i odróżnienie obserwacji od założeń. Wymaganie raportu zostało odrzucone jako obce celowi Map. |
 | `actionable-skill-example-2.md` — write-briefing | Numerowane kroki, mapowanie treści wejściowej na wynik, instrukcje przy polach, dobre i złe przykłady | Przekształcenie treści źródła w przypadek użycia, cel i zastosowanie oraz przykłady poprawiania wierszy. |
-| `actionable-skill-example-3.md` — review-plan | Porównanie punkt po punkcie, kryteria klasyfikacji i działanie wynikające z oceny | Porównanie informacji wymaganych przez zadanie z wybranymi celami oraz klasy Match, Missing, Excess, Detour i Unchecked. |
+| `actionable-skill-example-3.md` — review-plan | Porównanie punkt po punkcie, kryteria klasyfikacji i działanie wynikające z oceny | Porównanie potrzeb sytuacji z wybranymi źródłami: braki, zbędne odczyty, objazdy i niesprawdzone cele. |
 
 Wspólny wzorzec to polecenie z konkretnym obiektem, umieszczone w kroku, który prowadzi do sprawdzalnego wyniku. Tabele pomagają wybrać działanie. Przykłady pokazują, co zmienia sens, zamiast jedynie deklarować ogólną zasadę.
 
@@ -129,9 +153,9 @@ Nie przenosimy automatycznie szczegółowych reguł innych procesów, takich jak
 
 Poprzednia rewizja miała sześć etapów z osobnymi nagłówkami. Użytkownik doprecyzował docelowy układ: krótki wstęp, jedna sekcja `Steps`, numerowane kroki oraz punkty i tabele pod krokami. Nie tworzymy osobnych nagłówków dla każdego kroku.
 
-Obecna wersja ma siedem kroków: wybór map i lokalizacji, definicje oraz identyfikację wejścia, mapę źródeł, mapę zadań, zapis z obsługą zależności, sprawdzenie wyboru i raport. Całość stanowi jeden skill bez plików `references` i bez nazw oraz linków do konkretnego projektu przykładowego. Przykłady używają fikcyjnych dokumentów i wymagają zastąpienia ich rzeczywistymi źródłami.
+Wersja zapisana w commicie miała siedem kroków i kończyła się raportem. Użytkownik odrzucił ten kierunek jako odejście od celu. Aktualna wersja ma sześć kroków, rozpoczyna się od rozumienia wiedzy i nie wymaga raportu. Całość stanowi jeden skill bez plików `references` i bez nazw oraz linków do konkretnego projektu przykładowego. Przykłady używają fikcyjnych dokumentów i wymagają zastąpienia ich rzeczywistymi źródłami.
 
-Po tej zmianie sprawdzono strukturę skilla, lokalne odnośniki oraz język instrukcji z limitem 20 słów, łącznie z oboma szablonami map. Kontrole przeszły bez uwag. Folder `skills/context-map/` zawiera wyłącznie `SKILL.md`. README i ta notatka odzwierciedlają nowy podział.
+W poprzedniej rewizji sprawdzono strukturę skilla i język instrukcji, również wewnątrz przykładów. Obecna rewizja zastępuje stały podział na dwie mapy doborem punktów wejścia i struktury. Folder `skills/context-map/` nadal zawiera wyłącznie `SKILL.md`. README i ta notatka opisują aktualny kierunek.
 
 Scenariusze nadal opisują oczekiwane wybory, nie niezależne uruchomienia agentów.
 

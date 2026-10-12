@@ -6,7 +6,7 @@ Map project sources and tasks, apply project knowledge, gather durable learning,
 
 | Need | Skill | Result |
 | --- | --- | --- |
-| Build or repair project routing | [context-map](skills/context-map/SKILL.md) | Maintain a source index and task routes with first sources and conditional extensions. |
+| Build or repair project routing | [context-map](skills/context-map/SKILL.md) | Choose entry points and map structures from project knowledge and its uses. |
 | Use stored knowledge in the current task | [context-apply](skills/context-apply/SKILL.md) | Read the index and relevant entries; reflect their rules in actions and checks. |
 | Save session learning or review existing knowledge | [context-gather](skills/context-gather/SKILL.md) | Create, update, merge, or withdraw entries; create and maintain the index. |
 | Process saved sessions or pending checkpoints | [context-import-sessions](skills/context-import-sessions/SKILL.md) | Load session material, invoke gather, and mark completed checkpoints. |
@@ -28,10 +28,11 @@ npx skills add LeszekKantorek/context-skills
 
 ## Task routing with context-map
 
-* `context-map` manages two views: a source map for knowledge discovery and a task map for selecting guidance.
-* Keep the source map in the project's index. Include relevant sources outside `.context/`.
-* Put new task maps in `AGENTS.md`. Reuse existing task guidance instead of copying the same table into another file.
-* A known task route leads directly to its sources. Reading both maps is not a required sequence.
+* `context-map` first examines knowledge, its use conditions, and its effect on decisions or actions.
+* It chooses entry points from actual needs, such as questions, tasks, symptoms, decisions, or change areas.
+* A source index, task table, or conditional branch can fit different needs. No fixed number of maps is required.
+* Reuse effective navigation. Put compact routing in the applicable `AGENTS.md`, with links to detailed maps when needed.
+* Include relevant sources outside `.context/`. Keep knowledge and procedure steps at their sources.
 * Use Map when maintaining routing, not before every task. Do not require a row for every document.
 * Definitions, examples, and selection checks are contained in the single `SKILL.md`.
 * Apply, Gather, the session importer, and hooks retain their existing behavior in this iteration.
