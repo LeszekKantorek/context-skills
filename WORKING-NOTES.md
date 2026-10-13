@@ -1,6 +1,6 @@
 # Robocze ustalenia dotyczące context skills
 
-Stan na 2026-10-12. Notatka do kontynuowania pracy po długiej sesji lub zmianie rozmowy. Zapisuje decyzje użytkownika, bieżący zakres i pomysły do dalszego omówienia; nie ustanawia nowych reguł projektu.
+Stan na 2026-10-13. Notatka do kontynuowania pracy po długiej sesji lub zmianie rozmowy. Zapisuje decyzje użytkownika, bieżący zakres i pomysły do dalszego omówienia; nie ustanawia nowych reguł projektu.
 
 ## Bieżący zakres
 
@@ -10,17 +10,19 @@ Stan na 2026-10-12. Notatka do kontynuowania pracy po długiej sesji lub zmianie
 * Użytkownik zatwierdził `context-map` dobierający punkty wejścia i strukturę map do potrzeb projektu. Zastępuje to wcześniejsze wymaganie dwóch map. Definicje i przykłady pozostają w jednym `SKILL.md`.
 * Pozostałe skills i integracje mają na razie pozostać bez zmian.
 * Stan sprzed ponownego ustalenia celu zapisano lokalnym commitem `62434ff`. Nie publikowano zmian ani nie migrowano innych repozytoriów.
-* Dobór map do potrzeb projektu zapisano lokalnym commitem `a5539f6`. Obecna rewizja nawigacji po rozbudowanym projekcie jest zmianą roboczą po tym commicie.
+* Dobór map do potrzeb projektu zapisano lokalnym commitem `a5539f6`. Nawigację po rozbudowanym projekcie zapisano lokalnym commitem `5231369`. Obecna rewizja usuwa osobny etap analizy 5 Whys i pytań sokratejskich; pozostaje zmianą roboczą.
 * `.local/` i `.agents/` są ignorowane.
 
 ## Cel skilla po doprecyzowaniu
 
 Użytkownik zatwierdził cel: zrozumieć znaczenie wiedzy projektu, warunki jej zastosowania oraz wpływ na decyzje lub działania agenta. Dobór punktów wejścia i struktury map wynika z tego rozpoznania. Samo formatowanie tabel i sprawdzanie linków nie realizuje celu.
 
-* Kolejność pracy: zrozumienie źródła, badanie uzasadnienia, rozpoznanie zastosowań i punktów wejścia, dobór struktury i miejsca, zapis tras, sprawdzenie.
-* 5W oznacza tu 5 Whys: pogłębianie przyczyn i założeń. Nie trzeba zadawać wszystkich pięciu pytań ani wymyślać brakujących odpowiedzi.
-* Pytania sokratejskie dotyczą pojęć, założeń, dowodów, alternatyw, konsekwencji i kontrprzykładów.
-* Agent wybiera pytania, które mogą zmienić interpretację lub trasę. Nie przekazuje użytkownikowi obowiązkowego kwestionariusza.
+* Kolejność pracy: zrozumienie źródła, rozpoznanie zastosowań i punktów wejścia, dobór struktury i miejsca, zapis tras, sprawdzenie.
+* Użytkownik zatwierdził usunięcie osobnego etapu 5 Whys i pytań sokratejskich. Zastępuje to wcześniejsze wymaganie stosowania tych metod.
+* Użytkownik uznał tabelę trzech pytań za zbyt ubogą. Zatwierdził tabelę siedmiu pytań o przeznaczenie źródła, rodzaj treści, potrzebę odczytu, wymagany kontekst, podstawy i ograniczenia, relacje z inną wiedzą oraz wynik odczytu.
+* Pytania wspomagają zrozumienie źródła. Nie wymagają osobnej odpowiedzi na każde z nich ani nie przywracają osobnego etapu analizy.
+* Jasne odpowiedzi pozwalają przejść dalej. Przy niejasności agent doczytuje odpowiedni fragment albo zachowuje lukę, zamiast wymyślać zastosowanie.
+* Pozostaje rozróżnienie między treścią źródła, wnioskiem agenta i przyjętą zasadą projektu.
 * Przy artykule trzeba odróżnić zalecenie autora od zaakceptowanej reguły projektu. Brak lokalnego uzasadnienia pozostaje brakiem, nie nową regułą.
 * Map nie tworzy raportów. Jego wynikiem są mapy, a nie dokument opisujący przebieg pracy.
 * Wymagania dotyczące sposobu napisania skilla nie są poleceniami dla agenta wykonującego skill. Usunięto instrukcję nakazującą trzymanie definicji i przykładów w tym dokumencie.
@@ -71,7 +73,7 @@ Użytkownik odrzucił szczegółowy przykład diagnozowania wieku danych jako zb
 * Znany cel pozwala ominąć ogólną mapę. Przykładowo kompilacja może prowadzić bezpośrednio do instrukcji dla danego środowiska.
 * Wiedza i procedury pozostają w źródłach. Mapa nie przejmuje szczegółowych kroków diagnostycznych.
 * Weryfikacja obejmuje całą drogę od rzeczywistego pytania do konkretnego źródła, a nie tylko poprawność pojedynczych linków.
-* Nowy przykład w `SKILL.md` obejmuje różne obszary projektu oraz warunkowe przechodzenie między nimi. Zachowano Goal, 5 Whys i pytania sokratejskie.
+* Nowy przykład w `SKILL.md` obejmuje różne obszary projektu oraz warunkowe przechodzenie między nimi. Zachowano Goal. Późniejsza decyzja usuwa osobny etap 5 Whys i pytań sokratejskich.
 
 ### Zakres odpowiedzialności
 
@@ -170,7 +172,7 @@ Nie przenosimy automatycznie szczegółowych reguł innych procesów, takich jak
 
 Poprzednia rewizja miała sześć etapów z osobnymi nagłówkami. Użytkownik doprecyzował docelowy układ: krótki wstęp, jedna sekcja `Steps`, numerowane kroki oraz punkty i tabele pod krokami. Nie tworzymy osobnych nagłówków dla każdego kroku.
 
-Wersja zapisana w commicie miała siedem kroków i kończyła się raportem. Użytkownik odrzucił ten kierunek jako odejście od celu. Aktualna wersja ma sześć kroków, rozpoczyna się od rozumienia wiedzy i nie wymaga raportu. Całość stanowi jeden skill bez plików `references` i bez nazw oraz linków do konkretnego projektu przykładowego. Przykłady używają fikcyjnych dokumentów i wymagają zastąpienia ich rzeczywistymi źródłami.
+Wersja zapisana w commicie miała siedem kroków i kończyła się raportem. Użytkownik odrzucił ten kierunek jako odejście od celu. Aktualna wersja ma pięć kroków, rozpoczyna się od rozumienia wiedzy i nie wymaga raportu. Całość stanowi jeden skill bez plików `references` i bez nazw oraz linków do konkretnego projektu przykładowego. Przykłady używają fikcyjnych dokumentów i wymagają zastąpienia ich rzeczywistymi źródłami.
 
 W rewizji zapisanej jako `a5539f6` sprawdzono strukturę skilla i język instrukcji, również wewnątrz przykładów. Zastąpiono stały podział na dwie mapy doborem punktów wejścia i struktury. Obecna rewizja rozszerza ten kierunek o nawigację po całym zbiorze. Folder `skills/context-map/` nadal zawiera wyłącznie `SKILL.md`.
 

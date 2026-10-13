@@ -33,47 +33,24 @@ Help agents narrow a broad request to relevant sources across the project's know
 
 | Question | Identify | Example |
 | --- | --- | --- |
-| What problem does this knowledge address? | The situation and desired outcome | Repeated calculations delay a response. |
-| What does the source explain or recommend? | A claim, constraint, decision, or procedure | Reuse a calculated result for a limited time. |
-| Under which conditions does it apply? | Assumptions, boundaries, and exceptions | Reuse is acceptable only within the allowed freshness limit. |
-| What supports the claim? | Evidence and its limits | Measurements concern one workload, not every request. |
-| What would an agent do differently? | A decision, action, or check | Check freshness requirements before choosing a cache lifetime. |
+| What does this source help an agent understand or do? | Its subject, purpose, and contribution | A use case explains expected behavior. A build guide explains how to compile a target. |
+| What does it actually establish? | An explanation, requirement, decision, recommendation, or procedure | An architecture decision assigns component responsibilities. An article recommends an approach. |
+| What request or uncertainty would make an agent need it? | A recognizable reason to seek this knowledge | Determine whether reported behavior is a defect. Find the build instructions for a target. |
+| What does an agent need to know before using it? | Prerequisites and relevant project context | The target platform selects the build instructions. Product requirements constrain a design choice. |
+| What supports it, and what limits its use? | Authority, evidence, assumptions, scope, and exceptions | A project decision governs one subsystem. A study measures only one workload. |
+| How does it relate to other project knowledge? | Complementary sources, dependencies, overlaps, or conflicts | A use case defines behavior. A component contract constrains its implementation. |
+| What can the agent decide or do after reading it? | The useful result of consulting the source | Select the applicable checks. Explain expected behavior in an issue response. |
+
+* Use the questions that help you understand the source.
+* Do not require a separate answer to every question.
+* Continue when the application and its limits are clear.
+* If they remain unclear, read the relevant source section or preserve the gap.
+* Do not invent an application to complete a route.
 
 * Treat the examples as illustrations, not project facts.
 * Do not turn an article's recommendation into an accepted project rule.
 
-2. Examine the reasoning with 5W and Socratic questions.
-
-* Use 5W, or 5 Whys, when a claim does not explain why a recommendation fits the problem.
-* Ask why the desired outcome matters.
-* Ask why the proposed action could produce that outcome.
-* Continue with another why only when the answer leaves a relevant cause or assumption unclear.
-* Stop when the explanation supports a use condition or the available evidence cannot support another answer.
-* Do not require five questions or invent answers to complete the sequence.
-
-| Example why | Possible source-supported answer | Consequence for mapping |
-| --- | --- | --- |
-| Why reuse calculated results? | Repeated calculations contribute to response delay. | Consider the source for response-performance tasks. |
-| Why can a previous result serve a new request? | The relevant inputs remain valid during reuse. | Include input validity in the use condition. |
-| Why is that reuse period acceptable here? | The article does not establish the project's freshness requirements. | Consult the project contract before adopting the recommendation. |
-
-* Use Socratic questions to challenge the interpretation where it can change the route.
-
-| Question type | Ask yourself | Effect on the route |
-| --- | --- | --- |
-| Clarification | What does this term mean in this source? | Preserve its precise meaning in the condition. |
-| Assumptions | What must be true for this advice to work? | Make relevant preconditions explicit. |
-| Evidence | Why is this evidence sufficient for the claimed use? | Keep the condition within the evidence's scope. |
-| Alternatives | Could another source or method satisfy the task with fewer assumptions? | Select the source that fits the actual need. |
-| Consequences | What could fail if an agent applies this advice? | Add the necessary constraint or conditional source. |
-| Counterexample | When would this recommendation be wrong or unnecessary? | Exclude that situation from the route. |
-
-* Answer these questions from the available sources and project context.
-* Ask the user only when a missing decision prevents a supported mapping choice.
-* Use only questions that can change your understanding or the route.
-* Do not produce a questionnaire for every source.
-
-3. Derive situations in which the knowledge changes work.
+2. Derive situations in which the knowledge changes work.
 
 * Name a concrete decision, action, or check that the knowledge changes.
 * Identify the situation in which an agent needs that contribution.
@@ -110,7 +87,7 @@ Help agents narrow a broad request to relevant sources across the project's know
 * One task can need several sources.
 * Stop discovery when the application is clear or a specific missing fact prevents a conclusion.
 
-4. Choose entry points, map structures, and locations that fit those situations.
+3. Choose entry points, map structures, and locations that fit those situations.
 
 * Compare the identified situations with the project's existing navigation.
 * Reuse effective entry points and structures.
@@ -153,12 +130,12 @@ Help agents narrow a broad request to relevant sources across the project's know
 * Before changing an existing format, inspect its readers and writers, including installed skills and hooks.
 * Preserve the old format when a dependency's migration remains outside scope.
 
-5. Write routes that preserve the knowledge's conditions and authority.
+4. Write routes that preserve the knowledge's conditions and authority.
 
 * Link the section that supplies the needed knowledge.
 * Include relevant sources from `.context/`, `docs/`, contribution guides, available skills, and external references.
 * Keep facts and procedures at their sources.
-* Write use conditions from the applications established in Step 3.
+* Write use conditions from the applications established in Step 2.
 * Distinguish accepted requirements from advice, evidence, and unresolved choices.
 * When a route needs Read first, select its source with this table.
 
@@ -243,7 +220,7 @@ Stop expanding when the relevant outcome, constraints, and evidence requirements
 * Do not require knowledge-entry metadata on ordinary documents.
 * Exclude raw transcripts, secrets, and temporary progress records.
 
-6. Check that the chosen structure leads to the intended knowledge.
+5. Check that the chosen structure leads to the intended knowledge.
 
 * Compare each route with the source's claim, conditions, authority, and evidence limits.
 * Start from realistic requests without assuming the agent already knows the destination.
