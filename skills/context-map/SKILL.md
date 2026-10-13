@@ -108,6 +108,7 @@ Help agents narrow a broad request to relevant sources across the project's know
 
 4. Write tables that map situations to documents or sections.
 
+* Build a mapping from situations to documents or sections as a table with two or more columns.
 * Create or update the tables selected in Step 3.
 * Choose columns that support the selected navigation methods.
 * Use the table below to select columns, not as a required output template.
@@ -141,54 +142,33 @@ Help agents narrow a broad request to relevant sources across the project's know
 * Use the examples below only where their structure fits.
 * Replace fictional paths and conditions with verified project sources.
 
-* Example: a source index at `.context/index.md` supports knowledge discovery.
+* Example column combinations:
+* Paths in these examples are relative to a root `AGENTS.md`.
 
-```markdown
-| Source | Use when |
+``` Use when | Document / Section
+| Use when | Document / Section |
 | --- | --- |
-| [Freshness limits](cache-freshness.md) | Change or diagnose the age of displayed data. |
-| [Cache lifetime study](../docs/cache-study.md) | Compare cache lifetimes within accepted freshness limits. |
-| [Response diagnosis](../docs/diagnosis.md#response-delays) | Investigate delayed responses. |
+| Change or diagnose the age of displayed data. | [Freshness limits](.context/cache-freshness.md) |
+| Compare cache lifetimes within accepted freshness limits. | [Cache lifetime study](docs/cache-study.md) |
+| Investigate delayed responses. | [Response diagnosis](docs/diagnosis.md#response-delays) |
 ```
 
-* Example: task routes in a root `AGENTS.md` identify prerequisites and conditional sources.
-
-```markdown
-## Task routing
-
-Select the rows that match the task.
-Reuse current information from the conversation.
-Read the required sections without recursively reading every linked document.
-Stop when the outcome, constraints, and required evidence are clear.
-Expand the search for missing information, conflicts, or changed scope.
-
-| Task | Read first | Extend when |
+``` Task | Read first | Additional reading
+| Task | Read first | Additional reading |
 | --- | --- | --- |
 | Choose a cache lifetime | [Freshness limits](.context/cache-freshness.md) | Read the [cache study](docs/cache-study.md) when comparing lifetimes within those limits. |
 | Select checks for a change | [Validation scope](docs/testing.md#validation-by-change-scope) | Read [evidence reuse](docs/testing.md#evidence-reuse) when considering previous results. |
 ```
 
-* Example: navigation in a root `AGENTS.md` covers different kinds of project knowledge.
-* Some destinations supply guidance directly, while others help select a narrower source.
-
-```markdown
-## Find project guidance
-
-Use a known relevant source directly.
-Otherwise, select the area that matches the information you need.
-
-| Information needed | Start here | Narrow the selection by |
+``` Situation | Document / Section | Narrow by
+| Situation | Document / Section | Narrow by |
 | --- | --- | --- |
-| Expected product behavior | [Use cases](.context/product/index.md) | User outcome and affected scenario |
-| Component responsibilities or dependencies | [Architecture](.context/architecture/index.md) | Affected boundary or design decision |
-| Implementation conventions | [Programming guide](docs/programming.md) | Language and kind of change |
-| Compilation or local execution | [Build guide](docs/build.md) | Target and environment |
-| Evidence needed for a change | [Validation guide](docs/testing.md#validation-by-change-scope) | Changed behavior and affected boundaries |
-| How to answer an issue | [Response guidance](.context/collaboration/issue-responses.md) | Response purpose and available evidence |
-
-Select relevant entries within an area without reading every linked document.
-Consult another area when the current question requires its knowledge.
-Stop expanding when the relevant outcome, constraints, and evidence requirements are clear.
+| Determine expected product behavior | [Use cases](.context/product/index.md) | User outcome and affected scenario |
+| Assess component responsibilities or dependencies | [Architecture](.context/architecture/index.md) | Affected boundary or design decision |
+| Choose implementation conventions | [Programming guide](docs/programming.md) | Language and kind of change |
+| Compile or run the project locally | [Build guide](docs/build.md) | Target and environment |
+| Determine evidence needed for a change | [Validation guide](docs/testing.md#validation-by-change-scope) | Changed behavior and affected boundaries |
+| Prepare an issue response | [Response guidance](.context/collaboration/issue-responses.md) | Response purpose and available evidence |
 ```
 
 * Within the product index, route by user outcomes rather than listing every document without use conditions.
