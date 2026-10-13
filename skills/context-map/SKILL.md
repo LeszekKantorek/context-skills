@@ -1,6 +1,6 @@
 ---
 name: context-map
-description: Understand project knowledge and when it changes decisions or actions. Use to organize project guidance, choose navigation entry points, or fix context routing.
+description: Understand project knowledge and when it changes decisions or actions. Use to organize project guidance, choose navigation entry points, or correct context routing.
 ---
 
 # Map Project Context
@@ -186,36 +186,26 @@ Help agents narrow a broad request to relevant sources across the project's know
 * Do not require knowledge-entry metadata on ordinary documents.
 * Exclude raw transcripts, secrets, and temporary progress records.
 
-5. Check that the chosen structure leads to the intended knowledge.
+5. Check that the tables lead from situations to the right documents.
 
-* Compare each route with the source's claim, conditions, authority, and evidence limits.
-* Start from realistic requests without assuming the agent already knows the destination.
-* Check the whole path from a broad request to a specific source, including any local index.
-* Check a request that needs several areas and a request that can use a direct route.
-* Remove navigation steps that add no useful selection.
-* Check a matching situation and a similar situation that should not select the route.
-* Check each conditional branch against its supporting source.
-* Check where reading stops and what would justify expanding it.
-* Check combined routes when a task needs several sources.
+* Check the mappings against realistic requests and their linked sources.
+* Use the table to identify and correct navigation problems.
 
-| Example request | Expected selection | Meaning to preserve |
-| --- | --- | --- |
-| Find the accepted freshness limit | Question route or source index: freshness limits | Find the project decision without reading the cache study. |
-| Choose a cache lifetime | Task map: freshness limits, then the cache study when needed | Advice from a study does not override accepted constraints. |
-| Change behavior that crosses a component boundary | Relevant use case, affected architecture contracts, and applicable validation guidance | Select relevant sections without loading every area at the start. |
-| Compile the project locally | Build guide for the target and environment | Skip unrelated product and architecture indexes. |
-| Answer an issue without changing code | Response guidance and sources needed for the factual answer | Do not activate implementation and build procedures automatically. |
-| Fix a spelling error in a document | Local text and applicable writing guidance | A nearby performance topic does not activate a diagnostic procedure. |
+| Check | Expected result | Problem signal | Correction |
+| --- | --- | --- | --- |
+| Recognizable situation | The agent can select a row from its request | Selection requires knowing the destination document first | Describe the situation through the need or work it serves. |
+| Relevant destination | The linked content addresses the situation | The document shares a topic but does not supply the needed knowledge | Select a more relevant document or section. |
+| Sufficient knowledge | The mapping supplies the information needed to proceed | A required constraint, explanation, or procedure is missing | Add the missing source with its use condition. |
+| Selective reading | The mapping avoids unrelated content | Every request selects broad documents or unconditional additional reading | Narrow the link or state when additional reading matters. |
+| Clear conditions | Similar situations select different sources when necessary | A row also matches situations where its guidance does not apply | Clarify its scope, conditions, or exceptions. |
+| Useful navigation | Each intermediate map helps select the next destination | Navigation repeats, loops, or adds no useful choice | Remove the detour or link directly to the source. |
+| Preserved meaning | The mapping respects the source's authority and limits | Advice appears mandatory or uncertain knowledge appears settled | Correct the wording and preserve the source's qualifications. |
+| Valid destination | The link reaches the intended document or section | The path, anchor, or replacement is missing or incorrect | Correct the link or mark the unresolved gap. |
 
-* Treat these examples as expected choices, not evidence of completed agent runs.
-* Fix routes that omit necessary information or select unrelated sources.
-* Repeat the affected checks after a fix.
-* Check selection without executing destination procedures.
-* Check file paths, section anchors, external sources, and skill availability.
-* Write local paths relative to the file that contains each map.
-* For retired entries, follow valid replacement paths.
-* Keep broken replacements, cycles, and inaccessible sources explicit as unresolved gaps.
-* Do not present unchecked destinations as established routes.
-* Preserve substantive knowledge and unrelated instructions when removing duplicate navigation.
-* Save the maps within the user's authorized scope.
-* If the user requests suggestions only, return proposed maps without editing files.
+* Check a matching request and a similar request that should not select the same row.
+* Include a request that needs several knowledge areas when the map supports such work.
+* Check the full path when a row links to another index.
+* Check selection without executing the linked procedures.
+* Distinguish expected selections from observed agent behavior.
+* Repeat the affected checks after correcting a mapping.
+* Save changes within the requested scope.
