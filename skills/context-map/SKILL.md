@@ -50,45 +50,38 @@ Help agents narrow a broad request to relevant sources across the project's know
 * Treat the examples as illustrations, not project facts.
 * Do not turn an article's recommendation into an accepted project rule.
 
-2. Derive situations in which the knowledge changes work.
+2. Identify the roles that knowledge can serve in project navigation.
 
-* Name a concrete decision, action, or check that the knowledge changes.
+* Classify relevant content with the table below.
 * Identify the situation in which an agent needs that contribution.
+* Use actual requests, recurring work, and source applications to support the mapping.
+
+| Term | Meaning | Recognize when | Routing use |
+| --- | --- | --- | --- |
+| Knowledge area | A group of related knowledge serving recognizable needs | Sources concern related questions, responsibilities, or work | Provide an entry point with conditions for choosing that area. |
+| Task | An outcome an agent needs to achieve | The content supports a concrete request or recurring kind of work | Connect the requested outcome to relevant guidance. |
+| Explanation | Knowledge that helps an agent understand a subject | The content explains concepts, mechanisms, or relationships | Route questions or missing understanding to this source. |
+| Requirement or constraint | A condition that valid work must satisfy | The content defines required behavior, boundaries, or obligations | Route work affected by that condition to this source. |
+| Decision | An accepted choice with its scope and rationale | The content records what the project chose and why | Route choices affected by that decision to its rationale and limits. |
+| Procedure | An established sequence for achieving a result | The content gives actions, prerequisites, and an expected result | Provide a direct route when the requested work matches the procedure. |
+| Evidence | Support for a claim or conclusion | The content supplies observations, measurements, or test results | Link it where an agent needs to assess a claim or compare options. |
+| Open question | An unresolved matter relevant to the work | The content records missing knowledge, uncertainty, or conflicting positions | Make the uncertainty visible on affected routes. |
+
+* Classify the relevant fragment rather than assigning one role to an entire document.
+* Allow a fragment to serve several roles without copying its content.
+* Use these roles to recognize applications, not to require folders or separate maps.
+* Preserve useful knowledge even when none of these roles fits exactly.
+* Do not treat an author's recommendation as a project requirement or accepted decision.
+* Compare contributions from sources that address the same situation.
+* Preserve disagreements instead of choosing a new project policy.
 * Identify a similar situation in which the contribution does not apply.
-* Compare the contribution with existing knowledge for the same situation.
-* If sources disagree, keep the disagreement explicit instead of choosing a new project policy.
 * If no useful application emerges, leave the source outside the maps.
-* A missing application is not a reason to invent a broad task category.
-
-| Source content | Useful situation | Avoid |
-| --- | --- | --- |
-| An article explains cache lifetime trade-offs. | Choose a cache lifetime under freshness constraints. | Read this for all backend work. |
-| A context entry records accepted freshness limits. | Change or diagnose the age of displayed data. | Replace the accepted limits with the article's example values. |
-| A procedure defines how to isolate response delays. | Investigate a delayed response. | Run the procedure merely because its document exists. |
-
-* Identify what an agent knows when it starts: a question, task, symptom, decision, or affected area.
-* Use actual requests, recurring work, and source applications as evidence for these entry points.
-* Use the following terms when translating situations into routes.
-
-| Term | Meaning |
-| --- | --- |
-| Entry point | The recognizable situation from which an agent starts looking for guidance |
-| Route | A connection from an entry point to sources, with any conditions needed to select them |
-| Source | A document, section, available skill, or external reference that supplies relevant information |
-| Task | A requested outcome or recurring kind of work |
-| Procedure | An established sequence of actions with conditions and an expected result |
-| Read first | The source needed to understand task constraints or choose the next action |
-| Additional | A supporting source whose relevance depends on a stated condition |
-| Extend when | The condition that makes an additional source necessary |
-
-* A task can need knowledge without having an established procedure.
-* Do not invent procedure steps to complete a route.
-* One source can serve several situations.
-* One task can need several sources.
+* Do not invent a broad task category or procedure to complete a mapping.
 * Stop discovery when the application is clear or a specific missing fact prevents a conclusion.
 
 3. Choose entry points, map structures, and locations that fit those situations.
 
+* An entry point is a recognizable situation from which an agent starts looking for guidance.
 * Compare the identified situations with the project's existing navigation.
 * Reuse effective entry points and structures.
 * Choose labels that an agent can recognize from its request.
@@ -132,6 +125,12 @@ Help agents narrow a broad request to relevant sources across the project's know
 
 4. Write routes that preserve the knowledge's conditions and authority.
 
+* A source is a document, section, available skill, or external reference that supplies relevant information.
+* A route connects an entry point to sources with the conditions needed to select them.
+* Read first identifies the source needed to understand task constraints or choose the next action.
+* Additional identifies a supporting source whose relevance depends on a stated condition.
+* Extend when states the condition that makes an additional source necessary.
+* Assign these reading roles from the route's needs, not the source's category alone.
 * Link the section that supplies the needed knowledge.
 * Include relevant sources from `.context/`, `docs/`, contribution guides, available skills, and external references.
 * Keep facts and procedures at their sources.

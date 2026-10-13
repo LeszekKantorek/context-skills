@@ -10,14 +10,18 @@ Stan na 2026-10-13. Notatka do kontynuowania pracy po długiej sesji lub zmianie
 * Użytkownik zatwierdził `context-map` dobierający punkty wejścia i strukturę map do potrzeb projektu. Zastępuje to wcześniejsze wymaganie dwóch map. Definicje i przykłady pozostają w jednym `SKILL.md`.
 * Pozostałe skills i integracje mają na razie pozostać bez zmian.
 * Stan sprzed ponownego ustalenia celu zapisano lokalnym commitem `62434ff`. Nie publikowano zmian ani nie migrowano innych repozytoriów.
-* Dobór map do potrzeb projektu zapisano lokalnym commitem `a5539f6`. Nawigację po rozbudowanym projekcie zapisano lokalnym commitem `5231369`. Obecna rewizja usuwa osobny etap analizy 5 Whys i pytań sokratejskich; pozostaje zmianą roboczą.
+* Dobór map do potrzeb projektu zapisano lokalnym commitem `a5539f6`. Nawigację po rozbudowanym projekcie zapisano lokalnym commitem `5231369`. Usunięcie osobnego etapu analizy i nową tabelę pytań zapisano lokalnym commitem `bed4700`. Obecna rewizja tabeli ról wiedzy pozostaje zmianą roboczą.
 * `.local/` i `.agents/` są ignorowane.
 
 ## Cel skilla po doprecyzowaniu
 
 Użytkownik zatwierdził cel: zrozumieć znaczenie wiedzy projektu, warunki jej zastosowania oraz wpływ na decyzje lub działania agenta. Dobór punktów wejścia i struktury map wynika z tego rozpoznania. Samo formatowanie tabel i sprawdzanie linków nie realizuje celu.
 
-* Kolejność pracy: zrozumienie źródła, rozpoznanie zastosowań i punktów wejścia, dobór struktury i miejsca, zapis tras, sprawdzenie.
+* Kolejność pracy: zrozumienie źródła, rozpoznanie ról i zastosowań wiedzy, dobór punktów wejścia, struktury i miejsca, zapis tras, sprawdzenie.
+* Punkt 2 zawiera jedną tabelę decyzyjną `Term / Meaning / Recognize when / Routing use`, zastępującą przykład zastosowań i osobny słownik.
+* Tabela rozpoznaje role: Knowledge area, Task, Explanation, Requirement or constraint, Decision, Procedure, Evidence i Open question. Łączy rozpoznaną treść z jej zastosowaniem w nawigacji.
+* Klasyfikacja dotyczy istotnych fragmentów, dopuszcza kilka ról i nie wymaga kopiowania treści, nowych folderów ani osobnych map. Niedopasowanie kategorii nie jest powodem odrzucenia przydatnej wiedzy.
+* Definicje Read first, Additional i Extend when znajdują się w punkcie 4. Ich przypisanie zależy od potrzeb konkretnej trasy, nie od kategorii źródła.
 * Użytkownik zatwierdził usunięcie osobnego etapu 5 Whys i pytań sokratejskich. Zastępuje to wcześniejsze wymaganie stosowania tych metod.
 * Użytkownik uznał tabelę trzech pytań za zbyt ubogą. Zatwierdził tabelę siedmiu pytań o przeznaczenie źródła, rodzaj treści, potrzebę odczytu, wymagany kontekst, podstawy i ograniczenia, relacje z inną wiedzą oraz wynik odczytu.
 * Pytania wspomagają zrozumienie źródła. Nie wymagają osobnej odpowiedzi na każde z nich ani nie przywracają osobnego etapu analizy.
