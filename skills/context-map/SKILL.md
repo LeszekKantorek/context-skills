@@ -106,33 +106,37 @@ Help agents narrow a broad request to relevant sources across the project's know
 * Preserve directory scope and existing filename conventions.
 * Check readers and writers before changing a format that tools depend on.
 
-4. Write routes that preserve the knowledge's conditions and authority.
+4. Write tables that map situations to documents or sections.
 
-* A source is a document, section, available skill, or external reference that supplies relevant information.
-* A route connects an entry point to sources with the conditions needed to select them.
-* Read first identifies the source needed to understand task constraints or choose the next action.
-* Additional identifies a supporting source whose relevance depends on a stated condition.
-* Extend when states the condition that makes an additional source necessary.
-* Assign these reading roles from the route's needs, not the source's category alone.
-* Link the section that supplies the needed knowledge.
-* Include relevant sources from `.context/`, `docs/`, contribution guides, available skills, and external references.
-* Keep facts and procedures at their sources.
+* Create or update the tables selected in Step 3.
+* Choose columns that support the selected navigation methods.
+* Use the table below to select columns, not as a required output template.
+* Make each row connect a recognizable situation to relevant document or section links.
+
+| Column | Meaning | Include when | Write as | Useful for |
+| --- | --- | --- | --- | --- |
+| Situation / Task | The need or work that makes the linked documents relevant | The table starts from what the agent needs to do or understand | A recognizable request, outcome, or situation | Direct routes, conditional routes, orientation |
+| Use when | The condition under which the linked document applies | The table starts from documents, or situations need a more precise condition | A concrete need, scope, or circumstance | Source indexes, conditional routes |
+| Document / Section | The destination that supplies relevant knowledge | The mapping does not need separate prerequisite and additional sources | A document link, with a section anchor when appropriate | Direct routes, orientation, narrowing |
+| Read first | The source required before the agent can proceed | The situation has a knowledge prerequisite | Links to documents or sections that establish necessary context or constraints | Task routes, conditional routes |
+| Additional reading | Further sources needed under specific conditions | Only some instances of the situation need more knowledge | A condition paired with a document or section link | Conditional routes, connections between areas |
+| Narrow by | The criterion for selecting within the linked collection | The destination is an index or document covering several possibilities | A relevant distinction, such as component, user outcome, target, or environment | Orientation, narrowing |
+
+* Use either Situation / Task or Use when when one column sufficiently explains relevance.
+* Use Read first and Additional reading instead of Document / Section when the distinction matters.
+* Keep additional reading conditions beside their links.
+* Link to the relevant section instead of requiring the whole document when possible.
+* Keep knowledge and procedure steps in the linked documents.
+* Do not add a column unless it helps select the right source.
+* Preserve useful existing column names when their meaning fits the selected role.
+* Extend when can name the Additional reading column when each cell pairs a condition with its link.
+* Put general instructions for continuing or stopping navigation beside the table when needed.
 * Write use conditions from the applications established in Step 2.
-* Distinguish accepted requirements from advice, evidence, and unresolved choices.
-* When a route needs Read first, select its source with this table.
-
-| Candidate for Read first | Select it when | Make it conditional when |
-| --- | --- | --- |
-| Accepted constraint or decision | It determines which actions are valid. | Only a possible dependency makes it relevant. |
-| Procedure | The task requires its established sequence. | Only a later stage or failure requires it. |
-| Available skill | The skill owns the required procedure. | A stated condition determines whether the task needs it. |
-| Explanation or study | The agent needs its reasoning before choosing an approach. | It helps compare alternatives after constraints are clear. |
-
-* Read first applies to the matching situation, not every task in the project.
+* Assign Read first from the situation's needs, not the document's category alone.
 * Select several first sources only when the next action needs each one.
-* Give additional sources explicit selection conditions.
-* Link a known procedure or skill directly.
-* Avoid requiring another map when the destination is already known.
+* Include relevant documents from `.context/`, `docs/`, contribution guides, available skills, and external references.
+* Link a known procedure or skill document directly.
+* Distinguish accepted requirements from advice, evidence, and unresolved choices.
 * If no useful source exists, preserve the gap instead of adding filler.
 * Use the examples below only where their structure fits.
 * Replace fictional paths and conditions with verified project sources.

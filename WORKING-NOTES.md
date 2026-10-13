@@ -10,7 +10,7 @@ Stan na 2026-10-13. Notatka do kontynuowania pracy po długiej sesji lub zmianie
 * Użytkownik zatwierdził `context-map` dobierający punkty wejścia i strukturę map do potrzeb projektu. Zastępuje to wcześniejsze wymaganie dwóch map. Definicje i przykłady pozostają w jednym `SKILL.md`.
 * Pozostałe skills i integracje mają na razie pozostać bez zmian.
 * Stan sprzed ponownego ustalenia celu zapisano lokalnym commitem `62434ff`. Nie publikowano zmian ani nie migrowano innych repozytoriów.
-* Dobór map do potrzeb projektu zapisano lokalnym commitem `a5539f6`. Nawigację po rozbudowanym projekcie zapisano lokalnym commitem `5231369`. Usunięcie osobnego etapu analizy i nową tabelę pytań zapisano lokalnym commitem `bed4700`. Tabelę ról wiedzy zapisano lokalnym commitem `5ef98f8`. Użytkownik zatwierdził zmianę punktu 3 i jej lokalny commit.
+* Dobór map do potrzeb projektu zapisano lokalnym commitem `a5539f6`. Nawigację po rozbudowanym projekcie zapisano lokalnym commitem `5231369`. Usunięcie osobnego etapu analizy i nową tabelę pytań zapisano lokalnym commitem `bed4700`. Tabelę ról wiedzy zapisano lokalnym commitem `5ef98f8`. Dobór metod nawigacji zapisano lokalnym commitem `8fc61b2`. Użytkownik zatwierdził przebudowę punktu 4 i jej lokalny commit.
 * `.local/` i `.agents/` są ignorowane.
 
 ## Cel skilla po doprecyzowaniu
@@ -24,7 +24,11 @@ Użytkownik zatwierdził cel: zrozumieć znaczenie wiedzy projektu, warunki jej 
 * Punkt 3 dobiera metody nawigacji przez tabelę `Navigation method / Meaning / Choose when / Apply by`: Orientation, Narrowing, Direct route, Conditional route i Connection between areas.
 * Dobór wynika z tego, co agent już wie i czego potrzebuje, zamiast zaczynać od wyboru typu tabeli. Metody można łączyć bez osobnej mapy dla każdej i bez wymaganej kolejności czytania.
 * Zasady pod tabelą dotyczą ponownego użycia nawigacji, podziału map, przydatności kolejnych poziomów oraz miejsca zapisu i zależności narzędzi.
-* Definicje Read first, Additional i Extend when znajdują się w punkcie 4. Ich przypisanie zależy od potrzeb konkretnej trasy, nie od kategorii źródła.
+* Punkt 4 tworzy tabele łączące sytuacje z linkami do dokumentów lub sekcji. Zastępuje abstrakcyjny opis elementów mapy konkretnym doborem kolumn.
+* Tabela pomocnicza ma kolumny `Column / Meaning / Include when / Write as / Useful for` i opisuje Situation / Task, Use when, Document / Section, Read first, Additional reading oraz Narrow by.
+* Dobór kolumn zależy od metody nawigacji i potrzeb sytuacji. Nie trzeba stosować wszystkich kolumn. Read first i Additional reading rozdzielają źródła wymagane i warunkowe, zamiast dublować Document / Section.
+* Extend when może pozostać nazwą kolumny dodatkowych odczytów, jeżeli komórki łączą warunek z linkiem. Zachowano dotychczasowe przykłady indeksu, tabeli zadań i nawigacji po obszarach.
+* Continue when i Stop when nie są kolumnami katalogu. Ogólne zasady rozszerzania i kończenia odczytu mogą znaleźć się obok tabeli.
 * Użytkownik zatwierdził usunięcie osobnego etapu 5 Whys i pytań sokratejskich. Zastępuje to wcześniejsze wymaganie stosowania tych metod.
 * Użytkownik uznał tabelę trzech pytań za zbyt ubogą. Zatwierdził tabelę siedmiu pytań o przeznaczenie źródła, rodzaj treści, potrzebę odczytu, wymagany kontekst, podstawy i ograniczenia, relacje z inną wiedzą oraz wynik odczytu.
 * Pytania wspomagają zrozumienie źródła. Nie wymagają osobnej odpowiedzi na każde z nich ani nie przywracają osobnego etapu analizy.
