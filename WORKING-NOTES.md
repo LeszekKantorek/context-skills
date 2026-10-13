@@ -10,7 +10,8 @@ Stan na 2026-10-12. Notatka do kontynuowania pracy po długiej sesji lub zmianie
 * Użytkownik zatwierdził `context-map` dobierający punkty wejścia i strukturę map do potrzeb projektu. Zastępuje to wcześniejsze wymaganie dwóch map. Definicje i przykłady pozostają w jednym `SKILL.md`.
 * Pozostałe skills i integracje mają na razie pozostać bez zmian.
 * Stan sprzed ponownego ustalenia celu zapisano lokalnym commitem `62434ff`. Nie publikowano zmian ani nie migrowano innych repozytoriów.
-* `.local/` i `.agents/` są ignorowane. Obecna rewizja celu jest zmianą roboczą po tym commicie.
+* Dobór map do potrzeb projektu zapisano lokalnym commitem `a5539f6`. Obecna rewizja nawigacji po rozbudowanym projekcie jest zmianą roboczą po tym commicie.
+* `.local/` i `.agents/` są ignorowane.
 
 ## Cel skilla po doprecyzowaniu
 
@@ -57,6 +58,22 @@ Aktualna decyzja zastępuje wymaganie dwóch map. Skill rozpoznaje, z czym agent
 * Istniejące Apply, Gather i hook pozostają bez zmian. Ich zależności mogą ograniczać migrację indeksu.
 
 ## Rola context-map
+
+### Nawigacja po rozbudowanym projekcie
+
+Użytkownik odrzucił szczegółowy przykład diagnozowania wieku danych jako zbyt bliski konkretnej procedurze. Potrzebuje sposobu przechodzenia przez rozbudowaną, różnorodną wiedzę: od kompilacji i programowania, przez architekturę i przypadki użycia, po odpowiadanie na zgłoszenia.
+
+* Map ma pomagać zawężać szeroką potrzebę do właściwego źródła, także przez lokalny indeks obszaru.
+* Orientacja w zbiorze, zawężanie i bezpośrednie wejścia to możliwe mechanizmy nawigacji. Nie są trzema wymaganymi mapami ani obowiązkową kolejnością czytania.
+* Nazwa obszaru lub katalogu nie wystarcza. Trasa ma mówić, kiedy wiedza z danego obszaru jest potrzebna i jak zawęzić wybór.
+* Kolejny poziom nawigacji ma sens tylko wtedy, gdy pomaga wybrać źródło lub uniknąć zbędnych odczytów.
+* Zadanie może wymagać wiedzy z kilku obszarów. Przejście do kolejnego wynika z potrzeby, nie z obowiązku przeczytania całości na początku.
+* Znany cel pozwala ominąć ogólną mapę. Przykładowo kompilacja może prowadzić bezpośrednio do instrukcji dla danego środowiska.
+* Wiedza i procedury pozostają w źródłach. Mapa nie przejmuje szczegółowych kroków diagnostycznych.
+* Weryfikacja obejmuje całą drogę od rzeczywistego pytania do konkretnego źródła, a nie tylko poprawność pojedynczych linków.
+* Nowy przykład w `SKILL.md` obejmuje różne obszary projektu oraz warunkowe przechodzenie między nimi. Zachowano Goal, 5 Whys i pytania sokratejskie.
+
+### Zakres odpowiedzialności
 
 Użytkownik zmienił wcześniejszą koncepcję Apply: agent potrafi już stosować wiedzę, a potrzebny skill ma zarządzać jej routingiem. Dla tej odpowiedzialności przyjęto nazwę `context-map` i przygotowano osobny skill. Dotychczasowy `context-apply` nie został usunięty ani przemianowany.
 
@@ -128,7 +145,7 @@ Asystent zaproponował porównanie wariantu obecnego, uproszczonego i rozbudowan
 ## Przygotowane pliki i sprawdzenia
 
 * [Nowy skill](skills/context-map/SKILL.md) zawiera zakres, selekcję źródeł, budowanie tabeli, zasady migracji i sprawdzanie tras.
-* Definicje, przykłady indeksu, tras zadań i rozgałęzienia po objawie oraz scenariusze wyboru znajdują się bezpośrednio w `SKILL.md`. Osobny materiał referencyjny usunięto.
+* Definicje, przykłady indeksu, tras zadań i nawigacji po rozbudowanym projekcie oraz scenariusze wyboru znajdują się bezpośrednio w `SKILL.md`. Osobny materiał referencyjny usunięto.
 * [README](README.md) opisuje pierwszą wersję i współistnienie ze starym przepływem indeksu.
 * [Katalog skills](skills.sh.json) zawiera `context-map`.
 * Standardowy `quick_validate.py` przeszedł. Brakujący PyYAML pobrano do katalogu tymczasowego, bez dodawania zależności projektu.
@@ -155,7 +172,7 @@ Poprzednia rewizja miała sześć etapów z osobnymi nagłówkami. Użytkownik d
 
 Wersja zapisana w commicie miała siedem kroków i kończyła się raportem. Użytkownik odrzucił ten kierunek jako odejście od celu. Aktualna wersja ma sześć kroków, rozpoczyna się od rozumienia wiedzy i nie wymaga raportu. Całość stanowi jeden skill bez plików `references` i bez nazw oraz linków do konkretnego projektu przykładowego. Przykłady używają fikcyjnych dokumentów i wymagają zastąpienia ich rzeczywistymi źródłami.
 
-W poprzedniej rewizji sprawdzono strukturę skilla i język instrukcji, również wewnątrz przykładów. Obecna rewizja zastępuje stały podział na dwie mapy doborem punktów wejścia i struktury. Folder `skills/context-map/` nadal zawiera wyłącznie `SKILL.md`. README i ta notatka opisują aktualny kierunek.
+W rewizji zapisanej jako `a5539f6` sprawdzono strukturę skilla i język instrukcji, również wewnątrz przykładów. Zastąpiono stały podział na dwie mapy doborem punktów wejścia i struktury. Obecna rewizja rozszerza ten kierunek o nawigację po całym zbiorze. Folder `skills/context-map/` nadal zawiera wyłącznie `SKILL.md`.
 
 Scenariusze nadal opisują oczekiwane wybory, nie niezależne uruchomienia agentów.
 

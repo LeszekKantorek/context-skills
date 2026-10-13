@@ -9,6 +9,7 @@ description: Understand project knowledge and when it changes decisions or actio
 
 Understand what project knowledge means, when it applies, and how it changes an agent's decisions or actions.
 Organize access to that knowledge around the situations in which agents need it.
+Help agents narrow a broad request to relevant sources across the project's knowledge areas.
 
 * Choose entry points and map structures from actual project needs.
 * Use the smallest structure that preserves useful conditions and leads to the needed sources.
@@ -22,6 +23,8 @@ Organize access to that knowledge around the situations in which agents need it.
 * Identify the project and the scope of the request.
 * Read the supplied article, document, entry, or procedure for its meaning.
 * For a collection, use headings and existing navigation to select relevant content.
+* Identify its knowledge areas and the needs that lead agents to each area.
+* Inspect selected sources to understand those needs without loading the entire collection.
 * Read enough of each selected source to understand its claim, conditions, and evidence.
 * Identify the problem that the source addresses.
 * Distinguish what the source states from what you infer about its use.
@@ -112,6 +115,7 @@ Organize access to that knowledge around the situations in which agents need it.
 * Compare the identified situations with the project's existing navigation.
 * Reuse effective entry points and structures.
 * Choose labels that an agent can recognize from its request.
+* Explain when an area matters instead of using directory names as the only selection cues.
 * Avoid making the agent translate a symptom into an invented task category.
 * Use the following options as examples, not a required set.
 
@@ -126,6 +130,13 @@ Organize access to that knowledge around the situations in which agents need it.
 
 * Choose fields that preserve the conditions established during analysis.
 * Do not create a map type merely because this skill lists it.
+* Provide orientation when agents need to discover which knowledge areas exist.
+* Provide narrower routes when an area contains more knowledge than a request needs.
+* Provide direct routes for recognizable needs with known destinations.
+* Combine these navigation methods where useful, without requiring separate maps or a fixed reading order.
+* Add a navigation level only when it helps select among sources or avoid unrelated reading.
+* Connect areas when a request can need knowledge from several of them.
+* State what makes another area relevant instead of requiring every area at the start.
 * Use one map when its entries need the same fields and selection rules.
 * Separate maps when their entry points need different fields or navigation.
 * Use branches when a source choice depends on an earlier answer or observation.
@@ -194,19 +205,36 @@ Expand the search for missing information, conflicts, or changed scope.
 | Select checks for a change | [Validation scope](docs/testing.md#validation-by-change-scope) | Read [evidence reuse](docs/testing.md#evidence-reuse) when considering previous results. |
 ```
 
-* Example: a symptom route in a root `AGENTS.md` selects guidance from an observed result.
-* Its branches require support from the linked diagnosis procedure.
+* Example: navigation in a root `AGENTS.md` covers different kinds of project knowledge.
+* Some destinations supply guidance directly, while others help select a narrower source.
 
 ```markdown
-## Displayed data appears stale
+## Find project guidance
 
-Start with the [age check](docs/diagnosis.md#check-data-age).
-Compare the observed age with the [accepted limit](.context/cache-freshness.md).
+Use a known relevant source directly.
+Otherwise, select the area that matches the information you need.
 
-* If the age exceeds the limit, use [refresh diagnosis](docs/diagnosis.md#refresh-failures).
-* If the age meets the limit, use [freshness expectations](docs/diagnosis.md#freshness-expectations).
-* If the age cannot be established, use [measurement gaps](docs/diagnosis.md#measurement-gaps).
+| Information needed | Start here | Narrow the selection by |
+| --- | --- | --- |
+| Expected product behavior | [Use cases](.context/product/index.md) | User outcome and affected scenario |
+| Component responsibilities or dependencies | [Architecture](.context/architecture/index.md) | Affected boundary or design decision |
+| Implementation conventions | [Programming guide](docs/programming.md) | Language and kind of change |
+| Compilation or local execution | [Build guide](docs/build.md) | Target and environment |
+| Evidence needed for a change | [Validation guide](docs/testing.md#validation-by-change-scope) | Changed behavior and affected boundaries |
+| How to answer an issue | [Response guidance](.context/collaboration/issue-responses.md) | Response purpose and available evidence |
+
+Select relevant entries within an area without reading every linked document.
+Consult another area when the current question requires its knowledge.
+Stop expanding when the relevant outcome, constraints, and evidence requirements are clear.
 ```
+
+* Within the product index, route by user outcomes rather than listing every document without use conditions.
+* For a behavior change, use the relevant use case to establish the expected outcome.
+* Consult architecture when the change affects component responsibilities or dependencies.
+* Select validation guidance when deciding how to check the change.
+* Consult response guidance when preparing an issue response, not merely because work began with an issue.
+* A compilation request can go directly to the build guide without visiting product or architecture indexes.
+* These paths illustrate selection across areas, not a required workflow for every change.
 
 * These examples are alternatives that can coexist when the project needs them.
 * Do not copy all examples as a default architecture.
@@ -219,6 +247,9 @@ Compare the observed age with the [accepted limit](.context/cache-freshness.md).
 
 * Compare each route with the source's claim, conditions, authority, and evidence limits.
 * Start from realistic requests without assuming the agent already knows the destination.
+* Check the whole path from a broad request to a specific source, including any local index.
+* Check a request that needs several areas and a request that can use a direct route.
+* Remove navigation steps that add no useful selection.
 * Check a matching situation and a similar situation that should not select the route.
 * Check each conditional branch against its supporting source.
 * Check where reading stops and what would justify expanding it.
@@ -228,7 +259,9 @@ Compare the observed age with the [accepted limit](.context/cache-freshness.md).
 | --- | --- | --- |
 | Find the accepted freshness limit | Question route or source index: freshness limits | Find the project decision without reading the cache study. |
 | Choose a cache lifetime | Task map: freshness limits, then the cache study when needed | Advice from a study does not override accepted constraints. |
-| Investigate displayed data within the freshness limit | Symptom route: freshness expectations | Do not select refresh-failure guidance without its condition. |
+| Change behavior that crosses a component boundary | Relevant use case, affected architecture contracts, and applicable validation guidance | Select relevant sections without loading every area at the start. |
+| Compile the project locally | Build guide for the target and environment | Skip unrelated product and architecture indexes. |
+| Answer an issue without changing code | Response guidance and sources needed for the factual answer | Do not activate implementation and build procedures automatically. |
 | Fix a spelling error in a document | Local text and applicable writing guidance | A nearby performance topic does not activate a diagnostic procedure. |
 
 * Treat these examples as expected choices, not evidence of completed agent runs.
