@@ -79,49 +79,32 @@ Help agents narrow a broad request to relevant sources across the project's know
 * Do not invent a broad task category or procedure to complete a mapping.
 * Stop discovery when the application is clear or a specific missing fact prevents a conclusion.
 
-3. Choose entry points, map structures, and locations that fit those situations.
+3. Choose navigation that fits how agents seek project knowledge.
 
-* An entry point is a recognizable situation from which an agent starts looking for guidance.
-* Compare the identified situations with the project's existing navigation.
-* Reuse effective entry points and structures.
-* Choose labels that an agent can recognize from its request.
-* Explain when an area matters instead of using directory names as the only selection cues.
-* Avoid making the agent translate a symptom into an invented task category.
-* Use the following options as examples, not a required set.
+* Compare the needs identified in Step 2 with the project's existing navigation.
+* Identify what an agent knows when it starts and what it still needs to find.
+* Use the table to choose useful navigation methods.
 
-| Agent starts with | Possible structure | Use it when |
-| --- | --- | --- |
-| A question | Question → answer source | The agent needs a specific fact or explanation. |
-| A task | Task → Read first → Extend when | The outcome identifies prerequisites and conditional guidance. |
-| A symptom | Symptom → first check → conditional source | The next source depends on an observed result. |
-| A decision | Decision → constraints → criteria → evidence | The agent must compare options within accepted limits. |
-| A change area | Area → contracts → dependencies → applicable checks | The affected component determines relevant obligations. |
-| A need to discover knowledge | Source → Use when | The agent needs to identify what available knowledge can contribute. |
+| Navigation method | Meaning | Choose when | Apply by |
+| --- | --- | --- | --- |
+| Orientation | Show available knowledge areas and when they matter | The agent can describe its need but does not know where relevant knowledge lives | Describe areas through the needs they serve, with links to relevant sources or local maps. |
+| Narrowing | Reduce a broad selection to relevant knowledge | An area contains more information than the request needs | Organize choices by meaningful differences, such as user outcome, component, target, or environment. |
+| Direct route | Connect a recognizable need to a known destination | A recurring question or task has an established source | Link directly to the relevant section, procedure, or skill. |
+| Conditional route | Select a destination according to a relevant condition | Different circumstances require different sources | State the condition that distinguishes each destination. |
+| Connection between areas | Make related knowledge accessible across area boundaries | A request can require knowledge from several areas | Explain when another area becomes relevant and link to its appropriate entry point. |
 
-* Choose fields that preserve the conditions established during analysis.
-* Do not create a map type merely because this skill lists it.
-* Provide orientation when agents need to discover which knowledge areas exist.
-* Provide narrower routes when an area contains more knowledge than a request needs.
-* Provide direct routes for recognizable needs with known destinations.
-* Combine these navigation methods where useful, without requiring separate maps or a fixed reading order.
-* Add a navigation level only when it helps select among sources or avoid unrelated reading.
-* Connect areas when a request can need knowledge from several of them.
-* State what makes another area relevant instead of requiring every area at the start.
-* Use one map when its entries need the same fields and selection rules.
-* Separate maps when their entry points need different fields or navigation.
-* Use branches when a source choice depends on an earlier answer or observation.
-* Do not force dependent choices into an unconditional reading list.
-* Keep a missing branch justification explicit as a knowledge gap.
-* Do not invent diagnostic steps to complete a tree.
+* Combine methods where they help the same request.
+* Do not require a separate map for each method or a fixed reading order.
+* Reuse existing navigation when it supports the identified needs.
+* Use one map when entries share useful selection criteria.
+* Separate maps when their content needs different selection criteria or levels of detail.
+* Add a navigation level only when it helps select sources or avoid unrelated reading.
+* Choose labels that agents can recognize without knowing document names.
 * Keep each map in one location.
-* Reuse an existing index or guidance file when it fits the chosen structure.
-* Preserve its filename and letter case.
 * Place compact project routing in the applicable `AGENTS.md`.
-* Link to a separate map when its detail would obscure the agent file's other instructions.
-* Keep nested agent files within their directory scope.
-* Avoid creating files when an existing location serves the need.
-* Before changing an existing format, inspect its readers and writers, including installed skills and hooks.
-* Preserve the old format when a dependency's migration remains outside scope.
+* Link to a separate map when its detail would obscure other instructions.
+* Preserve directory scope and existing filename conventions.
+* Check readers and writers before changing a format that tools depend on.
 
 4. Write routes that preserve the knowledge's conditions and authority.
 

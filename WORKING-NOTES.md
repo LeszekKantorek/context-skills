@@ -10,7 +10,7 @@ Stan na 2026-10-13. Notatka do kontynuowania pracy po długiej sesji lub zmianie
 * Użytkownik zatwierdził `context-map` dobierający punkty wejścia i strukturę map do potrzeb projektu. Zastępuje to wcześniejsze wymaganie dwóch map. Definicje i przykłady pozostają w jednym `SKILL.md`.
 * Pozostałe skills i integracje mają na razie pozostać bez zmian.
 * Stan sprzed ponownego ustalenia celu zapisano lokalnym commitem `62434ff`. Nie publikowano zmian ani nie migrowano innych repozytoriów.
-* Dobór map do potrzeb projektu zapisano lokalnym commitem `a5539f6`. Nawigację po rozbudowanym projekcie zapisano lokalnym commitem `5231369`. Usunięcie osobnego etapu analizy i nową tabelę pytań zapisano lokalnym commitem `bed4700`. Obecna rewizja tabeli ról wiedzy pozostaje zmianą roboczą.
+* Dobór map do potrzeb projektu zapisano lokalnym commitem `a5539f6`. Nawigację po rozbudowanym projekcie zapisano lokalnym commitem `5231369`. Usunięcie osobnego etapu analizy i nową tabelę pytań zapisano lokalnym commitem `bed4700`. Tabelę ról wiedzy zapisano lokalnym commitem `5ef98f8`. Użytkownik zatwierdził zmianę punktu 3 i jej lokalny commit.
 * `.local/` i `.agents/` są ignorowane.
 
 ## Cel skilla po doprecyzowaniu
@@ -21,6 +21,9 @@ Użytkownik zatwierdził cel: zrozumieć znaczenie wiedzy projektu, warunki jej 
 * Punkt 2 zawiera jedną tabelę decyzyjną `Term / Meaning / Recognize when / Routing use`, zastępującą przykład zastosowań i osobny słownik.
 * Tabela rozpoznaje role: Knowledge area, Task, Explanation, Requirement or constraint, Decision, Procedure, Evidence i Open question. Łączy rozpoznaną treść z jej zastosowaniem w nawigacji.
 * Klasyfikacja dotyczy istotnych fragmentów, dopuszcza kilka ról i nie wymaga kopiowania treści, nowych folderów ani osobnych map. Niedopasowanie kategorii nie jest powodem odrzucenia przydatnej wiedzy.
+* Punkt 3 dobiera metody nawigacji przez tabelę `Navigation method / Meaning / Choose when / Apply by`: Orientation, Narrowing, Direct route, Conditional route i Connection between areas.
+* Dobór wynika z tego, co agent już wie i czego potrzebuje, zamiast zaczynać od wyboru typu tabeli. Metody można łączyć bez osobnej mapy dla każdej i bez wymaganej kolejności czytania.
+* Zasady pod tabelą dotyczą ponownego użycia nawigacji, podziału map, przydatności kolejnych poziomów oraz miejsca zapisu i zależności narzędzi.
 * Definicje Read first, Additional i Extend when znajdują się w punkcie 4. Ich przypisanie zależy od potrzeb konkretnej trasy, nie od kategorii źródła.
 * Użytkownik zatwierdził usunięcie osobnego etapu 5 Whys i pytań sokratejskich. Zastępuje to wcześniejsze wymaganie stosowania tych metod.
 * Użytkownik uznał tabelę trzech pytań za zbyt ubogą. Zatwierdził tabelę siedmiu pytań o przeznaczenie źródła, rodzaj treści, potrzebę odczytu, wymagany kontekst, podstawy i ograniczenia, relacje z inną wiedzą oraz wynik odczytu.
