@@ -51,8 +51,49 @@ Użytkownik zatwierdził cel: zrozumieć znaczenie wiedzy projektu, warunki jej 
 * Liczba punktów zależy od potrzeb kroku. Zachowano pięć kroków, treść wszystkich tabel i trzy przykłady wypełnionych map.
 * Krok 4 nadal określa budowę mapowania sytuacja → dokument lub sekcja w tabeli z dwiema lub większą liczbą kolumn.
 * Praca i commity pozostają lokalne. Użytkownik wycofał zgodę na push; nic nie wysyłamy na GitHub.
+* Commit wykonujemy wyłącznie na wyraźne polecenie użytkownika dotyczące danych zmian. Wcześniejsze zgody nie oznaczają automatycznego commitowania kolejnych edycji.
+
+## Wzorzec do wykorzystania przy budowie innych skills
+
+Układ wypracowany dla `context-map` jest punktem odniesienia przy projektowaniu kolejnych skills. Nie narzuca im pięciu kroków ani takiej samej liczby punktów. Wspólna ma być funkcja i kolejność instrukcji. Zastosowanie tego układu w Map zapisano w commicie `c5a563c`.
+
+```text
+<N>. <Krótka nazwa działania>
+
+* <Co należy osiągnąć i do czego posłuży to dalej.>
+* <Na jakich materiałach lub ustaleniach poprzedniego kroku pracujemy.>
+* <Jak podejść do pracy — wskazówki potrzebne przed tabelą.>
+* <Jak wykorzystać tabelę do osiągnięcia celu.>
+
+<Tabela wspierająca rozpoznanie lub decyzję.>
+
+* <Jeśli tabela jest otwartą pomocą: ważniejszy cel i sposób postępowania, gdy żaden wariant nie pasuje.>
+* <Jak interpretować i łączyć wybory z tabeli.>
+* <Jak postąpić z niejednoznacznością lub brakami, jeśli to istotne tutaj.>
+
+<Opcjonalne, wypełnione przykłady pokazujące zastosowanie wskazówek.>
+
+* <Co powinno być ustalone, żeby przejść dalej lub zakończyć pracę.>
+```
+
+* Cel pierwszego punktu ma wyjaśniać pożytek działania, a nie jedynie powtarzać tytuł kroku. Preferujemy bezpośrednie polecenia, np. `Establish…`, `Connect…`, `Choose…`.
+* Wejście, transformacja i wynik są analogią do projektowania procesu. Nie wymagają etykiet `Input:`, `Output:` lub `Result:` w gotowym skillu.
+* Końcowy punkt opisuje gotowość do dalszej pracy, np. `Continue when…` albo `Finish when…`. Nie tworzy dodatkowego obowiązku raportowania ani pytania o zgodę.
+* Tabela pomaga rozpoznać treść, wybrać działanie, dobrać konstrukcję albo skorygować problem. Jej kolumny wynikają z decyzji potrzebnej w danym kroku.
+* Przydatne wzorce kolumn to `Question / Identify / Example`, `Term / Meaning / Recognize when / Routing use` oraz `Check / Expected result / Problem signal / Correction`.
+* Tabela pomocnicza w skillu i tabela będąca wynikiem jego pracy pełnią różne funkcje. Nie należy automatycznie kopiować struktury pierwszej do drugiej.
+* Punkty przed tabelą przygotowują do jej użycia. Punkty po niej wyjaśniają interpretację, łączenie wyborów i wyjątki, zamiast ponownie opisywać wszystkie wiersze.
+* Jeżeli tabela jest przykładem lub otwartą pomocą, pierwszy punkt bezpośrednio po niej określa nadrzędny cel i działanie przy braku dopasowania. Sama deklaracja „to tylko przykłady” nie wystarcza.
+* Działanie przy braku dopasowania zależy od kroku: inne pytanie, opis adekwatnej roli, dostosowanie metody nawigacji, potrzebna kolumna albo dodatkowe sprawdzenie. Zachowujemy znaczenie źródeł i nie wymyślamy brakujących faktów.
+* Reguła nie otwiera zamkniętych list dozwolonych wartości ani obowiązujących ograniczeń. Stosujemy ją tam, gdzie tabela rzeczywiście dopuszcza inne rozwiązania.
+* W context-map dodano takie pierwsze punkty po pięciu tabelach pomocniczych. Tabele i wypełnione przykłady pozostają bez zmian.
+* Przykłady mają być wypełnione i pokazywać decyzje lub oczekiwany rezultat. Ich objaśnienia nie powinny brzmieć jak polecenia wykonania przykładowego zadania.
+* Zachowujemy elastyczność: bez obowiązku odpowiedzi na każde pytanie, użycia każdej kategorii lub dodawania tabeli, która nie pomaga podjąć decyzji.
+* Sprawdzamy połączenia między krokami: czy kolejny korzysta z poprzednich ustaleń, czy nie ponawia tej samej analizy i czy nie pomija rozpoznanej potrzeby.
+* Instrukcje dla autora skilla pozostają we wskazówkach projektowych. Do skilla trafiają polecenia potrzebne agentowi wykonującemu zadanie.
 
 ## Spójność pięciu kroków po przeglądzie
+
 
 * Krok 1 rozpoznaje wkład, podstawy, ograniczenia i relacje źródeł. Krok 2 korzysta z tego rozpoznania, zamiast ponawiać analizę.
 * Wynik kroku 2 to kandydaci do mapowania: sytuacja → fragment źródła, jego rola i warunki zastosowania; brakujące źródła pozostają jawnymi lukami.

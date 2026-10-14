@@ -38,6 +38,7 @@ Help agents narrow a broad request to relevant sources across the project's know
 | How does it relate to other project knowledge? | Complementary sources, dependencies, overlaps, or conflicts | A use case defines behavior. A component contract constrains its implementation. |
 | What can the agent decide or do after reading it? | The useful result of consulting the source | Select the applicable checks. Explain expected behavior in an issue response. |
 
+* Understanding the source matters more than answering the listed questions. Ask another relevant question when these leave its contribution unclear.
 * Use only the questions that help clarify the source.
 * Do not require a separate answer to every question.
 * Distinguish source statements from your interpretation and accepted project decisions.
@@ -66,11 +67,11 @@ Help agents narrow a broad request to relevant sources across the project's know
 | Evidence | Support for a claim or conclusion | The content supplies observations, measurements, or test results | Link it where an agent needs to assess a claim or compare options. |
 | Open question | An unresolved matter relevant to the work | The content records missing knowledge, uncertainty, or conflicting positions | Make the uncertainty visible on affected routes. |
 
+* Preserving useful applications matters more than fitting the listed roles. Describe another role when none fits without changing the meaning.
 * Treat the terms as navigation aids, not mutually exclusive content categories.
 * Assign roles to relevant fragments rather than entire documents.
 * Allow a fragment to serve several roles without copying its content.
 * Use these roles to recognize applications, not to require folders or separate maps.
-* Preserve useful knowledge even when none of these roles fits exactly.
 * Compare contributions from sources that address the same situation.
 * Preserve disagreements instead of choosing a new project policy.
 * Identify a similar situation in which the contribution does not apply.
@@ -94,6 +95,7 @@ Help agents narrow a broad request to relevant sources across the project's know
 | Conditional route | Select a destination according to a relevant condition | Different circumstances require different sources | Alternative destinations distinguished by explicit conditions. |
 | Connection between areas | Make related knowledge accessible across area boundaries | A request can require knowledge from several areas | A connection to another area with the condition that makes it relevant. |
 
+* Reaching relevant knowledge matters more than using a listed method. Adapt or combine methods when none serves the identified need.
 * Combine methods where they help the same request.
 * Do not require a separate map for each method or a mandatory reading order.
 * Reuse existing navigation when it supports the identified needs.
@@ -128,6 +130,7 @@ Help agents narrow a broad request to relevant sources across the project's know
 | Additional reading | Further sources needed under specific conditions | Only some instances of the situation need more knowledge | A condition paired with a document or section link | Conditional routes, connections between areas |
 | Narrow by | The criterion for selecting within the linked collection | The destination is an index or document covering several possibilities | A relevant distinction, such as component, user outcome, target, or environment | Orientation, narrowing |
 
+* Clear situation-to-document mappings matter more than matching the listed columns. Adapt or add a column when necessary selection information does not fit.
 * Use either Situation / Task or Use when when one column sufficiently explains relevance.
 * Use Read first and Additional reading instead of Document / Section when the distinction matters.
 * Keep additional reading conditions beside their links.
@@ -207,6 +210,7 @@ Help agents narrow a broad request to relevant sources across the project's know
 | Preserved meaning | The mapping respects the source's authority and limits | Advice appears mandatory or uncertain knowledge appears settled | Correct the wording and preserve the source's qualifications. |
 | Valid destination | The link reaches the intended document or section | The path, anchor, or replacement is missing or incorrect | Correct the link or mark the unresolved gap. |
 
+* Reliable source selection matters more than completing the listed checks. Add a relevant check when a navigation problem falls outside them.
 * Check a matching request and a similar request that should not select the same row.
 * Include a request that needs several knowledge areas when the map supports such work.
 * Check the full path when a row links to another index.
