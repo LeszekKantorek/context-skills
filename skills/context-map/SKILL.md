@@ -138,9 +138,8 @@ Help agents narrow a broad request to relevant sources across the project's know
 
 5. Check that the tables lead from situations to the right documents.
 
-* Establish whether the tables cover the identified needs and lead to sufficient knowledge without unnecessary reading.
-* Work from the draft tables, the candidate mappings from Step 2, and the navigation choices from Step 3.
-* Check the mappings against realistic requests and their linked sources.
+* Check whether the tables cover the needs identified in Step 2 and lead to sufficient knowledge without unnecessary reading.
+* Compare the tables with realistic requests, linked sources, and navigation determined in Step 3.
 * Use the table to identify and correct navigation problems.
 
 | Check | Expected result | Problem signal | Correction |
@@ -155,13 +154,5 @@ Help agents narrow a broad request to relevant sources across the project's know
 | Preserved meaning | The mapping respects the source's authority and limits | Advice appears mandatory or uncertain knowledge appears settled | Correct the wording and preserve the source's qualifications. |
 | Valid destination | The link reaches the intended document or section | The path, anchor, or replacement is missing or incorrect | Correct the link or mark the unresolved gap. |
 
-* Reliable source selection matters more than completing the listed checks. Add a relevant check when a navigation problem falls outside them.
-* Check a matching request and a similar request that should not select the same row.
-* Include a request that needs several knowledge areas when the map supports such work.
-* Check the full path when a row links to another index.
-* Check selection without executing the linked procedures.
-* Distinguish expected selections from observed agent behavior.
-* Repeat the affected checks after correcting a mapping.
-* Preserve omissions and gaps beside the affected mappings when useful, without creating a separate report.
-* Save changes within the requested scope.
-* Finish when the mappings pass the applicable checks and justified omissions or unresolved gaps remain visible.
+* Reliable source selection matters more than completing the listed checks. Add a relevant check when a problem falls outside them.
+* Correct problems and repeat affected checks, keeping justified omissions and unresolved gaps explicit.
