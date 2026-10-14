@@ -36,14 +36,14 @@ Preserve project decisions and findings with their meaning, scope, rationale, an
 
 | Aspect | Questions | Example |
 | --- | --- | --- |
-| Intent | Which goal or need explains this knowledge? Which priorities or exclusions follow from that goal? | Explicit unavailable states help users distinguish missing data from zero. |
+| Intent | Which goal or need explains this knowledge? Which priorities or exclusions do the sources connect with that goal? | Explicit unavailable states help users distinguish missing data from zero. |
 | Behavior | Which expected behavior does it define or constrain? Under which conditions does that behavior change? | A missing reading must remain visibly unavailable. |
 | Architecture | Which responsibility or dependency does it establish or affect? Which other components depend on that responsibility? | The provider reports availability. The browser presents it. |
 | Contracts | Which boundary guarantees does it depend on or establish? Which assumptions must callers and providers share? | An absent value must not become zero during transport. |
 | Implementation | Which code or configuration realizes or contradicts it? Which implementation details explain the observed result? | The decoder retains absent values instead of supplying defaults. |
 | Evidence | Which observations support or challenge these relationships? What do these observations leave untested or uncertain? | A controlled test showed an unavailable reading. Mobile readability remains untested. |
 
-* Identify relationships needed to understand or apply the knowledge, even when the table does not cover them. Add or adapt questions to identify those relationships.
+* Add or adapt questions when the table does not reveal relationships needed to understand or apply the knowledge.
 * Keep gaps and disagreements explicit, including differences between intended behavior and observed results.
 * Continue when you understand which relationships must accompany the knowledge and what supports or limits them.
 
@@ -59,11 +59,11 @@ Preserve project decisions and findings with their meaning, scope, rationale, an
 | Location | Where does this knowledge belong? Does related content already preserve it? | Reuse or update existing content. Create a focused entry when no known location fits. |
 | Grouping | Which statements must readers understand together? | Keep those statements together. Link to related knowledge that belongs elsewhere. |
 | Form | Which form makes the knowledge and its relationships clear? | Use explanations, tables, diagrams, or ordered steps according to the content. |
-| Context | What must accompany the knowledge for readers to use it correctly? | Include its purpose, rationale, scope, conditions, and exceptions where relevant. |
-| Support and status | What establishes each claim, and what remains unresolved? | Retain source links and evidence limits. Keep decisions, observations, proposals, and unresolved matters distinguishable. |
+| Context | Which context should appear beside the statements, and which context can readers reach through links? | Include its purpose, rationale, scope, conditions, and exceptions where relevant. |
+| Support and status | How should the record show supporting sources, evidence limits, and unresolved matters? | Retain source links and evidence limits. Keep decisions, observations, proposals, and unresolved matters distinguishable. |
 
 * Preserve the selected knowledge when these choices do not fit. Adapt its form or location to retain its meaning.
-* Write or update the selected content using these choices.
+* Apply the selected changes where the existing content does not preserve the knowledge and its relationships.
 * Continue when the record contains the selected knowledge, its relationships, and the context needed for future use.
 
 4. **Check the record against the selected knowledge and its intended use.**
