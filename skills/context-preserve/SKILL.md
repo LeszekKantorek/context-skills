@@ -47,47 +47,41 @@ Preserve project decisions and findings with their meaning, scope, rationale, an
 * Keep gaps and disagreements explicit, including differences between intended behavior and observed results.
 * Continue when you understand which relationships must accompany the knowledge and what supports or limits them.
 
-3. **Record the knowledge in an appropriate form and location.**
+3. **Record the knowledge for future use.**
 
-* Preserve the selected knowledge and its relationships where future work can use them.
-* Use known project locations and relevant navigation to inspect directly related content.
-* Use the table to choose how to record each candidate.
+* Record the knowledge so future readers can understand and use it without reconstructing the original conversation.
+* Use the knowledge from Step 1 and the relationships from Step 2.
+* Inspect directly related content in known project locations.
+* Use the table to choose the location, organization, and form of the record.
 
-| Existing content or knowledge need | Action | Example |
+| Decision | Question | Action |
 | --- | --- | --- |
-| An existing source already preserves the knowledge | Reuse the source or add a necessary link | Link to the accepted ownership decision. |
-| A relevant passage needs a correction or addition | Update that passage with the supported change | Add the agreed exception to the existing contract. |
-| No known location fits the knowledge | Create a focused entry in the project's context location | Record the agreed recovery boundary with its rationale. |
-| Understanding depends on an explanation | Explain the established concepts and relationships | Explain why source health differs from connection health. |
-| Understanding depends on a comparison or structure | Use a table or diagram | Show component responsibilities and their boundaries. |
-| The knowledge establishes an operating procedure | Record the established steps and their conditions | Preserve the verified recovery sequence and success check. |
+| Location | Where does this knowledge belong? Does related content already preserve it? | Reuse or update existing content. Create a focused entry when no known location fits. |
+| Grouping | Which statements must readers understand together? | Keep those statements together. Link to related knowledge that belongs elsewhere. |
+| Form | Which form makes the knowledge and its relationships clear? | Use explanations, tables, diagrams, or ordered steps according to the content. |
+| Context | What must accompany the knowledge for readers to use it correctly? | Include its purpose, rationale, scope, conditions, and exceptions where relevant. |
+| Support and status | What establishes each claim, and what remains unresolved? | Retain source links and evidence limits. Keep decisions, observations, proposals, and unresolved matters distinguishable. |
 
-* Choose another form or location when these options do not preserve the knowledge clearly.
-* Combine location and form choices as needed. Different abstraction levels do not require separate files or prescribed document structures.
-* Keep related statements together when future work needs them together.
-* Preserve sources, rationale, scope, and uncertainty beside the relevant statements.
-* Retain proposals as proposals and unresolved conflicts as unresolved conflicts.
-* Limit changes to the selected knowledge and directly affected references.
-* Continue when the records preserve the selected knowledge without unsupported additions.
+* Preserve the selected knowledge when these choices do not fit. Adapt its form or location to retain its meaning.
+* Write or update the selected content using these choices.
+* Continue when the record contains the selected knowledge, its relationships, and the context needed for future use.
 
-4. **Check that the record preserves the established meaning.**
+4. **Check the record against the selected knowledge and its intended use.**
 
-* Check whether future work can use the record without reconstructing the original conversation.
-* Compare the changed content with the candidates from Step 1 and the relationships from Step 2.
-* Use the table to identify and correct losses or distortions.
+* Check that the record preserves the selected knowledge and supports its intended future use.
+* Compare the record from Step 3 with the knowledge from Step 1 and the relationships from Step 2.
+* Use a future situation from Step 1 to assess whether the record supplies the necessary context.
+* Use the table to identify omissions, unsupported additions, and changes in meaning.
 
-| Check | Problem signal | Correction |
+| Check | Questions | Correction |
 | --- | --- | --- |
-| Coverage | A selected decision, correction, or finding disappears | Restore the missing knowledge or retain a link to its existing source. |
-| Meaning and authority | A proposal becomes a requirement or code becomes proof of intent | Restore the source's meaning and authority. |
-| Scope | A local decision becomes a general rule | Restore conditions, boundaries, and exceptions. |
-| Rationale and relationships | The record loses an established reason or dependency | Restore the explanation or source link. |
-| Evidence | A planned check appears as a passing result | Separate expected evidence from observed results. |
-| Uncertainty | The record silently resolves a conflict | Preserve the disagreement and the unresolved decision. |
-| Future use | A reader cannot identify when the knowledge applies | State the relevant situation or condition. |
-| References | A source link or affected reference no longer reaches its target | Correct the reference. |
+| Coverage | Does the record preserve the selected knowledge? Can readers reach knowledge retained in existing sources? | Restore missing content or links to existing sources. |
+| Meaning | Does the record say what the sources establish? Does it preserve the distinction between decisions, observations, and proposals? | Correct changed meanings and unsupported claims. |
+| Context and relationships | Does the record retain the reasons, conditions, and relationships needed to understand the knowledge? | Restore missing rationale, scope, exceptions, or connections. |
+| Evidence and uncertainty | Do claims retain their supporting evidence and its limits? Do unresolved matters remain explicit? | Correct unsupported certainty. Restore evidence, limitations, or unresolved disagreements. |
+| Future use | Can readers use the record in the identified situation? Are the wording, organization, and links sufficient? | Clarify the wording, adjust the organization, or correct links using the established knowledge. |
 
-* Add a relevant check when these checks do not cover a possible loss of meaning.
+* Add a check when another omission or change could affect interpretation or use.
 * Correct the affected content.
-* Repeat the affected checks until the record preserves the selected knowledge and its limits.
+* Repeat the affected checks after corrections.
 
