@@ -1,13 +1,13 @@
 ---
 name: context-import-sessions
-description: Load selected saved sessions or .context/sessions checkpoints and pass their contents to context-gather. Use to import knowledge from earlier sessions or process pending session records. Handles session files and checkpoint bookkeeping; context-gather writes and reviews knowledge.
+description: Load selected saved sessions or .context/sessions.log records and pass their contents to context-gather. Use to import knowledge from earlier sessions or process pending session records. Handles session files and review bookkeeping; context-gather writes and reviews knowledge.
 ---
 
 # Import Context Sessions
 
 ## Step 1: Select session files
 
-* Accept explicit transcript paths, session IDs, or the project's `.context/sessions/` queue.
+* Accept explicit transcript paths, session IDs, or the project's `.context/sessions.log` queue.
 * Select sessions within the requested project and scope; verify project identity from their contents.
 * **Require `context-gather` for processing knowledge.** If unavailable, report the missing skill and leave checkpoints pending.
 * For queued sessions, run the bundled helper using its installed path.
@@ -18,18 +18,15 @@ python <skill-directory>/scripts/context_read_sessions.py <project-root>
 ```
 
 * The helper lists records; it does not read or analyze transcripts.
-* Listing is read-only and reports `available`, `missing-path`, or `missing-file`.
-* For `missing-path`, look for an exact session ID in saved or archived transcripts
-  only when discovery is within the requested scope; verify the session and project
-  identity before importing an explicitly recovered path. Do not invent paths or
-  mark unknown sessions reviewed. Internal prediction sessions may have no saved
-  transcript; absence alone does not establish that classification.
-* Identify records by `session_id`, never by filename.
-* Retain each selected record's `updated_at` value before reading its transcript.
+* Listing is read-only and reports `available` or `missing-file`.
+* Leave unavailable transcripts pending. Do not substitute a transcript from another session.
+* Identify records by `session_id`, never by row position.
+* Retain each selected record's `checkpoint` token from the helper before reading its transcript.
+* The token reflects the record and transcript file metadata. It does not identify each hook event.
 
 ## Step 2: Read selected sessions
 
-* Read the transcript at each selected record's `transcript_path`, or the explicitly supplied path.
+* Read the transcript at each selected record's `path`, or the explicitly supplied path.
 * Prefer idle sessions or a stable snapshot of an active session.
 * Preserve user corrections, decisions, sources, and tool results needed to interpret the session.
 * Pass the full selected session when feasible; use ordered excerpts with source locations when it exceeds context limits.
@@ -52,14 +49,15 @@ python <skill-directory>/scripts/context_read_sessions.py <project-root>
 * A completed pass with no durable findings may still mark the checkpoint.
 * Leave failed, incomplete, or report-only imports pending.
 * For explicit transcript files without queue records, skip checkpoint bookkeeping.
-* Use the `updated_at` value retained in Step 1.
+* Use the `checkpoint` token retained in Step 1.
 
 ```text
-python <skill-directory>/scripts/context_read_sessions.py <project-root> --mark-reviewed <session-id> --updated-at <retained-updated-at>
+python <skill-directory>/scripts/context_read_sessions.py <project-root> --mark-reviewed <session-id> --checkpoint <retained-checkpoint>
 ```
 
 * If the checkpoint changed, leave it pending; read the new evidence before retrying.
-* Keep the existing record format: `session_id`, `updated_at`, `transcript_path`, and `reviewed_at`.
+* Keep the CSV columns: `session_date`, `session_id`, `path`, and `reviewed_date`.
+* Dates use `YYYY-MM-DD`. An empty `reviewed_date` means pending.
 * Report imported sessions, gather results, and checkpoints still pending.
 
 > Listing a record is not an import. Mark completion only after the handoff to `context-gather` succeeds.

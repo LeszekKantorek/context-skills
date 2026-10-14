@@ -5,7 +5,7 @@
 * Copy the `.codex` directory from `integrations/codex/` into the target project.
 * Merge with existing configuration without overwriting unrelated hooks.
 * When upgrading, replace references to `context_queue_session.py` with `context_register_session.py`.
-* Add `.context/sessions/` to the project's `.gitignore`.
+* Add `.context/sessions.log` and `.context/.sessions.lock` to the project's `.gitignore`.
 * Use `/hooks` in Codex to review and trust the project definitions.
 * See the [official hook documentation](https://learn.chatgpt.com/docs/hooks) for the host contract.
 
@@ -37,61 +37,28 @@
 
 ## Session records
 
-* Store records in `.context/sessions/` for the current Git worktree.
-* Exclude this directory from knowledge retrieval, index rows, and article frontmatter rules.
-* Keep exactly these four fields:
+* Store one row per session in `.context/sessions.log`, encoded as UTF-8 CSV.
+* The first line contains exactly these four column names:
 
-```json
-{
-  "session_id": "example-session-id",
-  "updated_at": "2026-10-03T12:00:00+00:00",
-  "transcript_path": "C:/sessions/example-session.jsonl",
-  "reviewed_at": null
-}
+```csv
+session_date,session_id,path,reviewed_date
+2026-10-14,example-session-id,C:/sessions/example-session.jsonl,
 ```
 
-* Identify sessions by `session_id`, never by filename.
-* New files use names such as `session-000001.json`; renamed records retain their identity.
-* Each accepted registration advances `updated_at` and resets `reviewed_at` to null.
-* `transcript_path` is absolute when supplied. An event without a path retains a
-  previously known path; a new session without a path is skipped without creating
-  a record or a queue directory. Empty, whitespace-only, and non-string paths
-  count as absent.
-* Existing legacy records with a null path remain unchanged until an event supplies
-  a path. The hook does not delete them or mark them reviewed.
-* A supplied path may point to a file that has not been saved yet; keep that
-  checkpoint so the transcript can be imported after it appears.
-* Do not store transcript text or message content in these records.
+* Dates use `YYYY-MM-DD` in the machine's local timezone.
+* `session_date` records the first registration date and remains unchanged on later events.
+* `session_id` contains the session ID. Row order does not establish identity.
+* `path` contains the absolute transcript path.
+* An empty `reviewed_date` means pending. A completed review sets today's date.
+* Each accepted registration clears `reviewed_date`, including another event on the same day.
+* CSV quoting preserves commas, quotes, and Unicode in paths and IDs.
+* The log contains metadata only. Exclude it and its lock file from project knowledge.
+* An event without a nonempty transcript path creates no row or context directory and does not change existing rows.
+* Empty, whitespace-only, and non-string paths count as absent.
+* A supplied path may precede the transcript file. Registration keeps the row pending until the file exists.
 
-## Sessions without transcript paths
-
-* The [hook contract](https://learn.chatgpt.com/docs/hooks) allows a null
-  `transcript_path`. It does not document `turn_trigger` or a composer-prediction
-  flag for the registration events. Missing paths alone do not establish the
-  session's purpose.
-* [Issue #3](https://github.com/LeszekKantorek/context-skills/issues/3) identified
-  internal `composer_predictions` sessions through Codex logs. A read-only local
-  check on 2026-10-11 independently found that marker for three of the five example
-  IDs, and found no transcript files or durable thread entries for any of the five.
-  The two other IDs had no matching logs in the database snapshot inspected.
-  This check opened SQLite with `mode=ro&immutable=1`, excluding current WAL data;
-  an absent match is not proof that the session never existed.
-* Skipping a new pathless session prevents unusable queue entries without guessing
-  whether it is a prediction, a normal session, or a subagent. An event that later
-  supplies a path registers the session normally. A session whose events never
-  supply a path will require explicit discovery before it can be imported.
-* For a legacy `missing-path` record, first look for the exact session ID in the
-  user's Codex session and archived-session filenames. If found, verify the ID
-  and project identity in the selected transcript before importing it explicitly.
-  Do not substitute a transcript merely because its timestamp or directory matches.
-* The local Codex thread index may provide `rollout_path`; logs may associate an ID
-  with `composer_predictions`. These are diagnostic leads, not stable hook APIs.
-  Missing log entries or `has_user_event=0` alone do not justify deleting a record
-  or excluding subagents. Confirmed prediction records can be removed during an
-  explicitly requested cleanup; unresolved records stay pending.
-* The hook does not scan session directories or query private SQLite databases.
-  Such discovery would add latency and dependencies on host-specific storage to
-  every registration, and cannot recover a transcript that was never saved.
+* Only the current CSV schema is supported. There is no migration or fallback reader.
+* Existing session IDs update the same row without creating duplicates, even during concurrent registration.
 
 ## Import selected checkpoints
 
@@ -102,19 +69,21 @@
 python /path/to/context-import-sessions/scripts/context_read_sessions.py /path/to/project
 ```
 
-* Retain the selected checkpoint's `updated_at` and read its transcript.
+* Retain the selected row's `checkpoint` token from the helper output before reading its transcript.
 * Invoke gather with the loaded material and source locations.
 * Mark the checkpoint only after gather completes successfully:
 
 ```text
-python /path/to/context-import-sessions/scripts/context_read_sessions.py /path/to/project --mark-reviewed SESSION_ID --updated-at CHECKPOINT_TIMESTAMP
+python /path/to/context-import-sessions/scripts/context_read_sessions.py /path/to/project --mark-reviewed SESSION_ID --checkpoint CHECKPOINT_TOKEN
 ```
 
 * Both options are required together.
-* Listing reports `available`, `missing-path`, and `missing-file` separately and
-  reads queue JSON only; it does not read transcript contents or create a lock.
-* A listing is an inventory of individual atomic records, not a locked snapshot
-  of the whole queue. Always retain and check the selected `updated_at` on review.
+* Listing reports `available` or `missing-file`. An empty path in the log is invalid.
+* It reads one log snapshot and transcript metadata, without reading transcript contents or creating a lock.
+* A checkpoint token combines the session ID, path, added date, and transcript size and file timestamps.
+* Marking requires the retained token and an available transcript. Changed file metadata rejects an older token.
+* Date-only columns cannot distinguish every registration event. The token detects file changes, not hook event order.
+* Use idle sessions or stable transcript snapshots. Metadata checks cannot detect edits that preserve all tracked metadata.
 * Leave missing evidence, incomplete processing, and report-only imports pending.
 * A completed gather pass with no durable findings may still mark the checkpoint.
 * A changed checkpoint remains pending; inspect new evidence before retrying.
@@ -122,17 +91,16 @@ python /path/to/context-import-sessions/scripts/context_read_sessions.py /path/t
 
 ## Storage guarantees
 
-* Registration and review bookkeeping share an OS-backed `.queue.lock`; inventory
-  listing does not acquire it or write to the queue.
-* JSON updates replace files through temporary files.
-* Both writers retry replacement for Windows errors 5, 32, and 33 for up to one
-  second, with 20 ms between attempts. Other errors fail immediately. Failed
-  replacement retains the previous record and cleans up the temporary file.
-* Git discovery, lock acquisition, and replacement each have a one-second bound.
-  The three-second host limit on `Interrupt` and `SessionEnd` also includes process
-  startup, so a final checkpoint can still be lost under sustained contention.
-* The lock prevents an old import from overwriting a newly registered checkpoint.
+* Registration and review bookkeeping share an OS-backed `.context/.sessions.lock`.
+* Both writers read the current log under the lock and atomically replace the entire log through a temporary file.
+* Inventory listing reads the log without acquiring the writer lock.
+* After any I/O error while creating, writing, closing, or replacing the temporary file, the writer retries the full write once.
+* The retry waits 50 ms and runs under the same lock. A second failure returns an error and preserves the previous log.
+* Temporary files are removed after each attempt. Invalid data fails before writing and is not retried.
+* Git discovery and lock acquisition each have a one-second bound. Hook timeouts still apply to the complete process.
+* The lock prevents writers from discarding each other's rows or review dates.
+* Review validation compares the retained token with the current record and transcript metadata under the lock.
 * A busy queue returns an error after a bounded wait.
-* Malformed records and duplicate session IDs return errors instead of overwriting ambiguous state.
+* Malformed CSV, invalid dates, and duplicate session IDs return errors instead of overwriting ambiguous state.
 * The lock file remains after process exit; do not delete it while helpers are running.
 * Each worktree owns its local queue; abrupt termination can prevent the final registration.

@@ -1,7 +1,9 @@
-"""Session queue checks use temporary directories and never import transcripts."""
+"""CSV inventory, review, validation, and atomic replacement checks."""
 
 import contextlib
 from concurrent.futures import ThreadPoolExecutor
+import csv
+import datetime
 import io
 import json
 import os
@@ -13,12 +15,11 @@ import threading
 import unittest
 from unittest.mock import patch
 
-
-SCRIPT = (Path(__file__).resolve().parents[1] / "skills"
-          / "context-import-sessions" / "scripts" / "context_read_sessions.py")
+ROOT = Path(__file__).resolve().parents[1]
+SCRIPT = ROOT / "skills" / "context-import-sessions" / "scripts" / "context_read_sessions.py"
 READER = runpy.run_path(str(SCRIPT))
-HOOK = runpy.run_path(str(Path(__file__).resolve().parents[1]
-                         / "integrations" / "codex" / ".codex" / "hooks" / "context_register_session.py"))
+HOOK = runpy.run_path(str(ROOT / "integrations" / "codex" / ".codex" / "hooks" / "context_register_session.py"))
+FIELDS = ["session_date", "session_id", "path", "reviewed_date"]
 
 
 class SessionInventoryTests(unittest.TestCase):
@@ -26,15 +27,24 @@ class SessionInventoryTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
-        self.queue = self.root / ".context" / "sessions"
+        self.queue = self.root / ".context"
+        self.log = self.queue / "sessions.log"
+        self.transcript = self.root / "session.jsonl"
 
-    def record(self, session_id="session-a", transcript=None):
-        self.queue.mkdir(parents=True, exist_ok=True)
-        path = self.queue / (session_id + ".json")
-        row = {"session_id": session_id, "updated_at": "2026-10-11T10:00:00+00:00",
-               "transcript_path": transcript, "reviewed_at": None}
-        path.write_text(json.dumps(row), encoding="utf-8")
-        return path, row
+    def record(self, session_id="session-a", transcript="default"):
+        self.queue.mkdir(exist_ok=True)
+        if transcript == "default":
+            self.transcript.write_text("evidence", encoding="utf-8")
+            transcript = str(self.transcript)
+        rows = READER["read_sessions"](self.queue)
+        row = {"session_date": "2026-10-11", "session_id": session_id,
+               "path": transcript or "", "reviewed_date": ""}
+        rows[session_id] = row
+        with self.log.open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=FIELDS)
+            writer.writeheader()
+            writer.writerows(rows.values())
+        return self.log, row
 
     def snapshot(self):
         return {str(path.relative_to(self.root)): (path.read_bytes(), path.stat().st_mtime_ns)
@@ -49,153 +59,235 @@ class SessionInventoryTests(unittest.TestCase):
             result = READER["main"]()
         return result, output.getvalue(), errors.getvalue()
 
-    def test_listing_missing_queue_creates_no_directories(self):
+    def test_listing_missing_queue_creates_nothing(self):
         self.assertEqual(self.cli(), (0, "queued: 0, reviewed: 0, pending: 0\n", ""))
         self.assertEqual(list(self.root.iterdir()), [])
 
-    def test_listing_reports_path_and_file_gaps_without_writes_or_transcript_reads(self):
-        transcript = self.root / "unreadable-as-text.jsonl"
-        transcript.write_bytes(b"\xff\xfe\x00")
-        self.record("available", str(transcript))
+    def test_listing_reports_gaps_without_writes_or_transcript_reads(self):
+        self.transcript.write_bytes(b"\xff\xfe\x00")
+        self.record("available", str(self.transcript))
         self.record("missing-file", str(self.root / "absent.jsonl"))
-        self.record("missing-path")
         before = self.snapshot()
+        original_open = Path.open
 
-        result, output, errors = self.cli()
+        def deny_transcript_open(path, *args, **kwargs):
+            if path == self.transcript:
+                raise AssertionError("inventory must not read transcript contents")
+            return original_open(path, *args, **kwargs)
 
+        with patch.object(Path, "open", deny_transcript_open):
+            result, output, errors = self.cli()
         self.assertEqual(result, 0, errors)
-        self.assertIn("queued: 3, reviewed: 0, pending: 3", output)
-        self.assertIn("transcript=available", output)
-        self.assertIn("transcript=missing-path", output)
-        self.assertIn("transcript=missing-file", output)
+        self.assertIn("queued: 2, reviewed: 0, pending: 2", output)
+        for availability in ("available", "missing-file"):
+            self.assertIn("transcript=" + availability, output)
+        self.assertIn("checkpoint=", output)
         self.assertEqual(self.snapshot(), before)
 
-    def test_invalid_record_fails_without_creating_lock(self):
+    def test_invalid_csv_fails_without_creating_lock_or_changing_log(self):
         path, _ = self.record()
-        path.write_text("{}", encoding="utf-8")
-        before = self.snapshot()
-        result, _, errors = self.cli()
-        self.assertEqual(result, 2)
-        self.assertIn("invalid session record", errors)
-        self.assertEqual(self.snapshot(), before)
+        bad_rows = [
+            "{}", "session_date,session_id,path,reviewed_date\n2026-10-11,id,path\n",
+            "session_date,session_id,path,reviewed_date\n20261011,id,path,\n",
+            "session_date,session_id,path,reviewed_date\n2026-02-30,id,path,\n",
+            "session_date,session_id,path,reviewed_date\n2026-10-11,,path,\n",
+            'session_date,session_id,path,reviewed_date\n2026-10-11,id,"unterminated',
+        ]
+        for content in bad_rows:
+            path.write_text(content, encoding="utf-8")
+            before = self.snapshot()
+            result, _, errors = self.cli()
+            self.assertEqual(result, 2, content)
+            self.assertIn("could not inspect queue", errors)
+            self.assertEqual(self.snapshot(), before)
 
-    @unittest.skipUnless(os.name == "nt", "Windows replacement sharing semantics")
-    def test_concurrent_listing_does_not_discard_hook_or_review_updates(self):
-        load_json, replace = json.load, os.replace
-        for writer in ("hook", "review"):
-            with self.subTest(writer=writer):
-                path, original = self.record()
-                blocked = threading.Event()
-                futures = []
-
-                def observe_replace(source, destination):
-                    try:
-                        return replace(source, destination)
-                    except PermissionError:
-                        blocked.set()
-                        raise
-
-                def update_during_read(handle):
-                    if threading.current_thread() is threading.main_thread():
-                        if writer == "hook":
-                            futures.append(executor.submit(HOOK["register"], self.queue,
-                                                           original["session_id"], "new.jsonl"))
-                        else:
-                            futures.append(executor.submit(READER["inventory"], self.queue,
-                                                           original["session_id"], original["updated_at"]))
-                        self.assertTrue(blocked.wait(timeout=2), "writer did not reach replacement")
-                    return load_json(handle)
-
-                with ThreadPoolExecutor(max_workers=1) as executor, \
-                        patch("os.replace", side_effect=observe_replace), \
-                        patch("json.load", side_effect=update_during_read):
-                    snapshot = READER["inventory"](self.queue)
-                    # The reader is closed; the writer must retry and save its update.
-                    self.assertEqual(len(futures), 1)
-                    futures[0].result(timeout=5)
-                self.assertEqual(snapshot[original["session_id"]][1], original)
-                updated = json.loads(path.read_text(encoding="utf-8"))
-                if writer == "hook":
-                    self.assertEqual(updated["transcript_path"], "new.jsonl")
-                    self.assertNotEqual(updated["updated_at"], original["updated_at"])
-                    self.assertIsNone(updated["reviewed_at"])
-                    with self.assertRaisesRegex(ValueError, "checkpoint changed"):
-                        READER["inventory"](self.queue, original["session_id"], original["updated_at"])
-                else:
-                    self.assertTrue(updated["reviewed_at"])
-                    self.assertEqual({**updated, "reviewed_at": None}, original)
-
-    @unittest.skipUnless(os.name == "nt", "Windows replacement retry policy")
-    def test_failed_replacement_keeps_previous_record_and_cleans_temporary_file(self):
-        for module in (READER, HOOK):
-            for winerror, expected_attempts in ((5, 2), (32, 2), (33, 2), (87, 1)):
-                with self.subTest(writer=module["__file__"], winerror=winerror):
-                    path, original = self.record()
-                    before = self.snapshot()
-                    error = OSError("replacement denied")
-                    error.winerror = winerror
-                    with patch("os.replace", side_effect=error) as replacement, \
-                            patch("time.monotonic", side_effect=[0, 0.1, 1.1]), \
-                            patch("time.sleep") as sleeping:
-                        with self.assertRaises(OSError):
-                            module["write_record"](path, {**original, "reviewed_at": "later"})
-                    self.assertEqual(replacement.call_count, expected_attempts)
-                    self.assertEqual(sleeping.call_count, expected_attempts - 1)
-                    self.assertEqual(self.snapshot(), before)
-
-    @unittest.skipUnless(os.name == "nt", "Windows replacement retry policy")
-    def test_transient_replacement_errors_retry_then_succeed(self):
-        replace = os.replace
-        for module in (READER, HOOK):
-            for winerror in (5, 32, 33):
-                with self.subTest(writer=module["__file__"], winerror=winerror):
-                    path, original = self.record()
-                    error = OSError("temporary reader conflict")
-                    error.winerror = winerror
-                    attempts = 0
-
-                    def conflict_once(source, destination):
-                        nonlocal attempts
-                        attempts += 1
-                        if attempts == 1:
-                            raise error
-                        return replace(source, destination)
-
-                    updated = {**original, "reviewed_at": "later"}
-                    with patch("os.replace", side_effect=conflict_once), patch("time.sleep"):
-                        module["write_record"](path, updated)
-                    self.assertEqual(attempts, 2)
-                    self.assertEqual(json.loads(path.read_text(encoding="utf-8")), updated)
-                    self.assertEqual(list(self.queue.glob("*.tmp")), [])
-
-    def test_marking_stale_checkpoint_preserves_record(self):
+    def test_marking_stale_checkpoint_preserves_log(self):
         path, _ = self.record()
         before = path.read_bytes()
-        result, _, errors = self.cli("--mark-reviewed", "session-a", "--updated-at", "older")
+        result, _, errors = self.cli("--mark-reviewed", "session-a", "--checkpoint", "older")
         self.assertEqual(result, 2)
         self.assertIn("checkpoint changed", errors)
         self.assertEqual(path.read_bytes(), before)
 
-    def test_marking_exact_checkpoint_is_locked_and_idempotent(self):
+    def test_marking_is_locked_and_idempotent(self):
         path, row = self.record()
+        token = READER["checkpoint"](row)
         with READER["queue_lock"](self.queue):
-            result, _, errors = self.cli("--mark-reviewed", row["session_id"],
-                                         "--updated-at", row["updated_at"])
+            result, _, errors = self.cli("--mark-reviewed", row["session_id"], "--checkpoint", token)
         self.assertEqual(result, 2)
         self.assertIn("queue is busy", errors)
-        self.assertIsNone(json.loads(path.read_text(encoding="utf-8"))["reviewed_at"])
-
-        result, output, errors = self.cli("--mark-reviewed", row["session_id"],
-                                         "--updated-at", row["updated_at"])
+        self.assertEqual(READER["read_sessions"](self.queue)[row["session_id"]]["reviewed_date"], "")
+        result, output, errors = self.cli("--mark-reviewed", row["session_id"], "--checkpoint", token)
         self.assertEqual(result, 0, errors)
         self.assertIn("reviewed: 1, pending: 0", output)
-        marked = json.loads(path.read_text(encoding="utf-8"))
-        self.assertTrue(marked["reviewed_at"])
-        self.assertEqual({**marked, "reviewed_at": None}, row)
+        marked = READER["read_sessions"](self.queue)[row["session_id"]]
+        self.assertEqual(marked["reviewed_date"], datetime.date.today().isoformat())
+        self.assertEqual({**marked, "reviewed_date": ""}, row)
         before = path.read_bytes()
-        self.assertEqual(self.cli("--mark-reviewed", row["session_id"],
-                                  "--updated-at", row["updated_at"])[0], 0)
+        self.assertEqual(self.cli("--mark-reviewed", row["session_id"], "--checkpoint", token)[0], 0)
         self.assertEqual(path.read_bytes(), before)
+
+    def test_changed_path_or_file_metadata_invalidates_token(self):
+        path, row = self.record()
+        token = READER["checkpoint"](row)
+        self.transcript.write_text("new evidence with a different size", encoding="utf-8")
+        self.assertNotEqual(READER["checkpoint"](row), token)
+        moved = self.root / "other.jsonl"
+        moved.write_bytes(self.transcript.read_bytes())
+        self.assertNotEqual(READER["checkpoint"]({**row, "path": str(moved)}), READER["checkpoint"](row))
+
+    def test_blank_path_record_is_rejected(self):
+        path, _ = self.record(transcript=None)
+        before = path.read_bytes()
+        result, _, errors = self.cli("--mark-reviewed", "session-a", "--checkpoint", "-")
+        self.assertEqual(result, 2)
+        self.assertIn("invalid session record", errors)
+        self.assertEqual(path.read_bytes(), before)
+
+    def test_same_size_edit_on_same_day_invalidates_token(self):
+        _, row = self.record()
+        token = READER["checkpoint"](row)
+        original = self.transcript.stat()
+        self.transcript.write_text("revision", encoding="utf-8")
+        os.utime(self.transcript, ns=(original.st_atime_ns, original.st_mtime_ns + 1_000_000))
+        self.assertEqual(self.transcript.stat().st_size, original.st_size)
+        self.assertNotEqual(READER["checkpoint"](row), token)
+        result, _, errors = self.cli("--mark-reviewed", row["session_id"], "--checkpoint", token)
+        self.assertEqual(result, 2)
+        self.assertIn("checkpoint changed", errors)
+
+    def test_unknown_session_does_not_create_queue(self):
+        result, _, errors = self.cli("--mark-reviewed", "missing", "--checkpoint", "missing")
+        self.assertEqual(result, 2)
+        self.assertIn("not in the queue", errors)
+        self.assertFalse(self.queue.exists())
+
+    def test_review_requires_both_arguments(self):
+        for arguments in (["--mark-reviewed", "session-a"], ["--checkpoint", "token"]):
+            with self.subTest(arguments=arguments), self.assertRaises(SystemExit) as result:
+                self.cli(*arguments)
+            self.assertEqual(result.exception.code, 2)
+
+    def test_concurrent_review_and_registration_preserve_other_rows(self):
+        _, row = self.record("review")
+        self.record("keep")
+        token = READER["checkpoint"](row)
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            marking = executor.submit(READER["inventory"], self.queue, "review", token)
+            adding = executor.submit(HOOK["register"], self.queue, "new", str(self.transcript))
+            marking.result(timeout=5)
+            adding.result(timeout=5)
+        rows = READER["read_sessions"](self.queue)
+        self.assertEqual(set(rows), {"review", "keep", "new"})
+        self.assertTrue(rows["review"]["reviewed_date"])
+        self.assertEqual(rows["keep"]["reviewed_date"], "")
+
+    def test_failed_replacement_retries_once_and_keeps_log(self):
+        for module in (READER, HOOK):
+            with self.subTest(module=module["__file__"]):
+                path, row = self.record()
+                before = self.snapshot()
+                with patch("os.replace", side_effect=OSError("write denied")) as replacement, \
+                        patch("time.sleep") as sleeping:
+                    with self.assertRaisesRegex(OSError, "write denied"):
+                        module["write_sessions"](path, {row["session_id"]: {**row, "reviewed_date": "2026-10-12"}})
+                self.assertEqual(replacement.call_count, 2)
+                sleeping.assert_called_once()
+                self.assertEqual(self.snapshot(), before)
+
+    def test_replacement_error_retries_complete_write_then_succeeds(self):
+        replace = os.replace
+        for module in (READER, HOOK):
+            with self.subTest(module=module["__file__"]):
+                path, row = self.record()
+                attempts = 0
+
+                def conflict_once(source, destination):
+                    nonlocal attempts
+                    attempts += 1
+                    if attempts == 1:
+                        raise OSError("temporary write failure")
+                    return replace(source, destination)
+
+                updated = {**row, "reviewed_date": "2026-10-12"}
+                with patch("os.replace", side_effect=conflict_once), patch("time.sleep"):
+                    module["write_sessions"](path, {row["session_id"]: updated})
+                self.assertEqual(attempts, 2)
+                self.assertEqual(READER["read_sessions"](self.queue)[row["session_id"]], updated)
+                self.assertEqual(list(self.queue.glob("*.tmp")), [])
+
+    def test_temporary_file_creation_error_is_retried(self):
+        create = tempfile.NamedTemporaryFile
+        for module in (READER, HOOK):
+            with self.subTest(module=module["__file__"]):
+                path, row = self.record()
+                attempts = 0
+
+                def fail_once(*args, **kwargs):
+                    nonlocal attempts
+                    attempts += 1
+                    if attempts == 1:
+                        raise OSError("temporary creation failure")
+                    return create(*args, **kwargs)
+
+                updated = {**row, "reviewed_date": "2026-10-12"}
+                with patch("tempfile.NamedTemporaryFile", side_effect=fail_once), patch("time.sleep"):
+                    module["write_sessions"](path, {row["session_id"]: updated})
+                self.assertEqual(attempts, 2)
+                self.assertEqual(READER["read_sessions"](self.queue)[row["session_id"]], updated)
+                self.assertEqual(list(self.queue.glob("*.tmp")), [])
+
+    def test_partial_csv_write_is_retried_without_duplicate_rows(self):
+        make_writer = csv.writer
+        for module in (READER, HOOK):
+            with self.subTest(module=module["__file__"]):
+                path, row = self.record()
+                failed = False
+
+                class FailingWriter:
+                    def __init__(self, handle, **kwargs):
+                        self.writer = make_writer(handle, **kwargs)
+
+                    def writerow(self, values):
+                        nonlocal failed
+                        self.writer.writerow(values)
+                        if values[0] != "session_date" and not failed:
+                            failed = True
+                            raise OSError("partial write")
+
+                updated = {**row, "reviewed_date": "2026-10-12"}
+                with patch("csv.writer", side_effect=FailingWriter), patch("time.sleep"):
+                    module["write_sessions"](path, {row["session_id"]: updated})
+                self.assertTrue(failed)
+                self.assertEqual(READER["read_sessions"](self.queue), {row["session_id"]: updated})
+                self.assertEqual(list(self.queue.glob("*.tmp")), [])
+
+    @unittest.skipUnless(os.name == "nt", "Windows replacement sharing semantics")
+    def test_listing_during_write_returns_a_complete_snapshot(self):
+        path, row = self.record()
+        original_reader, original_replace = csv.reader, os.replace
+        blocked = threading.Event()
+        futures = []
+
+        def observe_replace(source, destination):
+            try:
+                return original_replace(source, destination)
+            except PermissionError:
+                blocked.set()
+                raise
+
+        def start_writer(handle, *args, **kwargs):
+            if threading.current_thread() is threading.main_thread():
+                futures.append(executor.submit(HOOK["register"], self.queue, "new", str(self.transcript)))
+                self.assertTrue(blocked.wait(timeout=2), "writer did not reach replacement")
+            return original_reader(handle, *args, **kwargs)
+
+        with ThreadPoolExecutor(max_workers=1) as executor, \
+                patch("csv.reader", side_effect=start_writer), patch("os.replace", side_effect=observe_replace):
+            snapshot = READER["inventory"](self.queue)
+            futures[0].result(timeout=5)
+        self.assertEqual(snapshot, {row["session_id"]: row})
+        self.assertEqual(set(READER["read_sessions"](self.queue)), {"session-a", "new"})
 
 
 if __name__ == "__main__":
