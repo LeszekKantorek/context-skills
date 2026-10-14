@@ -43,10 +43,9 @@ Help agents narrow a broad request to relevant sources across the project's know
 
 2. Connect source contributions to situations and useful knowledge roles.
 
-* Connect source contributions to recognizable situations so that navigation reflects actual project needs.
-* Use the source understanding from Step 1 instead of repeating its analysis.
-* Use actual requests, recurring work, and source applications to support the mapping.
-* Use the table to recognize roles, needs, and groupings that help navigation.
+* Connect the source contributions identified in Step 1 to recognizable situations so that navigation reflects actual project needs.
+* Ground situations in actual requests, recurring work, and supported source applications.
+* Use the table to identify useful roles and groupings.
 
 | Term | Meaning | Recognize when | Routing use |
 | --- | --- | --- | --- |
@@ -59,17 +58,10 @@ Help agents narrow a broad request to relevant sources across the project's know
 | Evidence | Support for a claim or conclusion | The content supplies observations, measurements, or test results | Link it where an agent needs to assess a claim or compare options. |
 | Open question | An unresolved matter relevant to the work | The content records missing knowledge, uncertainty, or conflicting positions | Make the uncertainty visible on affected routes. |
 
-* Preserving useful applications matters more than fitting the listed roles. Describe another role when none fits without changing the meaning.
-* Treat the terms as navigation aids, not mutually exclusive content categories.
-* Assign roles to relevant fragments rather than entire documents.
-* Allow a fragment to serve several roles without copying its content.
-* Use these roles to recognize applications, not to require folders or separate maps.
-* Compare contributions from sources that address the same situation.
-* Preserve disagreements instead of choosing a new project policy.
-* Identify a similar situation in which the contribution does not apply.
-* If no useful application emerges, leave the source outside the maps.
-* Retain identified needs with missing sources as gaps for Step 5.
-* Continue when each identified situation has relevant source fragments, roles, and use conditions, or an explicit source gap.
+* Preserving useful applications matters more than fitting the listed roles. Describe another role when none preserves the meaning.
+* Assign roles to relevant fragments; one fragment can serve several roles.
+* Compare sources for the same situation, preserving differences in scope and unresolved disagreements.
+* Continue when each identified situation has relevant sources and use conditions, or an explicit source gap.
 
 3. Choose navigation that fits how agents seek project knowledge.
 
