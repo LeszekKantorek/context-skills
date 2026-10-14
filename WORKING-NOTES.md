@@ -2,6 +2,45 @@
 
 Stan na 2026-10-14. Notatka do kontynuowania pracy po długiej sesji lub zmianie rozmowy. Zapisuje decyzje użytkownika, bieżący zakres i pomysły do dalszego omówienia; nie ustanawia nowych reguł projektu.
 
+## Stan na zakończenie obecnego etapu context-map
+
+Użytkownik na razie kończy pracę nad `context-map`. Nie kontynuować jego przebudowy ani nie rozpoczynać prac nad innymi skills bez kolejnego zlecenia. Ostatnia wersja skilla jest zapisana lokalnie w commicie `d8f57b0` na gałęzi `codex/context-v-proposal`. Bieżące uzupełnienie notatki nie obejmuje polecenia commita. Nie wykonano pusha.
+
+Aktualne `description`:
+
+```yaml
+description: Use to create or improve project knowledge maps. Connect situations to relevant documents or sections through tables that support selective reading.
+```
+
+Aktualny `Goal` to jedno zdanie, bez dodatkowych punktów:
+
+```text
+Build or improve tables that guide agents from recognizable situations to the documents or sections they need, without unnecessary reading.
+```
+
+| Krok | Odpowiedzialność |
+| --- | --- |
+| 1. Understand what the sources contribute. | Zrozumieć wkład, ograniczenia i relacje źródeł. |
+| 2. Connect source contributions to situations and useful knowledge roles. | Powiązać przydatną wiedzę z sytuacjami, obszarami i rolami źródeł. |
+| 3. Determine how agents will reach relevant knowledge. | Ustalić metody nawigacji, podział i lokalizacje map. |
+| 4. Write tables that map situations to documents or sections. | Zapisać sytuacje i odnośniki wraz z warunkami wyboru w tabelach. |
+| 5. Check that the tables lead from situations to the right documents. | Sprawdzić pokrycie potrzeb i trafność nawigacji, poprawić problemy i zachować jawne braki. |
+
+* Skracaliśmy wyłącznie punkty `*`; wszystkie tabele i trzy wypełnione przykłady pozostały bez zmian w tej serii poprawek.
+* Kolejne commity skrócenia kroków: `3dcd2b6` (1), `9f37fc8` (2), `7f370c4` (3), `9b18cf7` (4), `be35e11` (5). Końcowe dopracowanie celu, opisu i instrukcji: `d8f57b0`.
+* Priorytetem jest esencja potrzebna do celu kroku. Usuwamy powtórzenia tabel, poboczne zakazy i instrukcje wynikające z kontekstu wywołania.
+* Cel i odwołanie do poprzedniego kroku można łączyć w jednym punkcie. Nie rozbudowujemy tekstu tylko po to, by każdy element wzorca miał osobną linijkę.
+* `Determine` w kroku 3 oznacza „ustal/określ”; użytkownik wybrał je zamiast `Choose` lub `Design`.
+* Krok 3 ma teraz: `Review existing maps. Update them within the requested scope or propose changes where needed.` Usunięto obowiązkowe umieszczanie routingu w AGENTS oraz osobną instrukcję o kompatybilności formatów.
+* Krok 2 mapuje przydatne zastosowania, nie kataloguje wszystkiego. Tabela pomaga rozpoznać obszary, sytuacje i role źródeł, a nie jedną rozłączną klasyfikację.
+* Przykłady nie ograniczają struktur tabel: można tworzyć inne, jeśli lepiej odpowiadają potrzebom. Zachowano przykładowe linki do `.context/` i `docs/`.
+* W kroku 5 pozostały trzy punkty przed tabelą i dwa po niej: nadrzędny cel z możliwością dodania sprawdzenia oraz poprawienie problemów i ponowienie kontroli. Usunięto dodatkowe polecenie zapisu i osobne zastrzeżenia dotyczące wykonywania procedur oraz deklarowania obserwacji.
+* Usunięto ogólną instrukcję o przekazywaniu ustaleń między krokami i nietworzeniu raportów. Zależności między krokami są widoczne w ich treści; nie przywracać tego punktu jako zabezpieczenia.
+* Usunięcie `context-apply` zapisano w `ef86827`. Skill nie wróci; pozostałych skills i integracji nie przebudowywano.
+* Nie przeprowadzono oceny zachowania agentów na rzeczywistych zadaniach. Wcześniejsze wyniki walidacji opisane dalej dotyczą konkretnych wcześniejszych rewizji, nie stanowią pełnej walidacji końcowego tekstu.
+
+Poniższe sekcje zachowują szersze ustalenia i historię. W razie różnic pierwszeństwo ma powyższy stan końcowy oraz aktualny `SKILL.md`.
+
 ## Bieżący zakres
 
 * Repozytorium: `LeszekKantorek/context-skills`.
@@ -15,7 +54,7 @@ Stan na 2026-10-14. Notatka do kontynuowania pracy po długiej sesji lub zmianie
 
 ## Cel skilla po doprecyzowaniu
 
-Użytkownik zatwierdził cel: zrozumieć znaczenie wiedzy projektu, warunki jej zastosowania oraz wpływ na decyzje lub działania agenta. Dobór punktów wejścia i struktury map wynika z tego rozpoznania. Samo formatowanie tabel i sprawdzanie linków nie realizuje celu.
+Pierwotne doprecyzowanie akcentowało zrozumienie znaczenia wiedzy projektu, warunków jej zastosowania oraz wpływu na decyzje lub działania agenta. Aktualne brzmienie Goal podano na początku notatki. Dobór punktów wejścia i struktury map wynika z tego rozpoznania. Samo formatowanie tabel i sprawdzanie linków nie realizuje celu.
 
 * Kolejność pracy: zrozumienie źródła, rozpoznanie ról i zastosowań wiedzy, dobór punktów wejścia, struktury i miejsca, zapis tras, sprawdzenie.
 * Punkt 2 zawiera jedną tabelę decyzyjną `Term / Meaning / Recognize when / Routing use`, zastępującą przykład zastosowań i osobny słownik.
@@ -23,7 +62,7 @@ Użytkownik zatwierdził cel: zrozumieć znaczenie wiedzy projektu, warunki jej 
 * Klasyfikacja dotyczy istotnych fragmentów, dopuszcza kilka ról i nie wymaga kopiowania treści, nowych folderów ani osobnych map. Niedopasowanie kategorii nie jest powodem odrzucenia przydatnej wiedzy.
 * Punkt 3 dobiera metody nawigacji przez tabelę `Navigation method / Meaning / Choose when / Selected structure`: Orientation, Narrowing, Direct route, Conditional route i Connection between areas.
 * Dobór wynika z tego, co agent już wie i czego potrzebuje, zamiast zaczynać od wyboru typu tabeli. Metody można łączyć bez osobnej mapy dla każdej i bez wymaganej kolejności czytania.
-* Zasady pod tabelą dotyczą ponownego użycia nawigacji, podziału map, przydatności kolejnych poziomów oraz miejsca zapisu i zależności narzędzi.
+* Skrócone zasady pod tabelą dotyczą dopasowania metod, ponownego użycia map, ich aktualizacji lub propozycji zmian oraz ustalenia granic i lokalizacji.
 * Punkt 4 tworzy tabele łączące sytuacje z linkami do dokumentów lub sekcji. Zastępuje abstrakcyjny opis elementów mapy konkretnym doborem kolumn.
 * Tabela pomocnicza ma kolumny `Column / Meaning / Include when / Write as / Useful for` i opisuje Situation / Task, Use when, Document / Section, Read first, Additional reading oraz Narrow by.
 * Dobór kolumn zależy od metody nawigacji i potrzeb sytuacji. Nie trzeba stosować wszystkich kolumn. Read first i Additional reading rozdzielają źródła wymagane i warunkowe, zamiast dublować Document / Section.
@@ -46,7 +85,7 @@ Użytkownik zatwierdził cel: zrozumieć znaczenie wiedzy projektu, warunki jej 
 ## Wspólna forma kroków 1–5
 
 * Użytkownik zatwierdził wspólną funkcję i kolejność instrukcji: cel → materiały i wcześniejsze ustalenia → podejście do pracy → użycie tabeli → tabela → interpretacja i wyjątki → warunek przejścia dalej.
-* Pierwszy punkt każdego kroku jawnie określa jego cel. Końcowy punkt wskazuje, co powinno być ustalone przed dalszą pracą lub zakończeniem.
+* Pierwszy punkt każdego kroku jawnie określa jego cel. Końcowy punkt wskazuje gotowość do dalszej pracy albo domyka działanie, jak poprawianie i ponawianie kontroli w kroku 5.
 * Usunięto etykiety `Result:`. Analogia wejścia, przekształcenia i wyniku pomaga projektować procedurę, ale nie wymaga takich nazw w instrukcjach.
 * Liczba punktów zależy od potrzeb kroku. Zachowano pięć kroków, treść wszystkich tabel i trzy przykłady wypełnionych map.
 * Krok 4 nadal określa budowę mapowania sytuacja → dokument lub sekcja w tabeli z dwiema lub większą liczbą kolumn.
@@ -78,7 +117,7 @@ Układ wypracowany dla `context-map` jest punktem odniesienia przy projektowaniu
 
 * Cel pierwszego punktu ma wyjaśniać pożytek działania, a nie jedynie powtarzać tytuł kroku. Preferujemy bezpośrednie polecenia, np. `Establish…`, `Connect…`, `Choose…`.
 * Wejście, transformacja i wynik są analogią do projektowania procesu. Nie wymagają etykiet `Input:`, `Output:` lub `Result:` w gotowym skillu.
-* Końcowy punkt opisuje gotowość do dalszej pracy, np. `Continue when…` albo `Finish when…`. Nie tworzy dodatkowego obowiązku raportowania ani pytania o zgodę.
+* Końcowy punkt może opisywać gotowość do dalszej pracy lub domykać działanie. Nie wymuszamy formuły `Continue when…`/`Finish when…`, raportowania ani pytania o zgodę.
 * Tabela pomaga rozpoznać treść, wybrać działanie, dobrać konstrukcję albo skorygować problem. Jej kolumny wynikają z decyzji potrzebnej w danym kroku.
 * Przydatne wzorce kolumn to `Question / Identify / Example`, `Term / Meaning / Recognize when / Routing use` oraz `Check / Expected result / Problem signal / Correction`.
 * Tabela pomocnicza w skillu i tabela będąca wynikiem jego pracy pełnią różne funkcje. Nie należy automatycznie kopiować struktury pierwszej do drugiej.
@@ -98,8 +137,8 @@ Układ wypracowany dla `context-map` jest punktem odniesienia przy projektowaniu
 * Krok 1 rozpoznaje wkład, podstawy, ograniczenia i relacje źródeł. Krok 2 korzysta z tego rozpoznania, zamiast ponawiać analizę.
 * Wynik kroku 2 to kandydaci do mapowania: sytuacja → fragment źródła, jego rola i warunki zastosowania; brakujące źródła pozostają jawnymi lukami.
 * Terminy w kroku 2 obejmują role treści, potrzeby i grupowanie. Nie stanowią rozłącznej taksonomii dokumentów.
-* Krok 3 wybiera konstrukcję nawigacji, podział i lokalizację map oraz uzasadnione ograniczenia kompatybilności. Nie zapisuje jeszcze tabel i linków.
-* Krok 4 tworzy konkretne tabele. Objaśnienia pod przykładami opisują oczekiwany wybór źródeł, a nie polecają wykonywania zadań projektowych.
+* Krok 3 ustala konstrukcję nawigacji, podział i lokalizację map. Osobną instrukcję o kompatybilności zastąpiono przeglądem i aktualizacją map lub propozycją zmian.
+* Krok 4 tworzy konkretne tabele. W toku skracania usunięto szczegółowe objaśnienia pod przykładami, zachowując same przykłady.
 * Krok 5 porównuje mapy z potrzebami rozpoznanymi w kroku 2. Każda potrzeba otrzymuje mapowanie, uzasadnione pominięcie albo jawną lukę.
 * Każdy krok określa cel i warunek przejścia dalej. Ustalenia służą kolejnemu krokowi, bez osobnych raportów i dokumentów.
 * Usunięto powtarzane instrukcje analizy, ostrzeżenia o zmianie zaleceń w reguły i powtórzenia zasad wyboru przykładów. Kontrola zachowania znaczenia pozostała w kroku 5.
@@ -120,7 +159,7 @@ Aktualna decyzja zastępuje wymaganie dwóch map. Skill rozpoznaje, z czym agent
 * To przykłady do wyboru, nie komplet obowiązkowych map ani zamknięta lista typów.
 * Jedna mapa wystarcza, gdy wpisy potrzebują podobnych pól i reguł wyboru. Osobne mapy mają sens przy różnych potrzebach nawigacji.
 * Rozgałęzienie ma sens, gdy dalsze źródło zależy od odpowiedzi lub obserwacji. Brak uzasadnienia gałęzi to luka w wiedzy.
-* Zachowujemy skuteczną istniejącą nawigację. Zwięzły routing trafia do właściwego `AGENTS.md`; obszerniejsza mapa może mieć osobne miejsce i odnośnik.
+* Zachowujemy skuteczną istniejącą nawigację. Aktualna wersja nie nakazuje zapisywania routingu w `AGENTS.md`; lokalizacja zależy od ustaleń kroku 3.
 * Skill nie wymaga utworzenia indeksu ani osobnej mapy zadań. Nie tworzy nowego pliku tylko dla zgodności z przykładem.
 * `Task` oznacza oczekiwany wynik lub powtarzalny rodzaj pracy.
 * `Procedure` oznacza ustaloną sekwencję działań z warunkami i oczekiwanym rezultatem.
@@ -262,8 +301,8 @@ Materiały użytkownika w `.local/`, skill STE, plik `skills-lock.json` oraz poz
 
 ### Kolejne kroki
 
-1. Omówić i dopracować pierwszą wersję `context-map`, zwłaszcza zwięzłość instrukcji i szczegółowość tabeli.
-2. Sprawdzić zachowanie na małym zadaniu, zadaniu przekraczającym granice modułów i przypadkach, które nie powinny aktywować danej trasy.
+1. Obecny etap `context-map` jest zakończony na życzenie użytkownika. Ewentualne dalsze poprawki wymagają nowego zlecenia.
+2. Przy ewentualnym wznowieniu można sprawdzić zachowanie na małym zadaniu, pracy obejmującej kilka obszarów i przypadkach niepasujących do tras. Nie wykonano tego eksperymentu.
 3. Osobno ustalić zakres ewentualnej migracji projektu używającego skills. Przykładowe ścieżki w skillu nie są gotową mapą żadnego repozytorium.
 4. Sprawdzać aktualnych odbiorców indeksów przed zmianą formatu. Nie uwzględniać usuniętego context-apply jako zależności. W README, katalogu skills i integracjach mogą pozostać historyczne odniesienia wymagające osobnego uporządkowania.
 5. Pozostałe skills rozwijać w kolejnych uzgodnionych iteracjach.
