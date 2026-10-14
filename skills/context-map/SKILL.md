@@ -18,20 +18,15 @@ Help agents narrow a broad request to relevant sources across the project's know
 
 ## Steps
 
-* Carry each step's result into the next step without creating separate reports or intermediate documents.
+* Use each step's conclusions in the next step without creating separate reports or intermediate documents.
 
-1. Understand the knowledge before choosing its place in a map.
+1. Understand what the sources contribute.
 
-* Identify the project and the scope of the request.
-* Read the supplied article, document, entry, or procedure for its meaning.
-* For a collection, use headings and existing navigation to select relevant content.
-* Identify the subjects covered by the selected collection.
-* Inspect selected sources to understand their contributions without loading the entire collection.
-* Read enough of each selected source to understand its claim, conditions, and evidence.
-* Identify the problem that the source addresses.
-* Distinguish what the source states from what you infer about its use.
-* Compare its assumptions with the project's constraints and accepted decisions.
-* Use these questions to identify what the source contributes.
+* Establish what the sources contribute so that their uses in project work can be identified.
+* Work within the requested project scope, using supplied sources and relevant existing guidance.
+* For a collection, select relevant content through headings and existing navigation.
+* Read selected sources for their meaning without loading the entire collection.
+* Use the questions below to examine meaning, authority, conditions, and relationships.
 
 | Question | Identify | Example |
 | --- | --- | --- |
@@ -43,22 +38,22 @@ Help agents narrow a broad request to relevant sources across the project's know
 | How does it relate to other project knowledge? | Complementary sources, dependencies, overlaps, or conflicts | A use case defines behavior. A component contract constrains its implementation. |
 | What can the agent decide or do after reading it? | The useful result of consulting the source | Select the applicable checks. Explain expected behavior in an issue response. |
 
-* Use the questions that help you understand the source.
+* Use only the questions that help clarify the source.
 * Do not require a separate answer to every question.
-* Continue when the source's contribution and its limits are clear.
-* If they remain unclear, read the relevant source section or preserve the gap.
-* Do not invent an application to complete a route.
-
-* Treat the examples as illustrations, not project facts.
+* Distinguish source statements from your interpretation and accepted project decisions.
+* Compare the source's assumptions with the project's constraints.
+* Treat examples as illustrations, not project facts.
 * Do not turn an article's recommendation into an accepted project rule.
-* Result: an understanding of each selected source's contribution, authority, limits, relationships, and unresolved gaps.
+* Read further where uncertainty affects the source's possible use.
+* Preserve unresolved gaps instead of inventing applications.
+* Continue when each selected source's contribution, limits, and relationships are clear, or its unresolved gaps are explicit.
 
 2. Connect source contributions to situations and useful knowledge roles.
 
+* Connect source contributions to recognizable situations so that navigation reflects actual project needs.
 * Use the source understanding from Step 1 instead of repeating its analysis.
-* Connect each useful contribution to the situations that need it.
-* Use the table to recognize roles, needs, and groupings that help navigation.
 * Use actual requests, recurring work, and source applications to support the mapping.
+* Use the table to recognize roles, needs, and groupings that help navigation.
 
 | Term | Meaning | Recognize when | Routing use |
 | --- | --- | --- | --- |
@@ -81,11 +76,13 @@ Help agents narrow a broad request to relevant sources across the project's know
 * Identify a similar situation in which the contribution does not apply.
 * If no useful application emerges, leave the source outside the maps.
 * Retain identified needs with missing sources as gaps for Step 5.
-* Result: candidate mappings connecting situations to source fragments, their roles, and their use conditions.
+* Continue when each identified situation has relevant source fragments, roles, and use conditions, or an explicit source gap.
 
 3. Choose navigation that fits how agents seek project knowledge.
 
-* Compare the needs identified in Step 2 with the project's existing navigation.
+* Choose how agents will reach relevant knowledge, including any necessary narrowing or connections between areas.
+* Work from the situations and candidate mappings established in Step 2.
+* Compare those needs with the project's existing navigation.
 * Identify what an agent knows when it starts and what it still needs to find.
 * Use the table to choose useful navigation methods.
 
@@ -111,16 +108,16 @@ Help agents narrow a broad request to relevant sources across the project's know
 * Check whether current tools read or write the format before choosing a replacement.
 * Base compatibility decisions on existing dependencies, not retired skills or historical workflows.
 * If a dependency requires the format, preserve compatibility unless its migration is within scope.
-* Result: selected navigation methods, map boundaries, locations, and any compatibility constraints.
 * Leave table construction and link writing to Step 4.
+* Continue when the navigation methods, map boundaries, locations, and compatibility constraints are clear.
 
 4. Write tables that map situations to documents or sections.
 
 * Build a mapping from situations to documents or sections as a table with two or more columns.
-* Create or update the tables selected in Step 3.
-* Choose columns that support the selected navigation methods.
-* Use the table below to select columns, not as a required output template.
+* Use the candidate mappings from Step 2 and the navigation choices from Step 3.
+* Create or update tables in the selected locations.
 * Make each row connect a recognizable situation to relevant document or section links.
+* Use the table below to select columns, not as a required output template.
 
 | Column | Meaning | Include when | Write as | Useful for |
 | --- | --- | --- | --- | --- |
@@ -189,11 +186,12 @@ Help agents narrow a broad request to relevant sources across the project's know
 * Do not require knowledge-entry metadata on ordinary documents.
 * Exclude raw transcripts, secrets, and temporary progress records.
 * Write local links relative to the file containing each table.
-* Result: draft tables with actual destinations and selection conditions, plus explicit gaps for validation.
+* Continue when the draft tables contain actual destinations and selection conditions, with missing sources explicit for validation.
 
 5. Check that the tables lead from situations to the right documents.
 
-* Compare the draft tables with the candidate mappings from Step 2 and navigation choices from Step 3.
+* Establish whether the tables cover the identified needs and lead to sufficient knowledge without unnecessary reading.
+* Work from the draft tables, the candidate mappings from Step 2, and the navigation choices from Step 3.
 * Check the mappings against realistic requests and their linked sources.
 * Use the table to identify and correct navigation problems.
 
@@ -217,4 +215,4 @@ Help agents narrow a broad request to relevant sources across the project's know
 * Repeat the affected checks after correcting a mapping.
 * Preserve omissions and gaps beside the affected mappings when useful, without creating a separate report.
 * Save changes within the requested scope.
-* Result: checked tables that cover the identified needs, with justified omissions and unresolved gaps visible.
+* Finish when the mappings pass the applicable checks and justified omissions or unresolved gaps remain visible.

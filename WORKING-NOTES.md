@@ -43,6 +43,15 @@ Użytkownik zatwierdził cel: zrozumieć znaczenie wiedzy projektu, warunki jej 
 * Cała treść skilla nadal pozostaje w jednym `SKILL.md`, z jawnym `Goal` i uzgodnionym układem `Steps`.
 * Użytkownik wyraźnie zachował linki do `docs/`. Przykłady łączą je z wpisami w `.context/`.
 
+## Wspólna forma kroków 1–5
+
+* Użytkownik zatwierdził wspólną funkcję i kolejność instrukcji: cel → materiały i wcześniejsze ustalenia → podejście do pracy → użycie tabeli → tabela → interpretacja i wyjątki → warunek przejścia dalej.
+* Pierwszy punkt każdego kroku jawnie określa jego cel. Końcowy punkt wskazuje, co powinno być ustalone przed dalszą pracą lub zakończeniem.
+* Usunięto etykiety `Result:`. Analogia wejścia, przekształcenia i wyniku pomaga projektować procedurę, ale nie wymaga takich nazw w instrukcjach.
+* Liczba punktów zależy od potrzeb kroku. Zachowano pięć kroków, treść wszystkich tabel i trzy przykłady wypełnionych map.
+* Krok 4 nadal określa budowę mapowania sytuacja → dokument lub sekcja w tabeli z dwiema lub większą liczbą kolumn.
+* Praca i commity pozostają lokalne. Użytkownik wycofał zgodę na push; nic nie wysyłamy na GitHub.
+
 ## Spójność pięciu kroków po przeglądzie
 
 * Krok 1 rozpoznaje wkład, podstawy, ograniczenia i relacje źródeł. Krok 2 korzysta z tego rozpoznania, zamiast ponawiać analizę.
@@ -51,7 +60,7 @@ Użytkownik zatwierdził cel: zrozumieć znaczenie wiedzy projektu, warunki jej 
 * Krok 3 wybiera konstrukcję nawigacji, podział i lokalizację map oraz uzasadnione ograniczenia kompatybilności. Nie zapisuje jeszcze tabel i linków.
 * Krok 4 tworzy konkretne tabele. Objaśnienia pod przykładami opisują oczekiwany wybór źródeł, a nie polecają wykonywania zadań projektowych.
 * Krok 5 porównuje mapy z potrzebami rozpoznanymi w kroku 2. Każda potrzeba otrzymuje mapowanie, uzasadnione pominięcie albo jawną lukę.
-* Każdy krok określa swój wynik. Wyniki pośrednie służą dalszej pracy, bez osobnych raportów i dokumentów.
+* Każdy krok określa cel i warunek przejścia dalej. Ustalenia służą kolejnemu krokowi, bez osobnych raportów i dokumentów.
 * Usunięto powtarzane instrukcje analizy, ostrzeżenia o zmianie zaleceń w reguły i powtórzenia zasad wyboru przykładów. Kontrola zachowania znaczenia pozostała w kroku 5.
 
 ## Przyjęty kierunek routingu
