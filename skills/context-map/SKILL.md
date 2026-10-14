@@ -1,24 +1,15 @@
 ---
 name: context-map
-description: Understand project knowledge and when it changes decisions or actions. Use to organize project guidance, choose navigation entry points, or correct context routing.
+description: Use to create or improve project knowledge maps. Connect situations to relevant documents or sections through tables that support selective reading.
 ---
 
 # Map Project Context
 
 ## Goal
 
-Understand what project knowledge means, when it applies, and how it changes an agent's decisions or actions.
-Organize access to that knowledge around the situations in which agents need it.
-Help agents narrow a broad request to relevant sources across the project's knowledge areas.
-
-* Choose entry points and map structures from actual project needs.
-* Use the smallest structure that preserves useful conditions and leads to the needed sources.
-* Keep the knowledge and procedure steps at their existing sources.
-* Preserve project requirements, evidence limits, and unresolved decisions.
+Build or improve tables that guide agents from recognizable situations to the documents or sections they need, without unnecessary reading.
 
 ## Steps
-
-* Use each step's conclusions in the next step without creating separate reports or intermediate documents.
 
 1. Understand what the sources contribute.
 
@@ -45,7 +36,8 @@ Help agents narrow a broad request to relevant sources across the project's know
 
 * Connect the source contributions identified in Step 1 to recognizable situations so that navigation reflects actual project needs.
 * Ground situations in actual requests, recurring work, and supported source applications.
-* Use the table to identify useful roles and groupings.
+* Map useful applications rather than cataloging every source.
+* Use the table to identify knowledge areas, situations, and the roles sources serve within them.
 
 | Term | Meaning | Recognize when | Routing use |
 | --- | --- | --- | --- |
@@ -79,9 +71,8 @@ Help agents narrow a broad request to relevant sources across the project's know
 
 * Reaching relevant knowledge matters more than using a listed method. Adapt or combine methods when none serves the need.
 * Reuse existing maps, separating them only when selection criteria or levels of detail differ.
-* Keep compact routing in the applicable `AGENTS.md` and detailed maps in separate linked files.
-* Check current format dependencies before replacing existing navigation. Preserve compatibility unless migration is within scope.
-* Continue when navigation methods, map boundaries, locations, and compatibility constraints are clear.
+* Review existing maps. Update them within the requested scope or propose changes where needed.
+* Continue when navigation methods, map boundaries, and locations are clear.
 
 4. Write tables that map situations to documents or sections.
 
@@ -99,7 +90,6 @@ Help agents narrow a broad request to relevant sources across the project's know
 | Narrow by | The criterion for selecting within the linked collection | The destination is an index or document covering several possibilities | A relevant distinction, such as component, user outcome, target, or environment | Orientation, narrowing |
 
 * Clear situation-to-document mappings matter more than matching the listed columns. Adapt or add columns when necessary selection information does not fit.
-* Use Read first and Additional reading when prerequisites and conditional sources need separate columns.
 * Keep selection conditions beside their links and general reading guidance beside the table.
 * Link relevant sections using paths relative to the map, preserving useful existing column names.
 * Preserve source authority and uncertainty, keeping knowledge and procedure steps in the linked documents.
