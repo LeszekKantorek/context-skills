@@ -1,6 +1,6 @@
 # Robocze ustalenia dotyczące context skills
 
-Stan na 2026-10-13. Notatka do kontynuowania pracy po długiej sesji lub zmianie rozmowy. Zapisuje decyzje użytkownika, bieżący zakres i pomysły do dalszego omówienia; nie ustanawia nowych reguł projektu.
+Stan na 2026-10-14. Notatka do kontynuowania pracy po długiej sesji lub zmianie rozmowy. Zapisuje decyzje użytkownika, bieżący zakres i pomysły do dalszego omówienia; nie ustanawia nowych reguł projektu.
 
 ## Bieżący zakres
 
@@ -10,7 +10,7 @@ Stan na 2026-10-13. Notatka do kontynuowania pracy po długiej sesji lub zmianie
 * Użytkownik zatwierdził `context-map` dobierający punkty wejścia i strukturę map do potrzeb projektu. Zastępuje to wcześniejsze wymaganie dwóch map. Definicje i przykłady pozostają w jednym `SKILL.md`.
 * Pozostałe skills i integracje mają na razie pozostać bez zmian.
 * Stan sprzed ponownego ustalenia celu zapisano lokalnym commitem `62434ff`. Nie publikowano zmian ani nie migrowano innych repozytoriów.
-* Dobór map do potrzeb projektu zapisano lokalnym commitem `a5539f6`. Nawigację po rozbudowanym projekcie zapisano lokalnym commitem `5231369`. Usunięcie osobnego etapu analizy i nową tabelę pytań zapisano lokalnym commitem `bed4700`. Tabelę ról wiedzy zapisano lokalnym commitem `5ef98f8`. Dobór metod nawigacji zapisano lokalnym commitem `8fc61b2`. Przebudowę punktu 4 zapisano jako `6601da3`, a jego cel i przykłady zestawów kolumn jako `fc763e7`. Użytkownik zatwierdził przebudowę punktu 5 i jej lokalny commit.
+* Dobór map do potrzeb projektu zapisano lokalnym commitem `a5539f6`. Nawigację po rozbudowanym projekcie zapisano lokalnym commitem `5231369`. Usunięcie osobnego etapu analizy i nową tabelę pytań zapisano lokalnym commitem `bed4700`. Tabelę ról wiedzy zapisano lokalnym commitem `5ef98f8`. Dobór metod nawigacji zapisano lokalnym commitem `8fc61b2`. Przebudowę punktu 4 zapisano jako `6601da3`, a jego cel i przykłady zestawów kolumn jako `fc763e7`. Punkt 5 zapisano jako `6902cfe`. Użytkownik zatwierdził przegląd spójności pięciu kroków i lokalny commit poprawek.
 * `.local/` i `.agents/` są ignorowane.
 
 ## Cel skilla po doprecyzowaniu
@@ -21,7 +21,7 @@ Użytkownik zatwierdził cel: zrozumieć znaczenie wiedzy projektu, warunki jej 
 * Punkt 2 zawiera jedną tabelę decyzyjną `Term / Meaning / Recognize when / Routing use`, zastępującą przykład zastosowań i osobny słownik.
 * Tabela rozpoznaje role: Knowledge area, Task, Explanation, Requirement or constraint, Decision, Procedure, Evidence i Open question. Łączy rozpoznaną treść z jej zastosowaniem w nawigacji.
 * Klasyfikacja dotyczy istotnych fragmentów, dopuszcza kilka ról i nie wymaga kopiowania treści, nowych folderów ani osobnych map. Niedopasowanie kategorii nie jest powodem odrzucenia przydatnej wiedzy.
-* Punkt 3 dobiera metody nawigacji przez tabelę `Navigation method / Meaning / Choose when / Apply by`: Orientation, Narrowing, Direct route, Conditional route i Connection between areas.
+* Punkt 3 dobiera metody nawigacji przez tabelę `Navigation method / Meaning / Choose when / Selected structure`: Orientation, Narrowing, Direct route, Conditional route i Connection between areas.
 * Dobór wynika z tego, co agent już wie i czego potrzebuje, zamiast zaczynać od wyboru typu tabeli. Metody można łączyć bez osobnej mapy dla każdej i bez wymaganej kolejności czytania.
 * Zasady pod tabelą dotyczą ponownego użycia nawigacji, podziału map, przydatności kolejnych poziomów oraz miejsca zapisu i zależności narzędzi.
 * Punkt 4 tworzy tabele łączące sytuacje z linkami do dokumentów lub sekcji. Zastępuje abstrakcyjny opis elementów mapy konkretnym doborem kolumn.
@@ -42,6 +42,17 @@ Użytkownik zatwierdził cel: zrozumieć znaczenie wiedzy projektu, warunki jej 
 * Wymagania dotyczące sposobu napisania skilla nie są poleceniami dla agenta wykonującego skill. Usunięto instrukcję nakazującą trzymanie definicji i przykładów w tym dokumencie.
 * Cała treść skilla nadal pozostaje w jednym `SKILL.md`, z jawnym `Goal` i uzgodnionym układem `Steps`.
 * Użytkownik wyraźnie zachował linki do `docs/`. Przykłady łączą je z wpisami w `.context/`.
+
+## Spójność pięciu kroków po przeglądzie
+
+* Krok 1 rozpoznaje wkład, podstawy, ograniczenia i relacje źródeł. Krok 2 korzysta z tego rozpoznania, zamiast ponawiać analizę.
+* Wynik kroku 2 to kandydaci do mapowania: sytuacja → fragment źródła, jego rola i warunki zastosowania; brakujące źródła pozostają jawnymi lukami.
+* Terminy w kroku 2 obejmują role treści, potrzeby i grupowanie. Nie stanowią rozłącznej taksonomii dokumentów.
+* Krok 3 wybiera konstrukcję nawigacji, podział i lokalizację map oraz uzasadnione ograniczenia kompatybilności. Nie zapisuje jeszcze tabel i linków.
+* Krok 4 tworzy konkretne tabele. Objaśnienia pod przykładami opisują oczekiwany wybór źródeł, a nie polecają wykonywania zadań projektowych.
+* Krok 5 porównuje mapy z potrzebami rozpoznanymi w kroku 2. Każda potrzeba otrzymuje mapowanie, uzasadnione pominięcie albo jawną lukę.
+* Każdy krok określa swój wynik. Wyniki pośrednie służą dalszej pracy, bez osobnych raportów i dokumentów.
+* Usunięto powtarzane instrukcje analizy, ostrzeżenia o zmianie zaleceń w reguły i powtórzenia zasad wyboru przykładów. Kontrola zachowania znaczenia pozostała w kroku 5.
 
 ## Przyjęty kierunek routingu
 
@@ -71,7 +82,8 @@ Aktualna decyzja zastępuje wymaganie dwóch map. Skill rozpoznaje, z czym agent
 * Mapy obejmują źródła poza `.context/`. Nie są obowiązkowym katalogiem każdego pliku.
 * Procedury i wiedza pozostają w źródłach. W tabelach zapisujemy warunki i odnośniki.
 * Przed zmianą formatu indeksu trzeba sprawdzić zarówno jego czytelników, jak i narzędzia, które go zapisują.
-* Istniejące Apply, Gather i hook pozostają bez zmian. Ich zależności mogą ograniczać migrację indeksu.
+* Użytkownik usunął `context-apply` i potwierdził, że ten skill nie wróci. Nie chronimy jego historycznych zależności.
+* Ewentualne ograniczenia formatu wynikają wyłącznie z aktualnie istniejących odbiorców i narzędzi. Migracja pozostałych skills i integracji nie jest częścią przeglądu Map.
 
 ## Rola context-map
 
@@ -91,7 +103,7 @@ Użytkownik odrzucił szczegółowy przykład diagnozowania wieku danych jako zb
 
 ### Zakres odpowiedzialności
 
-Użytkownik zmienił wcześniejszą koncepcję Apply: agent potrafi już stosować wiedzę, a potrzebny skill ma zarządzać jej routingiem. Dla tej odpowiedzialności przyjęto nazwę `context-map` i przygotowano osobny skill. Dotychczasowy `context-apply` nie został usunięty ani przemianowany.
+Użytkownik zmienił wcześniejszą koncepcję Apply: agent potrafi już stosować wiedzę, a potrzebny skill ma zarządzać jej routingiem. Dla tej odpowiedzialności przyjęto nazwę `context-map` i przygotowano osobny skill. Wcześniej zachowany `context-apply` został następnie usunięty przez użytkownika i nie będzie przywracany.
 
 Map rozpoznaje zastosowania wiedzy i organizuje dostęp do dokumentów oraz procedur przez dobrane punkty wejścia. Uruchamia się przy tworzeniu lub poprawianiu routingu, nie przed każdym zadaniem projektowym. Dla lokalnej poprawki bada odpowiednie trasy; przy budowie pierwszej mapy rozpoznaje szerszy zbiór źródeł.
 
@@ -203,7 +215,7 @@ Materiały użytkownika w `.local/`, skill STE, plik `skills-lock.json` oraz poz
 1. Omówić i dopracować pierwszą wersję `context-map`, zwłaszcza zwięzłość instrukcji i szczegółowość tabeli.
 2. Sprawdzić zachowanie na małym zadaniu, zadaniu przekraczającym granice modułów i przypadkach, które nie powinny aktywować danej trasy.
 3. Osobno ustalić zakres ewentualnej migracji projektu używającego skills. Przykładowe ścieżki w skillu nie są gotową mapą żadnego repozytorium.
-4. Przed wycofaniem starych indeksów uwzględnić Apply, Gather i startup hook, które nadal ich wymagają. Obecny zakres nie obejmuje zmiany tych odbiorców.
+4. Sprawdzać aktualnych odbiorców indeksów przed zmianą formatu. Nie uwzględniać usuniętego context-apply jako zależności. W README, katalogu skills i integracjach mogą pozostać historyczne odniesienia wymagające osobnego uporządkowania.
 5. Pozostałe skills rozwijać w kolejnych uzgodnionych iteracjach.
 
 Przy wznowieniu pracy sprawdzić aktualną gałąź i diff; powyższy stan jest zapisem z daty notatki. Aktualizować tę notatkę przy kolejnych istotnych decyzjach, zachowując rozróżnienie między decyzją użytkownika, propozycją i wykonanym działaniem.

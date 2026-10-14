@@ -18,13 +18,15 @@ Help agents narrow a broad request to relevant sources across the project's know
 
 ## Steps
 
+* Carry each step's result into the next step without creating separate reports or intermediate documents.
+
 1. Understand the knowledge before choosing its place in a map.
 
 * Identify the project and the scope of the request.
 * Read the supplied article, document, entry, or procedure for its meaning.
 * For a collection, use headings and existing navigation to select relevant content.
-* Identify its knowledge areas and the needs that lead agents to each area.
-* Inspect selected sources to understand those needs without loading the entire collection.
+* Identify the subjects covered by the selected collection.
+* Inspect selected sources to understand their contributions without loading the entire collection.
 * Read enough of each selected source to understand its claim, conditions, and evidence.
 * Identify the problem that the source addresses.
 * Distinguish what the source states from what you infer about its use.
@@ -43,17 +45,19 @@ Help agents narrow a broad request to relevant sources across the project's know
 
 * Use the questions that help you understand the source.
 * Do not require a separate answer to every question.
-* Continue when the application and its limits are clear.
+* Continue when the source's contribution and its limits are clear.
 * If they remain unclear, read the relevant source section or preserve the gap.
 * Do not invent an application to complete a route.
 
 * Treat the examples as illustrations, not project facts.
 * Do not turn an article's recommendation into an accepted project rule.
+* Result: an understanding of each selected source's contribution, authority, limits, relationships, and unresolved gaps.
 
-2. Identify the roles that knowledge can serve in project navigation.
+2. Connect source contributions to situations and useful knowledge roles.
 
-* Classify relevant content with the table below.
-* Identify the situation in which an agent needs that contribution.
+* Use the source understanding from Step 1 instead of repeating its analysis.
+* Connect each useful contribution to the situations that need it.
+* Use the table to recognize roles, needs, and groupings that help navigation.
 * Use actual requests, recurring work, and source applications to support the mapping.
 
 | Term | Meaning | Recognize when | Routing use |
@@ -67,17 +71,17 @@ Help agents narrow a broad request to relevant sources across the project's know
 | Evidence | Support for a claim or conclusion | The content supplies observations, measurements, or test results | Link it where an agent needs to assess a claim or compare options. |
 | Open question | An unresolved matter relevant to the work | The content records missing knowledge, uncertainty, or conflicting positions | Make the uncertainty visible on affected routes. |
 
-* Classify the relevant fragment rather than assigning one role to an entire document.
+* Treat the terms as navigation aids, not mutually exclusive content categories.
+* Assign roles to relevant fragments rather than entire documents.
 * Allow a fragment to serve several roles without copying its content.
 * Use these roles to recognize applications, not to require folders or separate maps.
 * Preserve useful knowledge even when none of these roles fits exactly.
-* Do not treat an author's recommendation as a project requirement or accepted decision.
 * Compare contributions from sources that address the same situation.
 * Preserve disagreements instead of choosing a new project policy.
 * Identify a similar situation in which the contribution does not apply.
 * If no useful application emerges, leave the source outside the maps.
-* Do not invent a broad task category or procedure to complete a mapping.
-* Stop discovery when the application is clear or a specific missing fact prevents a conclusion.
+* Retain identified needs with missing sources as gaps for Step 5.
+* Result: candidate mappings connecting situations to source fragments, their roles, and their use conditions.
 
 3. Choose navigation that fits how agents seek project knowledge.
 
@@ -85,26 +89,30 @@ Help agents narrow a broad request to relevant sources across the project's know
 * Identify what an agent knows when it starts and what it still needs to find.
 * Use the table to choose useful navigation methods.
 
-| Navigation method | Meaning | Choose when | Apply by |
+| Navigation method | Meaning | Choose when | Selected structure |
 | --- | --- | --- | --- |
-| Orientation | Show available knowledge areas and when they matter | The agent can describe its need but does not know where relevant knowledge lives | Describe areas through the needs they serve, with links to relevant sources or local maps. |
-| Narrowing | Reduce a broad selection to relevant knowledge | An area contains more information than the request needs | Organize choices by meaningful differences, such as user outcome, component, target, or environment. |
-| Direct route | Connect a recognizable need to a known destination | A recurring question or task has an established source | Link directly to the relevant section, procedure, or skill. |
-| Conditional route | Select a destination according to a relevant condition | Different circumstances require different sources | State the condition that distinguishes each destination. |
-| Connection between areas | Make related knowledge accessible across area boundaries | A request can require knowledge from several areas | Explain when another area becomes relevant and link to its appropriate entry point. |
+| Orientation | Show available knowledge areas and when they matter | The agent can describe its need but does not know where relevant knowledge lives | Areas described through the needs they serve, leading to sources or local maps. |
+| Narrowing | Reduce a broad selection to relevant knowledge | An area contains more information than the request needs | Choices organized by user outcome, component, target, or environment. |
+| Direct route | Connect a recognizable need to a known destination | A recurring question or task has an established source | A direct connection to the relevant section, procedure, or skill. |
+| Conditional route | Select a destination according to a relevant condition | Different circumstances require different sources | Alternative destinations distinguished by explicit conditions. |
+| Connection between areas | Make related knowledge accessible across area boundaries | A request can require knowledge from several areas | A connection to another area with the condition that makes it relevant. |
 
 * Combine methods where they help the same request.
-* Do not require a separate map for each method or a fixed reading order.
+* Do not require a separate map for each method or a mandatory reading order.
 * Reuse existing navigation when it supports the identified needs.
 * Use one map when entries share useful selection criteria.
 * Separate maps when their content needs different selection criteria or levels of detail.
 * Add a navigation level only when it helps select sources or avoid unrelated reading.
 * Choose labels that agents can recognize without knowing document names.
 * Keep each map in one location.
-* Place compact project routing in the applicable `AGENTS.md`.
-* Link to a separate map when its detail would obscure other instructions.
+* Choose the applicable `AGENTS.md` for compact routing.
+* Choose a separate linked map when its detail would obscure other instructions.
 * Preserve directory scope and existing filename conventions.
-* Check readers and writers before changing a format that tools depend on.
+* Check whether current tools read or write the format before choosing a replacement.
+* Base compatibility decisions on existing dependencies, not retired skills or historical workflows.
+* If a dependency requires the format, preserve compatibility unless its migration is within scope.
+* Result: selected navigation methods, map boundaries, locations, and any compatibility constraints.
+* Leave table construction and link writing to Step 4.
 
 4. Write tables that map situations to documents or sections.
 
@@ -137,9 +145,8 @@ Help agents narrow a broad request to relevant sources across the project's know
 * Select several first sources only when the next action needs each one.
 * Include relevant documents from `.context/`, `docs/`, contribution guides, available skills, and external references.
 * Link a known procedure or skill document directly.
-* Distinguish accepted requirements from advice, evidence, and unresolved choices.
+* Preserve the authority and uncertainty established in Step 1 when wording each mapping.
 * If no useful source exists, preserve the gap instead of adding filler.
-* Use the examples below only where their structure fits.
 * Replace fictional paths and conditions with verified project sources.
 
 * Example column combinations:
@@ -171,28 +178,28 @@ Help agents narrow a broad request to relevant sources across the project's know
 | Prepare an issue response | [Response guidance](.context/collaboration/issue-responses.md) | Response purpose and available evidence |
 ```
 
-* Within the product index, route by user outcomes rather than listing every document without use conditions.
-* For a behavior change, use the relevant use case to establish the expected outcome.
-* Consult architecture when the change affects component responsibilities or dependencies.
-* Select validation guidance when deciding how to check the change.
-* Consult response guidance when preparing an issue response, not merely because work began with an issue.
-* A compilation request can go directly to the build guide without visiting product or architecture indexes.
-* These paths illustrate selection across areas, not a required workflow for every change.
+* In the area example, a behavior question leads to the relevant use case through the product index.
+* A change affecting component responsibilities also selects architecture guidance.
+* A compilation request can select the build guide directly.
+* Response guidance becomes relevant when preparing an issue response.
+* These selections illustrate the example's intended behavior, not instructions to perform those tasks during mapping.
+* Use only the example structures that fit the navigation selected in Step 3.
 
-* These examples are alternatives that can coexist when the project needs them.
-* Do not copy all examples as a default architecture.
-* Add local selection and stopping guidance only where agents need it.
 * Do not make maps require each other as repeated navigation steps.
 * Do not require knowledge-entry metadata on ordinary documents.
 * Exclude raw transcripts, secrets, and temporary progress records.
+* Write local links relative to the file containing each table.
+* Result: draft tables with actual destinations and selection conditions, plus explicit gaps for validation.
 
 5. Check that the tables lead from situations to the right documents.
 
+* Compare the draft tables with the candidate mappings from Step 2 and navigation choices from Step 3.
 * Check the mappings against realistic requests and their linked sources.
 * Use the table to identify and correct navigation problems.
 
 | Check | Expected result | Problem signal | Correction |
 | --- | --- | --- | --- |
+| Coverage of needs | Each identified need has a mapping, a justified omission, or an explicit gap | A need from Step 2 disappears without explanation | Add a supported mapping or preserve the reason for omission or the unresolved gap. |
 | Recognizable situation | The agent can select a row from its request | Selection requires knowing the destination document first | Describe the situation through the need or work it serves. |
 | Relevant destination | The linked content addresses the situation | The document shares a topic but does not supply the needed knowledge | Select a more relevant document or section. |
 | Sufficient knowledge | The mapping supplies the information needed to proceed | A required constraint, explanation, or procedure is missing | Add the missing source with its use condition. |
@@ -208,4 +215,6 @@ Help agents narrow a broad request to relevant sources across the project's know
 * Check selection without executing the linked procedures.
 * Distinguish expected selections from observed agent behavior.
 * Repeat the affected checks after correcting a mapping.
+* Preserve omissions and gaps beside the affected mappings when useful, without creating a separate report.
 * Save changes within the requested scope.
+* Result: checked tables that cover the identified needs, with justified omissions and unresolved gaps visible.
