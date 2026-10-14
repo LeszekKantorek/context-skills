@@ -63,13 +63,11 @@ Help agents narrow a broad request to relevant sources across the project's know
 * Compare sources for the same situation, preserving differences in scope and unresolved disagreements.
 * Continue when each identified situation has relevant sources and use conditions, or an explicit source gap.
 
-3. Choose navigation that fits how agents seek project knowledge.
+3. Determine how agents will reach relevant knowledge.
 
-* Choose how agents will reach relevant knowledge, including any necessary narrowing or connections between areas.
-* Work from the situations and candidate mappings established in Step 2.
-* Compare those needs with the project's existing navigation.
-* Identify what an agent knows when it starts and what it still needs to find.
-* Use the table to choose useful navigation methods.
+* Determine navigation methods for the situations identified in Step 2.
+* Compare existing navigation with what agents know initially and what they need to find.
+* Use the table to select navigation methods.
 
 | Navigation method | Meaning | Choose when | Selected structure |
 | --- | --- | --- | --- |
@@ -79,23 +77,11 @@ Help agents narrow a broad request to relevant sources across the project's know
 | Conditional route | Select a destination according to a relevant condition | Different circumstances require different sources | Alternative destinations distinguished by explicit conditions. |
 | Connection between areas | Make related knowledge accessible across area boundaries | A request can require knowledge from several areas | A connection to another area with the condition that makes it relevant. |
 
-* Reaching relevant knowledge matters more than using a listed method. Adapt or combine methods when none serves the identified need.
-* Combine methods where they help the same request.
-* Do not require a separate map for each method or a mandatory reading order.
-* Reuse existing navigation when it supports the identified needs.
-* Use one map when entries share useful selection criteria.
-* Separate maps when their content needs different selection criteria or levels of detail.
-* Add a navigation level only when it helps select sources or avoid unrelated reading.
-* Choose labels that agents can recognize without knowing document names.
-* Keep each map in one location.
-* Choose the applicable `AGENTS.md` for compact routing.
-* Choose a separate linked map when its detail would obscure other instructions.
-* Preserve directory scope and existing filename conventions.
-* Check whether current tools read or write the format before choosing a replacement.
-* Base compatibility decisions on existing dependencies, not retired skills or historical workflows.
-* If a dependency requires the format, preserve compatibility unless its migration is within scope.
-* Leave table construction and link writing to Step 4.
-* Continue when the navigation methods, map boundaries, locations, and compatibility constraints are clear.
+* Reaching relevant knowledge matters more than using a listed method. Adapt or combine methods when none serves the need.
+* Reuse existing maps, separating them only when selection criteria or levels of detail differ.
+* Keep compact routing in the applicable `AGENTS.md` and detailed maps in separate linked files.
+* Check current format dependencies before replacing existing navigation. Preserve compatibility unless migration is within scope.
+* Continue when navigation methods, map boundaries, locations, and compatibility constraints are clear.
 
 4. Write tables that map situations to documents or sections.
 
