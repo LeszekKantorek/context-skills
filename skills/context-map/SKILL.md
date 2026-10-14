@@ -22,10 +22,9 @@ Help agents narrow a broad request to relevant sources across the project's know
 
 1. Understand what the sources contribute.
 
-* Establish what the sources contribute so that their uses in project work can be identified.
-* Work within the requested project scope, using supplied sources and relevant existing guidance.
-* For a collection, select relevant content through headings and existing navigation.
-* Read selected sources for their meaning without loading the entire collection.
+* Establish what the sources contribute and when they can help project work.
+* Use supplied sources and relevant project guidance within the requested scope.
+* For collections, select relevant content through headings and existing navigation.
 * Use the questions below to examine meaning, authority, conditions, and relationships.
 
 | Question | Identify | Example |
@@ -38,16 +37,9 @@ Help agents narrow a broad request to relevant sources across the project's know
 | How does it relate to other project knowledge? | Complementary sources, dependencies, overlaps, or conflicts | A use case defines behavior. A component contract constrains its implementation. |
 | What can the agent decide or do after reading it? | The useful result of consulting the source | Select the applicable checks. Explain expected behavior in an issue response. |
 
-* Understanding the source matters more than answering the listed questions. Ask another relevant question when these leave its contribution unclear.
-* Use only the questions that help clarify the source.
-* Do not require a separate answer to every question.
-* Distinguish source statements from your interpretation and accepted project decisions.
-* Compare the source's assumptions with the project's constraints.
-* Treat examples as illustrations, not project facts.
-* Do not turn an article's recommendation into an accepted project rule.
-* Read further where uncertainty affects the source's possible use.
-* Preserve unresolved gaps instead of inventing applications.
-* Continue when each selected source's contribution, limits, and relationships are clear, or its unresolved gaps are explicit.
+* Understanding the source matters more than completing the table. Ask another question when its contribution remains unclear.
+* Distinguish source claims, your interpretation, and accepted project decisions.
+* Continue when contributions, limits, and relationships are clear, with unresolved gaps explicit.
 
 2. Connect source contributions to situations and useful knowledge roles.
 
