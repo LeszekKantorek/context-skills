@@ -85,11 +85,9 @@ Help agents narrow a broad request to relevant sources across the project's know
 
 4. Write tables that map situations to documents or sections.
 
-* Build a mapping from situations to documents or sections as a table with two or more columns.
-* Use the candidate mappings from Step 2 and the navigation choices from Step 3.
-* Create or update tables in the selected locations.
-* Make each row connect a recognizable situation to relevant document or section links.
-* Use the table below to select columns, not as a required output template.
+* Map situations from Step 2 to document or section links using the navigation determined in Step 3.
+* Create or update tables with two or more columns in the selected locations.
+* Use the table below to select columns.
 
 | Column | Meaning | Include when | Write as | Useful for |
 | --- | --- | --- | --- | --- |
@@ -100,24 +98,11 @@ Help agents narrow a broad request to relevant sources across the project's know
 | Additional reading | Further sources needed under specific conditions | Only some instances of the situation need more knowledge | A condition paired with a document or section link | Conditional routes, connections between areas |
 | Narrow by | The criterion for selecting within the linked collection | The destination is an index or document covering several possibilities | A relevant distinction, such as component, user outcome, target, or environment | Orientation, narrowing |
 
-* Clear situation-to-document mappings matter more than matching the listed columns. Adapt or add a column when necessary selection information does not fit.
-* Use either Situation / Task or Use when when one column sufficiently explains relevance.
-* Use Read first and Additional reading instead of Document / Section when the distinction matters.
-* Keep additional reading conditions beside their links.
-* Link to the relevant section instead of requiring the whole document when possible.
-* Keep knowledge and procedure steps in the linked documents.
-* Do not add a column unless it helps select the right source.
-* Preserve useful existing column names when their meaning fits the selected role.
-* Extend when can name the Additional reading column when each cell pairs a condition with its link.
-* Put general instructions for continuing or stopping navigation beside the table when needed.
-* Write use conditions from the applications established in Step 2.
-* Assign Read first from the situation's needs, not the document's category alone.
-* Select several first sources only when the next action needs each one.
-* Include relevant documents from `.context/`, `docs/`, contribution guides, available skills, and external references.
-* Link a known procedure or skill document directly.
-* Preserve the authority and uncertainty established in Step 1 when wording each mapping.
-* If no useful source exists, preserve the gap instead of adding filler.
-* Replace fictional paths and conditions with verified project sources.
+* Clear situation-to-document mappings matter more than matching the listed columns. Adapt or add columns when necessary selection information does not fit.
+* Use Read first and Additional reading when prerequisites and conditional sources need separate columns.
+* Keep selection conditions beside their links and general reading guidance beside the table.
+* Link relevant sections using paths relative to the map, preserving useful existing column names.
+* Preserve source authority and uncertainty, keeping knowledge and procedure steps in the linked documents.
 
 * Example column combinations:
 * Paths in these examples are relative to a root `AGENTS.md`.
@@ -148,18 +133,8 @@ Help agents narrow a broad request to relevant sources across the project's know
 | Prepare an issue response | [Response guidance](.context/collaboration/issue-responses.md) | Response purpose and available evidence |
 ```
 
-* In the area example, a behavior question leads to the relevant use case through the product index.
-* A change affecting component responsibilities also selects architecture guidance.
-* A compilation request can select the build guide directly.
-* Response guidance becomes relevant when preparing an issue response.
-* These selections illustrate the example's intended behavior, not instructions to perform those tasks during mapping.
-* Use only the example structures that fit the navigation selected in Step 3.
-
-* Do not make maps require each other as repeated navigation steps.
-* Do not require knowledge-entry metadata on ordinary documents.
-* Exclude raw transcripts, secrets, and temporary progress records.
-* Write local links relative to the file containing each table.
-* Continue when the draft tables contain actual destinations and selection conditions, with missing sources explicit for validation.
+* Use the examples as illustrations. Build other table structures when they better serve the identified needs.
+* Continue when the tables contain relevant destinations and selection conditions, with missing sources explicit for validation.
 
 5. Check that the tables lead from situations to the right documents.
 
