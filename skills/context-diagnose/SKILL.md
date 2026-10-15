@@ -47,7 +47,7 @@ Identify why agent behavior fell short and determine a correction supported by e
 
 * Explain the gap from Step 1 using the context and evidence from Step 2.
 * Compare plausible causes by what supports them, what contradicts them, and what would distinguish them.
-* Use the table to investigate causes before selecting a correction.
+* Use the table to investigate possible causes.
 
 | Possible cause | Examine |
 | --- | --- |
@@ -59,7 +59,7 @@ Identify why agent behavior fell short and determine a correction supported by e
 | Execution or tool limitations | Did the problem occur despite a correct decision and sufficient context? |
 
 * Investigate another cause when the listed explanations do not account for the observed gap.
-* Retain competing explanations when the evidence cannot distinguish them; an unsupported cause remains a hypothesis.
+* Retain competing explanations when the evidence cannot distinguish them.
 * Continue when the cause is supported or the remaining hypotheses have checks that could distinguish them.
 
 4. **Select and apply a targeted correction.**
