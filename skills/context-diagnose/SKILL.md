@@ -64,7 +64,7 @@ Identify why agent behavior fell short and determine a correction supported by e
 
 4. **Select and apply a targeted correction.**
 
-* Address the supported cause from Step 3 with a change tied to the expected behavior from Step 1.
+* Select a response to the findings from Step 3 that supports the expected behavior from Step 1.
 * Use the table to select a response suited to the diagnosis.
 
 | Finding | Possible response |
@@ -78,21 +78,21 @@ Identify why agent behavior fell short and determine a correction supported by e
 | Uncertain cause | Perform a check that distinguishes the plausible explanations. |
 
 * Adapt or combine responses when the listed options do not address the cause.
-* Apply the selected correction and identify the expected change in behavior.
+* Perform the selected check or apply the correction, identifying the expected result.
 * Return to Step 3 when new evidence changes the diagnosis or leaves it unresolved.
 * Continue when the correction is ready for a behavioral check. If progress is blocked, identify what is needed to proceed.
 
 5. **Check whether the correction improves behavior.**
 
 * Determine whether the correction from Step 4 improves the behavior identified in Step 1.
-* Use a comparable task that exposes the original failure and a relevant case where the correction should not apply.
+* Use a comparable task that exposes the original failure and a relevant case that could reveal unwanted effects.
 * Compare observed behavior before and after the correction, accounting for differences that could affect the result.
 * Use the table to assess the outcome and its limits.
 
 | Check | Establish | Follow-up |
 | --- | --- | --- |
 | Original failure | Whether the expected behavior occurs after the correction | Revisit the diagnosis if the gap remains. |
-| Applicability | Whether the guidance applies under the intended conditions | Refine conditions that miss relevant situations or include unrelated ones. |
+| Applicability | Whether the correction works under the intended conditions | Adjust the correction or its scope where results differ from expectations. |
 | Side effects | Whether the correction causes unnecessary reading, actions, or new errors | Adjust the correction to address the observed side effect. |
 | Evidence limits | What was tested and what remains uncertain | Keep untested effectiveness and unresolved explanations explicit. |
 
