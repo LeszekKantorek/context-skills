@@ -116,24 +116,27 @@ class HookTests(unittest.TestCase):
         self.mark(token=token)
         self.assertEqual(self.log.read_bytes(), before)
         self.invoke(self.event())
-        self.assertEqual(self.records()["session-123"], row)
+        self.assertEqual(self.records()["session-123"], reviewed)
 
-    def test_all_events_keep_one_row_and_clear_review(self):
+    def test_all_events_keep_one_row_and_preserve_review(self):
+        self.invoke(self.event())
+        self.mark()
+        reviewed_date = self.records()["session-123"]["reviewed_date"]
         for name in ("Stop", "Interrupt", "PreCompact", "SessionEnd"):
             result = self.invoke(self.event(name=name, last_assistant_message="secret-canary" * 7000))
             self.assertEqual(result.stdout.strip(), "{}" if name in {"Stop", "PreCompact"} else "")
             self.assertEqual(len(self.records()), 1)
-            self.assertEqual(self.records()["session-123"]["reviewed_date"], "")
-            self.mark()
+            self.assertEqual(self.records()["session-123"]["reviewed_date"], reviewed_date)
         self.assertNotIn("secret-canary", self.log.read_text(encoding="utf-8"))
 
-    def test_first_added_date_survives_later_registration(self):
+    def test_registration_preserves_dates_when_path_changes(self):
         self.invoke(self.event())
         row = dict(self.records()["session-123"], **{"session_date": "2025-01-02", "reviewed_date": "2025-01-03"})
         self.write_rows([row])
-        self.invoke(self.event())
+        self.invoke(self.event(transcript_path="moved.jsonl"))
         self.assertEqual(self.records()["session-123"]["session_date"], "2025-01-02")
-        self.assertEqual(self.records()["session-123"]["reviewed_date"], "")
+        self.assertEqual(self.records()["session-123"]["reviewed_date"], "2025-01-03")
+        self.assertEqual(self.records()["session-123"]["path"], str(self.repo / "moved.jsonl"))
 
     def test_csv_round_trip_for_paths_and_identifiers(self):
         path = self.repo / "żółć, flight logs" / "session.jsonl"
@@ -242,7 +245,7 @@ class HookTests(unittest.TestCase):
         self.assertTrue(all(result.returncode == 0 for result in results))
         self.assertEqual(set(self.records()), {"shared", "first", "second"})
 
-    def test_registration_waits_for_review_lock_then_resets_review(self):
+    def test_registration_waits_for_review_lock_then_preserves_review(self):
         self.invoke(self.event())
         with SCAN_API.queue_lock(self.state):
             worker = subprocess.Popen(
@@ -259,7 +262,7 @@ class HookTests(unittest.TestCase):
             SCAN_API.write_sessions(self.log, rows)
         _, errors = worker.communicate(timeout=10)
         self.assertEqual(worker.returncode, 0, errors)
-        self.assertEqual(self.records()["session-123"]["reviewed_date"], "")
+        self.assertEqual(self.records()["session-123"]["reviewed_date"], "2026-10-03")
 
     def test_review_waits_for_lock_then_detects_changed_transcript(self):
         self.invoke(self.event())

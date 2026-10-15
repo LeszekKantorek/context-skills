@@ -125,7 +125,7 @@ def register(directory, session_id, transcript_path):
             "session_date": previous["session_date"] if previous else datetime.date.today().isoformat(),
             "session_id": session_id,
             "path": transcript_path,
-            "reviewed_date": "",
+            "reviewed_date": previous["reviewed_date"] if previous else "",
         }
         write_sessions(directory / "sessions.log", sessions)
 

@@ -50,12 +50,12 @@ session_date,session_id,path,reviewed_date
 * `session_id` contains the session ID. Row order does not establish identity.
 * `path` contains the absolute transcript path.
 * An empty `reviewed_date` means pending. A completed review sets today's date.
-* Each accepted registration clears `reviewed_date`, including another event on the same day.
+* Repeated registration of an existing `session_id` preserves its `reviewed_date`.
 * CSV quoting preserves commas, quotes, and Unicode in paths and IDs.
 * The log contains metadata only. Exclude it and its lock file from project knowledge.
 * An event without a nonempty transcript path creates no row or context directory and does not change existing rows.
 * Empty, whitespace-only, and non-string paths count as absent.
-* A supplied path may precede the transcript file. Registration keeps the row pending until the file exists.
+* A supplied path may precede the transcript file. New sessions start with an empty review date.
 
 * Only the current CSV schema is supported. There is no migration or fallback reader.
 * Existing session IDs update the same row without creating duplicates, even during concurrent registration.

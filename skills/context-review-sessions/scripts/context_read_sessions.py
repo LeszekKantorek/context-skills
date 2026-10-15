@@ -4,7 +4,6 @@
 import argparse
 import csv
 import datetime
-import hashlib
 import json
 import os
 import stat
@@ -114,62 +113,48 @@ def write_sessions_once(path, sessions):
             temporary.unlink(missing_ok=True)
 
 
-def checkpoint(row):
-    """Detect changed record identity or transcript metadata without reading content."""
-    signature = None
-    if row["path"]:
-        try:
-            info = Path(row["path"]).stat()
-            if stat.S_ISREG(info.st_mode):
-                signature = [info.st_size, info.st_mtime_ns, info.st_ctime_ns]
-        except FileNotFoundError:
-            pass
-    if signature is None:
-        return None
-    data = [row["session_date"], row["session_id"], row["path"], signature]
-    return hashlib.sha256(json.dumps(data, ensure_ascii=False).encode("utf-8")).hexdigest()
-
-
-def inventory(directory, session_id=None, expected_checkpoint=None):
+def inventory(directory, session_ids=None):
     if not directory.exists():
-        if session_id:
+        if session_ids:
             raise ValueError("session is not in the queue")
         return {}
-    if session_id is None:
+    if session_ids is None:
         # The complete log is replaced atomically; listing needs no writer lock.
         return read_sessions(directory)
     with queue_lock(directory):
         sessions = read_sessions(directory)
-        if expected_checkpoint is None:
-            raise ValueError("--checkpoint is required when marking a review")
-        if session_id not in sessions:
-            raise ValueError("session is not in the queue")
-        row = sessions[session_id]
-        current = checkpoint(row)
-        if current is None:
-            raise ValueError("session transcript is unavailable; leave the review pending")
-        if current != expected_checkpoint:
-            raise ValueError("session checkpoint changed; review its new evidence first")
-        if not row["reviewed_date"]:
-            row["reviewed_date"] = datetime.date.today().isoformat()
+        selected = []
+        for session_id in dict.fromkeys(session_ids):
+            if session_id not in sessions:
+                raise ValueError("session is not in the queue: " + session_id)
+            row = sessions[session_id]
+            if not Path(row["path"]).is_file():
+                raise ValueError("session transcript is unavailable: " + session_id)
+            if not row["reviewed_date"]:
+                selected.append(row)
+        if selected:
+            review_date = datetime.date.today().isoformat()
+            for row in selected:
+                row["reviewed_date"] = review_date
             write_sessions(directory / "sessions.log", sessions)
         return sessions
 
 
 def describe_session(row):
     """Report file metadata without selecting groups or reading transcript contents."""
-    token, size, error = None, None, None
+    size, error = None, None
     try:
-        token = checkpoint(row)
-        availability = "available" if token else "missing-file"
-        if token:
-            size = Path(row["path"]).stat().st_size
+        info = Path(row["path"]).stat()
+        availability = "available" if stat.S_ISREG(info.st_mode) else "missing-file"
+        if availability == "available":
+            size = info.st_size
+    except FileNotFoundError:
+        availability = "missing-file"
     except OSError as exc:
-        token = None
         availability, error = "unavailable", str(exc)
-    line = "%s  %s  transcript=%s  bytes=%s  checkpoint=%s  path=%s" % (
+    line = "%s  %s  transcript=%s  bytes=%s  path=%s" % (
         row["session_id"], row["session_date"], availability,
-        size if size is not None else "-", token or "-",
+        size if size is not None else "-",
         json.dumps(row["path"], ensure_ascii=False),
     )
     if error:
@@ -180,18 +165,15 @@ def describe_session(row):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("project_root", type=Path)
-    parser.add_argument("--mark-reviewed", metavar="SESSION_ID")
-    parser.add_argument("--checkpoint", help="Exact checkpoint token printed before reading the transcript")
+    parser.add_argument("--mark-reviewed", metavar="SESSION_ID", nargs="+")
     args = parser.parse_args()
-    if bool(args.mark_reviewed) != (args.checkpoint is not None):
-        parser.error("--mark-reviewed and --checkpoint must be supplied together")
     try:
         result = subprocess.run(
             ["git", "-C", str(args.project_root.resolve()), "rev-parse", "--show-toplevel"],
             check=True, capture_output=True, text=True, timeout=1,
         )
         directory = Path(result.stdout.strip()) / ".context"
-        sessions = inventory(directory, args.mark_reviewed, args.checkpoint)
+        sessions = inventory(directory, args.mark_reviewed)
         pending = sorted((row for row in sessions.values() if not row["reviewed_date"]),
                          key=lambda row: (row["session_date"], row["session_id"]))
         lines = [describe_session(row) for row in pending]
