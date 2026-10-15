@@ -2,6 +2,64 @@
 
 Stan na 2026-10-15. Notatka do kontynuowania pracy po długiej sesji lub zmianie rozmowy. Zapisuje decyzje użytkownika, bieżący zakres i pomysły do dalszego omówienia; nie ustanawia nowych reguł projektu.
 
+## Stan na zakończenie obecnego etapu context-diagnose
+
+Zakończono opracowanie i wspólny przegląd [context-diagnose](skills/context-diagnose/SKILL.md). Końcowa wersja skilla jest zapisana lokalnie w commicie `58fe506` na gałęzi `codex/context-v-proposal`. Użytkownik zlecił aktualizację tej notatki i osobny lokalny commit. Nie wykonano pusha.
+
+Ta sekcja i aktualny plik skilla mają pierwszeństwo przed wcześniejszymi propozycjami dotyczącymi diagnozowania. Przyjęto nazwę `context-diagnose`; historyczne zapisy o niezatwierdzonej nazwie i przyszłym opracowaniu Diagnose nie opisują już obecnego stanu.
+
+Aktualne `description`:
+
+```yaml
+description: Use to diagnose agent mistakes or behavior flagged by user corrections and check targeted improvements.
+```
+
+Aktualny `Goal`:
+
+```text
+Identify why agent behavior fell short, apply a targeted correction, and check its effect using task evidence.
+```
+
+### Odpowiedzialność i przebieg
+
+Diagnose zaczyna od konkretnego błędu agenta lub zachowania wskazanego przez korektę użytkownika. Porównuje oczekiwanie z obserwacją, bada dostępny kontekst i ślady jego użycia, ocenia przyczyny, dobiera odpowiedź i sprawdza skutek. Może badać dokumenty projektu, routing i skills, także procedury wytworzone przez Compile. Nie zastępuje ogólnego zachowywania wiedzy przez Preserve ani przeglądu zbioru przez Maintain.
+
+| Krok | Odpowiedzialność i wynik dla dalszej pracy |
+| --- | --- |
+| 1. Establish the gap between expected and observed behavior. | Ustalić oczekiwanie, konkretną rozbieżność, jej konsekwencję oraz dowody lub niepewność. |
+| 2. Trace the context available at the point of failure. | Odtworzyć dostępne wówczas informacje, instrukcje, drogi dostępu i ślady zastosowania. |
+| 3. Evaluate possible causes against the evidence. | Porównać wyjaśnienia; ustalić wspartą dowodami przyczynę albo hipotezy ze sposobami ich rozróżnienia. |
+| 4. Select and apply a targeted correction. | Wykonać sprawdzenie rozróżniające hipotezy albo zastosować poprawkę, określając oczekiwany rezultat. |
+| 5. Check whether the correction improves behavior. | Porównać zachowanie przed i po zmianie, sprawdzić zakres działania i skutki uboczne oraz określić granice dowodów. |
+
+### Przyjęte ustalenia redakcyjne i merytoryczne
+
+* Całość pozostaje w jednym `SKILL.md`, z Goal, sekcją Steps i pięcioma krokami. Punkty przygotowują do tabeli, wskazują postępowanie poza jej wariantami i domykają etap.
+* Korekta użytkownika jest sygnałem do zbadania zachowania agenta, nie przedmiotem diagnozy.
+* Kontekst odtwarzamy dla czasu zdarzenia. Aktualna treść dokumentu nie musi odpowiadać instrukcjom dostępnym podczas zadania.
+* Dostępność wiedzy, droga do niej oraz ślady odczytu i zastosowania są odrębnymi aspektami. Przykład z brakiem wizualnego sprawdzenia odróżnia brak informacji w raporcie od dowodu niewykonania sprawdzenia.
+* Przyczyny obejmują brak lub błąd wiedzy, nietrafny routing, niejasne, nadmierne lub sprzeczne instrukcje, błędne zastosowanie wskazówek oraz ograniczenia wykonawcze lub narzędziowe. Tabela pozostaje otwarta na inne wyjaśnienia.
+* Porównujemy dowody wspierające i podważające przyczyny oraz sposoby ich rozróżnienia. Nierozstrzygnięte wyjaśnienia pozostają konkurencyjnymi hipotezami.
+* Poprawka może oznaczać usunięcie lub zawężenie instrukcji. Nie każdy błąd wymaga zmiany kontekstu; odpowiedzią może być zmiana sposobu wykonania lub usunięcie ograniczenia narzędzia.
+* Krok 4 przyjmuje zarówno wspartą dowodami przyczynę, jak i nierozstrzygnięte hipotezy. Dlatego wybiera odpowiedź na ustalenia i wykonuje sprawdzenie albo poprawkę, zamiast zawsze nakazywać zmianę instrukcji.
+* Nowe dowody zmieniające diagnozę lub pozostawiające ją nierozstrzygniętą prowadzą z kroku 4 do kroku 3. Przeszkoda w pracy wymaga określenia, czego brakuje do kontynuacji; nie oznacza gotowości do sprawdzenia poprawki.
+* Krok 5 używa porównywalnego zadania ujawniającego pierwotny błąd oraz przypadku mogącego ujawnić niepożądane skutki. Nie wymaga zawsze przypadku, w którym poprawka ma nie działać.
+* Kontrola `Applicability` dotyczy poprawki i jej warunków, nie wyłącznie instrukcji. Porównanie przed i po uwzględnia inne różnice mogące wpływać na wynik.
+* Wyniki podważające wyjaśnienie prowadzą do ponownej diagnozy; po dalszych zmianach ponawiamy dotknięte sprawdzenia.
+* Usunięto osobne zabezpieczenia powtarzające treść tabel: odróżnianie relacji od obserwacji, istnienia od zastosowania instrukcji, przypomnienie o statusie hipotezy oraz o braku dowodu skuteczności bez próby zachowania. Rozróżnienia pozostają w pytaniach, przykładach i kryteriach sprawdzeń.
+* Przegląd spójności zachował rozdział funkcji: krok 2 odtwarza fakty, krok 3 ocenia wyjaśnienia, krok 4 dobiera działanie. Podobne kategorie w ich tabelach nie są powtórzeniem tej samej analizy.
+* Końcowe description obejmuje diagnozowanie zachowania i sprawdzanie poprawek bez zawężania rozwiązania do kontekstu. Goal obejmuje również wykonanie i sprawdzenie poprawki, a nie tylko jej wybór.
+
+### Zapis zmian i sprawdzenia
+
+* `9fe9767` — dodanie całego skilla ze zmienionym Goal i skróconym krokiem 1; `a98689f` — skrócenie kroku 2; `0b9a2c8` — skrócenie kroku 3.
+* `59f11e8` — skrócenie kroku 4; `15af256` — skrócenie kroku 5; `1b6e842` — poprawki spójności kroków 4–5; `58fe506` — końcowe description i Goal.
+* Walidator struktury przeszedł dla wersji początkowej oraz po zmianie Goal i kroku 1. Użyto istniejącego PyYAML z `.references/context-map-validation/`.
+* Przy kolejnych zmianach sprawdzano diff i formatowanie. Wspólny przegląd objął wszystkie kroki, ich połączenia, powtórzenia oraz zgodność description i Goal z procedurą.
+* Nie wykonano próby diagnozy na rzeczywistym zadaniu ani testu zachowania agenta po poprawce. Przegląd tekstu nie potwierdza skuteczności procedury.
+* W tej serii zmieniono wyłącznie nowy skill, a następnie tę notatkę. README, katalog skills, integracje i pozostałe skills pozostają bez zmian.
+* Compile pozostaje kierunkiem do dalszego omówienia. Zakończenie Diagnose nie stanowi zlecenia jego wdrożenia ani aktualizacji integracji.
+
 ## Stan na zakończenie obecnego etapu context-maintain
 
 Zakończono opracowanie i wspólny przegląd [context-maintain](skills/context-maintain/SKILL.md). Końcowa wersja skilla jest zapisana lokalnie w commicie `d6709ee` na gałęzi `codex/context-v-proposal`. Użytkownik zlecił aktualizację tej notatki i osobny lokalny commit. Nie wykonano pusha.
