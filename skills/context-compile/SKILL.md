@@ -7,7 +7,7 @@ description: Use to turn established project procedures into directly selectable
 
 ## Goal
 
-Make established project procedures directly selectable and executable as skills while preserving their meaning and a single maintained source.
+Make established project procedures directly selectable and executable as skills, preserving their meaning with one maintained source per procedure.
 
 ## Steps
 
