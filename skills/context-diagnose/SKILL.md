@@ -1,13 +1,13 @@
 ---
 name: context-diagnose
-description: Use to investigate agent mistakes or user corrections and improve the context that guides agent behavior.
+description: Use to diagnose agent mistakes or behavior flagged by user corrections and check targeted improvements.
 ---
 
 # Diagnose Agent Behavior
 
 ## Goal
 
-Identify why agent behavior fell short and determine a correction supported by evidence.
+Identify why agent behavior fell short, apply a targeted correction, and check its effect using task evidence.
 
 ## Steps
 
