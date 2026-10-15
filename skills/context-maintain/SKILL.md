@@ -67,7 +67,7 @@ Improve the coherence and organization of existing project knowledge while prese
 | Leave unresolved | Available evidence cannot settle a conflict or justify a change | Competing claims, their sources, and the decision or evidence still needed. |
 
 * Adapt or combine changes when the listed options do not preserve useful knowledge.
-* Continue when changes have clear destinations, preserved qualifications, and identified effects on dependent references.
+* Continue when changes have clear destinations, identified context to retain, and known effects on dependent references.
 
 4. **Apply the selected changes and repair affected references.**
 
@@ -82,7 +82,7 @@ Improve the coherence and organization of existing project knowledge while prese
 | Moved or replaced content | Update incoming links, section references, and existing replacement records. |
 | Navigation | Repair affected routes. Use context-map when the change requires redesigning how situations lead to sources. |
 | Dependent tools | Preserve required formats or update affected readers and writers. |
-| Unresolved proposals | Keep them distinguishable from accepted knowledge and identify what prevents their resolution. |
+| Unresolved matters | Preserve conflicting claims, uncertainty, and the evidence or decisions needed for resolution. |
 
 * Preserve other affected relationships when the table does not cover them.
 * Continue when selected changes and affected references are updated, with incomplete work explicit.
@@ -99,7 +99,7 @@ Improve the coherence and organization of existing project knowledge while prese
 | Knowledge coverage | Useful statements, rationale, evidence, and exceptions remain available | Restore missing content or references. |
 | Meaning and authority | Scope and the distinction between decisions, observations, and proposals remain intact | Correct altered obligations, unsupported certainty, or lost conditions. |
 | Coherence | Equivalent rules have a clear maintained source; meaningful variants remain distinguishable | Remove residual duplication or restore differences lost during consolidation. |
-| Problem resolution | Each selected change addresses the problem that justified it | Adjust ineffective changes or retain the unresolved problem explicitly. |
+| Problem resolution | Each identified problem is resolved or remains explicit with its reason | Address overlooked problems or explain why they remain unresolved. |
 | Access | Affected links and routes reach sufficient content for representative needs | Repair destinations, missing context, or unnecessary detours. |
 | Dependent tools | Affected readers and writers remain compatible with the revised content | Correct incompatible changes or identify the remaining migration need. |
 
