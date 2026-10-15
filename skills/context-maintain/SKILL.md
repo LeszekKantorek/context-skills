@@ -53,7 +53,7 @@ Improve the coherence and organization of existing project knowledge while prese
 3. **Determine changes that preserve useful knowledge.**
 
 * Choose changes that address the problems from Step 2 while retaining the contributions identified in Step 1.
-* Determine where each affected statement, qualification, and supporting source will remain accessible.
+* Determine where affected knowledge and its necessary context will remain accessible.
 * Use the table to choose changes suited to the content and existing organization.
 
 | Change | Choose when | Preserve |
@@ -66,9 +66,7 @@ Improve the coherence and organization of existing project knowledge while prese
 | Remove | A fragment adds no unique knowledge or is demonstrably obsolete | Any still-useful rationale, evidence, exceptions, and references to its replacement. |
 | Leave unresolved | Available evidence cannot settle a conflict or justify a change | Competing claims, their sources, and the decision or evidence still needed. |
 
-* Choose another change or combine changes when these options do not preserve the knowledge's useful contributions.
-* Select shared sources by responsibility and use, without imposing a new directory structure or document format.
-* Separate supported editorial changes from proposals that alter accepted project decisions.
+* Adapt or combine changes when the listed options do not preserve useful knowledge.
 * Continue when changes have clear destinations, preserved qualifications, and identified effects on dependent references.
 
 4. **Apply the selected changes and repair affected references.**
