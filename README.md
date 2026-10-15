@@ -1,107 +1,26 @@
 # context-skills
 
-Map project sources and tasks, apply project knowledge, gather durable learning, and import saved sessions into `.context/`.
+Skills for AI agents to preserve project knowledge, organize it, and make it useful in future work. They work with your existing documents, decisions, and procedures.
 
-## Choose a skill
+## Skills
 
-| Need | Skill | Result |
-| --- | --- | --- |
-| Build or repair project routing | [context-map](skills/context-map/SKILL.md) | Choose entry points and map structures from project knowledge and its uses. |
-| Use stored knowledge in the current task | [context-apply](skills/context-apply/SKILL.md) | Read the index and relevant entries; reflect their rules in actions and checks. |
-| Save session learning or review existing knowledge | [context-gather](skills/context-gather/SKILL.md) | Create, update, merge, or withdraw entries; create and maintain the index. |
-| Review pending sessions | [context-review-sessions](skills/context-review-sessions/SKILL.md) | Preserve findings through context-preserve and record completed reviews. |
+| Skill | Purpose |
+| --- | --- |
+| [context-preserve](skills/context-preserve/SKILL.md) | Preserve decisions and findings from sessions or supplied sources, including their rationale and evidence. |
+| [context-review-sessions](skills/context-review-sessions/SKILL.md) | Process pending sessions through context-preserve and record completed reviews. |
+| [context-map](skills/context-map/SKILL.md) | Build maps that connect tasks and questions to relevant documents or sections. |
+| [context-maintain](skills/context-maintain/SKILL.md) | Review and improve the coherence and organization of existing project knowledge. |
+| [context-diagnose](skills/context-diagnose/SKILL.md) | Investigate agent mistakes, apply targeted corrections, and check their effects. |
+| [context-compile](skills/context-compile/SKILL.md) | Turn established project procedures into directly selectable skills. |
 
-* `context-gather` combines the former `context-consolidate` and `context-review` responsibilities.
-* Use `context-apply` during work and `context-gather` when knowledge should be saved or maintained.
-* `context-review-sessions` coordinates session processing through `context-preserve`.
-* No full skill sequence is required.
+Use the skill that fits the task; there is no required sequence.
 
 ## Install
 
-```text
+```sh
 npx skills add LeszekKantorek/context-skills
 ```
 
-* Select a single skill with `npx skills add LeszekKantorek/context-skills@context-apply` or another name from the table.
-* Install `context-preserve` alongside `context-review-sessions`.
-* When updating an existing installation, remove the retired `context-consolidate` and `context-review` skill copies.
+Choose the skills to install. Install `context-preserve` alongside `context-review-sessions`.
 
-## Task routing with context-map
-
-* `context-map` first examines knowledge, its use conditions, and its effect on decisions or actions.
-* It chooses entry points from actual needs, such as questions, tasks, symptoms, decisions, or change areas.
-* A source index, task table, or conditional branch can fit different needs. No fixed number of maps is required.
-* Reuse effective navigation. Put compact routing in the applicable `AGENTS.md`, with links to detailed maps when needed.
-* Include relevant sources outside `.context/`. Keep knowledge and procedure steps at their sources.
-* Use Map when maintaining routing, not before every task. Do not require a row for every document.
-* Definitions, examples, and selection checks are contained in the single `SKILL.md`.
-* Adding Map does not migrate a project's existing index dependencies. Check callers before retiring old routers; report any compatibility content that still has to remain.
-
-## Existing context index workflow
-
-* **Gather creates `.context/INDEX.md` when no context index exists.** An existing index is updated in place.
-* The index contains only a table with `Entry` and `Use when` columns.
-* Link each active entry once; paths are relative to the index.
-* Replace example rows with actual entries; use only the header and separator for an empty collection.
-* Exclude session records, withdrawn entries, and the index itself.
-
-```markdown
-| Entry | Use when |
-| --- | --- |
-| [Repository instructions](repository-instructions.md) | Use when changing code or validating changes in this repository. |
-```
-
-## Knowledge entries
-
-| Field | Required | Meaning |
-| --- | --- | --- |
-| `description` | Yes | Content and use in at most three short sentences. |
-| `status` | Yes | `active`, `superseded`, or `deprecated`. |
-| `superseded_by` | For `superseded` only | Replacement path relative to the entry. |
-
-* `active` means current and useful; a hypothesis remains uncertain.
-* `superseded` means replaced; follow `superseded_by` to current knowledge.
-* `deprecated` means withdrawn without a replacement.
-* Keep body content in short bullets; use sections only when useful.
-* Add tables, snippets, reusable templates, or Mermaid and ASCII diagrams when they help.
-* Preserve sources, rationale, and uncertainty alongside the knowledge.
-* Use the [three article templates](skills/context-gather/references/entry-templates.md).
-
-## How the skills work together
-
-| Request | Route |
-| --- | --- |
-| Implement a change using repository conventions | Apply reads the index and relevant entries, then guides the change. |
-| Save what we learned in this conversation | Gather collects session knowledge, writes new entries, reviews existing context, then updates the index. |
-| Build initial project memory | Gather uses supplied context and accessible sources, then creates entries and the index. |
-| Check the collection for stale or duplicated knowledge | Gather reviews the requested scope and repairs supported defects. |
-| Import lessons from previous sessions | Import sessions loads the selected records and invokes gather. |
-| Review context without editing files | Gather returns findings and proposed changes; no files are written. |
-
-* Keep temporary progress and next steps in the task's plan or handoff.
-* Preserve unresolved decisions; do not infer accepted intent from code alone.
-* Do not copy secrets or raw transcripts into knowledge entries.
-* A successful retrieval check does not prove a future agent will apply the knowledge correctly.
-
-## Optional Codex hooks
-
-* The [Codex integration](integrations/codex/README.md) adds a startup reminder and session registration.
-* `SessionStart` reminds the agent of the three skill roles and the required index.
-* `Stop`, `Interrupt`, `PreCompact`, and `SessionEnd` run `context_register_session.py`.
-* Each session with a nonempty supplied transcript path has one CSV row in `.context/sessions.log`.
-* Events without a path are skipped. Repeated session IDs update the existing row.
-* Registration stores metadata only; it does not read transcripts or invoke skills.
-* Ignore `.context/sessions.log` and `.context/.sessions.lock` in Git; exclude them from project knowledge.
-* The CSV header is `session_date,session_id,path,reviewed_date`. Dates use `YYYY-MM-DD`.
-* Only this format is supported. There is no migration from older formats.
-* Use [context-review-sessions](skills/context-review-sessions/SKILL.md) to process pending sessions.
-
-## Development checks
-
-```text
-python -m unittest discover -s tests -v
-```
-
-* Use `python3` where that is the Python 3 executable.
-* Tests cover registration and review bookkeeping.
-* Skill validation checks structure; it does not prove agent selection or knowledge quality.
+For session registration, see the [Codex integration](integrations/codex/README.md).
