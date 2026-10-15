@@ -31,7 +31,7 @@ Make established project procedures directly selectable and executable as skills
 
 * Determine what belongs in the skill and where the procedure will be maintained.
 * Use the applications and dependencies from Step 1, existing skills, and relevant project conventions.
-* Use the table to select boundaries, content locations, and the maintenance arrangement.
+* Use the table to make these decisions.
 
 | Decision | Consider | Establish |
 | --- | --- | --- |
@@ -42,7 +42,7 @@ Make established project procedures directly selectable and executable as skills
 
 * Adapt these choices when another arrangement better preserves the procedure and supports its use.
 * For generated skills, determine how to reproduce the result and detect when it no longer matches the source.
-* Continue when boundaries, content locations, and source ownership are clear, without independently edited copies of the procedure.
+* Continue when boundaries, content locations, and source ownership are clear.
 
 3. **Translate the procedure into actionable skill instructions.**
 
