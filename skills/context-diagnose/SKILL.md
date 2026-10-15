@@ -98,4 +98,4 @@ Identify why agent behavior fell short and determine a correction supported by e
 
 * Add a check when another consequence could affect the task or interpretation of the result.
 * Return to the diagnosis when results challenge the explanation, and repeat affected checks after further corrections.
-* State the observed effect and its limits. Without a behavioral trial, the correction's effectiveness remains unverified.
+* State the observed effect and its limits.
