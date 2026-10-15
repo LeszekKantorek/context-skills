@@ -4,7 +4,6 @@
 
 * Copy the `.codex` directory from `integrations/codex/` into the target project.
 * Merge with existing configuration without overwriting unrelated hooks.
-* When upgrading, replace references to `context_queue_session.py` with `context_register_session.py`.
 * Add `.context/sessions.log` and `.context/.sessions.lock` to the project's `.gitignore`.
 * Use `/hooks` in Codex to review and trust the project definitions.
 * See the [official hook documentation](https://learn.chatgpt.com/docs/hooks) for the host contract.
@@ -25,15 +24,16 @@
 
 | Hook | Action |
 | --- | --- |
-| `SessionStart` | Explain apply, gather, import sessions, and the required context index. |
+| `SessionStart` | Summarize the six context skills so the agent can choose one for the task. |
 | `Stop`, `Interrupt`, `PreCompact`, `SessionEnd` | Register a session through `context_register_session.py`. |
 
 * Registration runs synchronously. `Stop` and `PreCompact` have a five-second timeout;
   `Interrupt` and `SessionEnd` retain the host's three-second maximum.
-* It does not open transcripts, create the knowledge index, or invoke skills.
-* Gather creates the index when processing knowledge.
-* Import sessions reads selected transcripts and invokes gather.
-* Hooks do not schedule imports or return continuation or blocking decisions.
+* Registration stores session metadata without opening transcripts or invoking skills.
+* The startup reminder covers `context-preserve`, `context-review-sessions`, `context-map`, `context-maintain`, `context-diagnose`, and `context-compile`.
+* Skills work with existing project documents; no index format or skill sequence is required.
+* `context-review-sessions` coordinates pending reviews through `context-preserve`.
+* Hooks do not schedule reviews or return continuation or blocking decisions.
 
 ## Session records
 

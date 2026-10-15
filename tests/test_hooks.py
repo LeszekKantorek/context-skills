@@ -5,6 +5,7 @@ import csv
 import datetime
 import importlib.util
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -90,7 +91,14 @@ class HookTests(unittest.TestCase):
                 text=True, capture_output=True, check=True,
             )
             if name == "SessionStart":
-                self.assertIn("context-apply", result.stdout)
+                expected_skills = {
+                    path.parent.name for path in (ROOT / "skills").glob("*/SKILL.md")
+                }
+                mentioned_skills = set(re.findall(r"\bcontext-[a-z-]+\b", result.stdout))
+                self.assertEqual(mentioned_skills, expected_skills)
+                self.assertNotIn("index", result.stdout.lower())
+                self.assertIn(".context/sessions.log", result.stdout)
+                self.assertIn(".context/.sessions.lock", result.stdout)
                 self.assertFalse(self.state.exists())
         self.assertEqual(len(self.records()), 1)
         self.assertFalse((self.state / "INDEX.md").exists())
