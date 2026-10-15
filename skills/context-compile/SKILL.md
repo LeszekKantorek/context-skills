@@ -46,8 +46,7 @@ Make established project procedures directly selectable and executable as skills
 
 3. **Translate the procedure into actionable skill instructions.**
 
-* Turn the procedure from Step 1 into instructions using the boundaries and source arrangement from Step 2.
-* Preserve established meaning while expressing the actions and decisions needed to achieve the result.
+* Express the actions and decisions from Step 1 as instructions using the boundaries and source arrangement from Step 2.
 * Use the table to translate source contributions into skill content.
 
 | Source contribution | Skill expression | Example |
@@ -60,7 +59,7 @@ Make established project procedures directly selectable and executable as skills
 | Completion criteria | Checks of the result and actions for unresolved gaps | Verify package contents and identify checks that could not be completed. |
 
 * Use another form when the listed expressions do not preserve a contribution needed for execution.
-* Choose steps and tables to fit the procedure; the resulting skill need not follow this skill's five-step structure.
+* Choose steps and tables to fit the procedure.
 * Continue when the SKILL.md provides actionable instructions with necessary conditions, context, and completion checks.
 
 4. **Integrate the skill with its sources and entry points.**
