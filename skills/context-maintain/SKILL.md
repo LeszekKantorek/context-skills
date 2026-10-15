@@ -71,9 +71,8 @@ Improve the coherence and organization of existing project knowledge while prese
 
 4. **Apply the selected changes and repair affected references.**
 
-* Improve the collection using the changes selected in Step 3, within the current write scope.
-* Establish destination content before removing fragments from their previous locations.
-* Use the table to carry the selected changes through the affected documents and their dependents.
+* Apply the changes selected in Step 3.
+* Use the table to update affected content and its dependencies.
 
 | Affected content | Action |
 | --- | --- |
@@ -82,12 +81,11 @@ Improve the coherence and organization of existing project knowledge while prese
 | Rationale and evidence | Keep supporting sources and limitations attached to the claims they support. |
 | Moved or replaced content | Update incoming links, section references, and existing replacement records. |
 | Navigation | Repair affected routes. Use context-map when the change requires redesigning how situations lead to sources. |
-| Dependent tools | Preserve required formats or update affected readers and writers within the authorized scope. |
+| Dependent tools | Preserve required formats or update affected readers and writers. |
 | Unresolved proposals | Keep them distinguishable from accepted knowledge and identify what prevents their resolution. |
 
 * Preserve other affected relationships when the table does not cover them.
-* For a review without edits, present the proposed changes and unresolved matters instead of modifying the collection.
-* Continue when selected changes are applied or presented, with incomplete work explicit.
+* Continue when selected changes and affected references are updated, with incomplete work explicit.
 
 5. **Check meaning, coherence, and access after the changes.**
 
