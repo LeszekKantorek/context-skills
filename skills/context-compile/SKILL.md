@@ -65,7 +65,7 @@ Make established project procedures directly selectable and executable as skills
 4. **Integrate the skill with its sources and entry points.**
 
 * Place the skill from Step 3 in the selected location and implement the source arrangement from Step 2.
-* Use the table to update procedure ownership, supporting sources, and affected references.
+* Use the table to integrate the skill with related sources.
 
 | Arrangement | Action |
 | --- | --- |
