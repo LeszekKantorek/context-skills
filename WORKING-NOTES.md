@@ -2,6 +2,63 @@
 
 Stan na 2026-10-15. Notatka do kontynuowania pracy po długiej sesji lub zmianie rozmowy. Zapisuje decyzje użytkownika, bieżący zakres i pomysły do dalszego omówienia; nie ustanawia nowych reguł projektu.
 
+## Stan na zakończenie obecnego etapu context-compile
+
+Zakończono opracowanie i wspólny przegląd [context-compile](skills/context-compile/SKILL.md). Końcowa wersja skilla jest zapisana lokalnie w commicie `7af56bd` na gałęzi `codex/context-v-proposal`. Użytkownik zlecił aktualizację tej notatki i osobny lokalny commit. Nie wykonano pusha.
+
+Ta sekcja i aktualny plik skilla mają pierwszeństwo przed historycznymi propozycjami poniżej. Compile został opracowany jako procedura przekształcania ustalonych procedur projektu w skills. Nie jest już wyłącznie przyszłym pomysłem ani jedynie generatorem metadanych routingu uzależnionym od pomiarów kosztu indeksu.
+
+Aktualne `description`:
+
+```yaml
+description: Use to turn established project procedures into directly selectable skills.
+```
+
+Aktualny `Goal`:
+
+```text
+Make established project procedures directly selectable and executable as skills, preserving their meaning with one maintained source per procedure.
+```
+
+### Odpowiedzialność i przebieg
+
+Compile przekształca ustalone procedury w bezpośrednio wybierane instrukcje wykonania pracy. Rozpoznaje ich znaczenie i zastosowania, ustala granice skilla i miejsce utrzymywania procedury, opracowuje instrukcję, integruje ją ze źródłami i sprawdza rezultat. Nie ustanawia nowych reguł projektu w miejsce brakujących ustaleń.
+
+| Krok | Odpowiedzialność i wynik dla dalszej pracy |
+| --- | --- |
+| 1. Understand the procedure and its intended use. | Rozpoznać wynik, warunki, działania, decyzje, zależności i podstawy procedury, zachowując jawne braki. |
+| 2. Determine the skill boundaries and source ownership. | Ustalić granice skilla, wykorzystanie istniejących skills, rozmieszczenie treści i jedno miejsce utrzymywania procedury. |
+| 3. Translate the procedure into actionable skill instructions. | Wyrazić ustaloną procedurę w SKILL.md, zachowując potrzebny kontekst i nierozstrzygnięte braki. |
+| 4. Integrate the skill with its sources and entry points. | Umieścić skill, wdrożyć wybrany sposób utrzymania i zaktualizować dotknięte odwołania. |
+| 5. Check selection, execution, and source consistency. | Sprawdzić znaczenie, wybór, wykonanie, spójność źródła i odnośniki; poprawić problemy i ponowić kontrole. |
+
+### Przyjęte ustalenia redakcyjne i merytoryczne
+
+* Całość pozostaje w jednym `SKILL.md`, z Goal, sekcją Steps i pięcioma krokami z tabelami wspierającymi decyzje.
+* Wybór między przenoszeniem a generowaniem jest decyzją dla konkretnej procedury w kroku 2. Nie narzucono jednego wariantu wszystkim projektom.
+* Gdy skill przejmuje procedurę, poprzednia wersja zostaje zastąpiona odpowiednim odwołaniem. Gdy właścicielem pozostaje dokument, skill powstaje z utrzymywanego źródła i wymaga kontroli aktualności.
+* Jedno źródło utrzymywania dotyczy każdej procedury osobno. Nie oznacza jednego dokumentu dla wszystkich procedur ani zakazu osobnych źródeł wiedzy wspierającej.
+* Rozpoznajemy możliwość rozszerzenia istniejącego skilla. Granice wynikają ze wspólnego rezultatu i warunków wyboru, nie z automatycznego tworzenia skilla dla każdego dokumentu.
+* Krok 3 przekłada sytuacje na nazwę i description, wynik na Goal, działania i zależności na kroki, wybory na kryteria lub tabele, a wiedzę wspierającą na kontekst lub warunkowe odnośniki.
+* Kroki i tabele powstającego skilla należy dobrać do procedury. Usunięto osobne zabezpieczenie o niekopiowaniu pięciokrokowego układu Compile; pozostawiono pozytywną instrukcję dopasowania struktury.
+* Skrócono wyliczenia przy poleceniach użycia tabel oraz powtórzenia o niewymyślaniu brakujących reguł i niezależnie edytowanych kopiach. Znaczenie i jawne braki pozostają w celu, tabelach i warunkach zakończenia.
+* Przegląd spójności doprecyzował koniec kroku 3: SKILL.md zachowuje ustaloną procedurę, potrzebny kontekst i nierozstrzygnięte braki rozpoznane wcześniej.
+* Wariant generowania w kroku 4 wymaga rzeczywistego wygenerowania skilla ze źródła z zachowaniem instrukcji opracowanych w kroku 3 oraz zapewnienia kontroli aktualności. Sam opis sposobu generowania nie domyka tego działania.
+* Krok 5 sprawdza wybór na zadaniach pasujących i niepasujących, a wykonanie na reprezentatywnym zadaniu pasującym. Przypadek niepasujący nie wymaga wykonania procedury.
+* Ocena tekstu i obserwacja wykonania pozostają odrębnymi rodzajami dowodów; należy wskazać, co pozostaje niesprawdzone.
+* Powtarzające się odniesienia do źródła mają różne funkcje: krok 2 wybiera sposób utrzymania, krok 4 go wdraża, krok 5 sprawdza spójność.
+* Description zachowano bez zmian. W Goal doprecyzowano jedno utrzymywane źródło na procedurę, zamiast sugerować zachowanie jednego źródła już istniejącego przed rozpoczęciem pracy.
+
+### Zapis zmian i sprawdzenia
+
+* `f1b7d9b` — dodanie całego skilla ze skróconym krokiem 1; `e773d22` — skrócenie kroku 2; `4848863` — skrócenie kroku 3.
+* `333fbc3` — skrócenie kroku 4; `55127b9` — doprecyzowanie sprawdzeń kroku 5; `bc4774f` — dwie poprawki spójności; `7af56bd` — końcowe Goal.
+* Walidator struktury przeszedł dla wersji początkowej i po skróceniu kroku 1. Użyto istniejącego PyYAML z `.references/context-map-validation/`.
+* Przy kolejnych zmianach sprawdzano diff i formatowanie. Wspólny przegląd objął wszystkie kroki, przekazywanie ustaleń, powtórzenia oraz description i Goal.
+* Nie wykonano kompilacji rzeczywistej procedury projektu, nie zbudowano generatora ani nie przetestowano wyboru lub wykonania wygenerowanego skilla. Zakończenie dotyczy opracowania instrukcji Compile, nie dowodu jej skuteczności.
+* W tej serii zmieniono wyłącznie nowy skill, a następnie tę notatkę. README, katalog skills, integracje i pozostałe skills pozostają bez zmian.
+* Nie uzgodniono kolejnego zadania. Testy praktyczne, porządkowanie historycznych odniesień i aktualizacja integracji pozostają osobnym zakresem.
+
 ## Stan na zakończenie obecnego etapu context-diagnose
 
 Zakończono opracowanie i wspólny przegląd [context-diagnose](skills/context-diagnose/SKILL.md). Końcowa wersja skilla jest zapisana lokalnie w commicie `58fe506` na gałęzi `codex/context-v-proposal`. Użytkownik zlecił aktualizację tej notatki i osobny lokalny commit. Nie wykonano pusha.
