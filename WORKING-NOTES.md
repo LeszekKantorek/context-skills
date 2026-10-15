@@ -1,6 +1,62 @@
 # Robocze ustalenia dotyczące context skills
 
-Stan na 2026-10-14. Notatka do kontynuowania pracy po długiej sesji lub zmianie rozmowy. Zapisuje decyzje użytkownika, bieżący zakres i pomysły do dalszego omówienia; nie ustanawia nowych reguł projektu.
+Stan na 2026-10-15. Notatka do kontynuowania pracy po długiej sesji lub zmianie rozmowy. Zapisuje decyzje użytkownika, bieżący zakres i pomysły do dalszego omówienia; nie ustanawia nowych reguł projektu.
+
+## Stan na zakończenie obecnego etapu context-maintain
+
+Zakończono opracowanie i wspólny przegląd [context-maintain](skills/context-maintain/SKILL.md). Końcowa wersja skilla jest zapisana lokalnie w commicie `d6709ee` na gałęzi `codex/context-v-proposal`. Użytkownik zlecił aktualizację tej notatki i osobny lokalny commit. Nie wykonano pusha.
+
+Ta sekcja i aktualne pliki skills mają pierwszeństwo przed historycznymi opisami poniżej. `context-preserve` i `context-review-sessions` były już opracowane przed rozpoczęciem Maintain; wcześniejsze zapisy o Gather i niewdrożonym przeglądzie sesji nie opisują obecnego stanu. Historyczne zakończenie Map nie oznacza zakazu później zleconych prac nad Maintain.
+
+Aktualne `description`:
+
+```yaml
+description: Use to review and improve the coherence and organization of existing project knowledge.
+```
+
+Aktualny `Goal`:
+
+```text
+Improve the coherence and organization of existing project knowledge while preserving its meaning, rationale, evidence, and conditions of use.
+```
+
+### Odpowiedzialność i przebieg
+
+Maintain przegląda i porządkuje istniejący zbiór wiedzy, także rozproszony między katalogami. Preserve zachowuje wiedzę z sesji lub dostarczonych źródeł, Review Sessions koordynuje przegląd zaległych sesji, a Map projektuje nawigację. Maintain naprawia odwołania dotknięte porządkowaniem; przebudowę tras sytuacja → źródło kieruje do Map.
+
+| Krok | Odpowiedzialność i wynik dla dalszej pracy |
+| --- | --- |
+| 1. Understand the collection and its uses. | Rozpoznać wkład źródeł, zastosowania i zależności potrzebne do porównania wiedzy. |
+| 2. Compare related knowledge and identify problems. | Rozpoznać problemy, wskazując źródła, konsekwencje, dowody lub niepewność. |
+| 3. Determine changes that preserve useful knowledge. | Wybrać zmiany, lokalizacje wiedzy, kontekst do zachowania i wpływ na zależne odwołania. |
+| 4. Apply the selected changes and repair affected references. | Wykonać wybrane zmiany i naprawić dotknięte odwołania oraz zależności. |
+| 5. Check meaning, coherence, and access after the changes. | Porównać rezultat z wkładem źródeł, rozpoznanymi problemami i wybranymi zmianami; poprawić problemy i ponowić sprawdzenia. |
+
+### Przyjęte ustalenia redakcyjne i merytoryczne
+
+* Całość pozostaje w jednym `SKILL.md`: krótki Goal, sekcja Steps, pięć numerowanych kroków z punktami i tabelami wspierającymi decyzje.
+* Każdy krok korzysta z wcześniejszych ustaleń. Nie wymagamy osobnych raportów między krokami.
+* Podobne sformułowania nie dowodzą duplikacji. Porównujemy znaczenie i warunki zastosowania; różne zakresy mogą uzasadniać osobne reguły.
+* Tabela kroku 2 służy rozpoznawaniu problemów, nie nakazuje jeszcze ich naprawy. Dobór zmian należy do kroku 3, wykonanie do kroku 4.
+* Wiek dokumentu nie dowodzi nieaktualności. Rozbieżność kodu i dokumentacji nie przesądza, która strona wymaga korekty.
+* Krok 3 dopuszcza zachowanie i doprecyzowanie, scalanie, łączenie odnośnikami, podział, korektę lub zastąpienie, usunięcie oraz pozostawienie sprawy nierozstrzygniętej.
+* Usunięto osobne punkty o wyborze wspólnego źródła według odpowiedzialności i zastosowania oraz oddzielaniu zmian redakcyjnych od propozycji zmiany decyzji. W tym miejscu dublowały cel i warunki tabeli; nie przywracać ich jako dodatkowych zabezpieczeń.
+* Z kroku 4 usunięto uniwersalny nakaz zapisania treści docelowej przed usuwaniem starej, powtórzenia zakresu uprawnień oraz osobną instrukcję trybu bez edycji. Zakres działania wynika ze zlecenia.
+* Przegląd spójności doprecyzował koniec kroku 3: kontekst do zachowania jest zidentyfikowany, a nie już zachowany przez wykonaną edycję.
+* W kroku 4 `Unresolved matters` obejmuje sprzeczne twierdzenia, niepewność oraz brakujące dowody lub decyzje, nie tylko propozycje.
+* W kroku 5 każdy problem rozpoznany w kroku 2 ma być rozwiązany albo pozostać jawny z uzasadnieniem. Kontrola nie ogranicza się do wybranych zmian.
+* Powracające aspekty znaczenia, zakresu, dowodów i dostępu pełnią różne funkcje: krok 3 ustala, co zachować, krok 4 prowadzi edycję, a krok 5 sprawdza rezultat.
+* Description skrócono do zastosowania skilla. Usunięto częściowe wyliczenie problemów i obietnicę ich rozstrzygnięcia. Goal zachowano bez zmian jako kryterium wyniku.
+
+### Zapis zmian i sprawdzenia
+
+* `bd7280d` — dodanie całego skilla ze skróconym krokiem 1; `fcfdb54` — diagnostyczna tabela kroku 2; `840ff20` — skrócenie kroku 3.
+* `01bb637` — skrócenie kroku 4; `c1f2e72` — skrócenie kroku 5; `36a009c` — trzy poprawki spójności; `d6709ee` — skrócenie description.
+* Walidator struktury przeszedł dla wersji początkowej i po skróceniu kroku 1. Użyto istniejącego PyYAML z `.references/context-map-validation/`, bez dodawania zależności projektu.
+* Przy kolejnych zmianach sprawdzano diff i formatowanie. Przegląd wszystkich kroków dotyczył spójności tekstu i przekazywania ustaleń.
+* Nie wykonano próby zachowania agenta na rzeczywistym zbiorze dokumentów ani niezależnego testu skuteczności Maintain. Przegląd tekstu nie stanowi takiego dowodu.
+* W tej serii zmieniono wyłącznie nowy skill, a następnie tę notatkę. Nie aktualizowano README, katalogu skills ani integracji; mogą nadal zawierać historyczne odniesienia.
+* Propozycja dalszej kolejności — Diagnose / Diagnose-and-improve, potem Compile — pozostaje rekomendacją asystenta. Nazwa diagnozowania, zakres kolejnej pracy i sposób utrzymania źródła procedur w Compile wymagają dalszych ustaleń; nie zostały wdrożone.
 
 ## Stan na zakończenie obecnego etapu context-map
 
