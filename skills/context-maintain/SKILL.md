@@ -37,16 +37,16 @@ Improve the coherence and organization of existing project knowledge while prese
 
 | Pattern | Examine | Interpretation |
 | --- | --- | --- |
-| Repeated knowledge | Do the statements establish the same rule under the same conditions? | Equivalent rules may share one source. Similar wording alone does not establish duplication. |
-| Different scopes | Do different components, environments, or situations explain the difference? | Preserve applicable variants and make their conditions clear. |
-| Conflicting claims | Do the statements disagree under the same conditions? What establishes the intended result? | Resolve supported conflicts; retain unresolved disagreements explicitly. |
-| Outdated content | Has a decision, dependency, or observed behavior changed? | Use evidence of change. Age alone does not establish obsolescence. |
-| Fragmented knowledge | Must readers reconstruct one explanation or procedure from scattered fragments? | Bring necessary context together or connect complementary sources. |
-| Overgrown documents | Do independent subjects obscure the content needed for a particular situation? | Consider focused sections or separate documents with clear relationships. |
-| Unnecessary instructions | Does a requirement still serve its stated purpose within its scope? | Remove established redundancy; treat changes to accepted obligations as proposed decisions. |
-| Difficult access | Do links, section boundaries, or intermediate documents prevent selective reading? | Identify affected references and the navigation changes needed after reorganization. |
+| Repeated knowledge | Do the statements establish the same rule under the same conditions? | Equivalent statements may duplicate one rule. Similar wording alone does not establish duplication. |
+| Different scopes | Do different components, environments, or situations explain the difference? | Different conditions may justify separate rules. |
+| Conflicting claims | Do the statements disagree under the same conditions? What establishes the intended result? | Incompatible claims under the same conditions indicate a conflict; its resolution may remain uncertain. |
+| Outdated content | Has a decision, dependency, or observed behavior changed? | Evidence of change may establish obsolescence. Age alone does not. |
+| Fragmented knowledge | Must readers reconstruct one explanation or procedure from scattered fragments? | Scattered fragments are a problem when readers must reconstruct context needed for one use. |
+| Overgrown documents | Do independent subjects obscure the content needed for a particular situation? | Independent subjects are a problem when they obscure relevant knowledge or complicate maintenance. |
+| Unnecessary instructions | Does a requirement still serve its stated purpose within its scope? | Repetition or a superseded purpose may indicate redundancy; an accepted obligation requires separate consideration. |
+| Difficult access | Do links, section boundaries, or intermediate documents prevent selective reading? | Broken references or unnecessary navigation can prevent readers from reaching sufficient knowledge. |
 
-* Identify other problems when the listed patterns do not explain a difficulty in using or maintaining the knowledge.
+* Identify other problems when the table does not explain an observed difficulty.
 * Distinguish intended behavior from implementation observations. A disagreement does not establish which side needs correction.
 * Continue when each identified problem has affected sources, an explained consequence, and supporting evidence or explicit uncertainty.
 
