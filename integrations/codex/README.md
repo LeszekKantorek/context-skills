@@ -26,7 +26,7 @@
 | Hook | Action |
 | --- | --- |
 | `SessionStart` | Explain apply, gather, import sessions, and the required context index. |
-| `Stop`, `Interrupt`, `PreCompact`, `SessionEnd` | Register a session checkpoint through `context_register_session.py`. |
+| `Stop`, `Interrupt`, `PreCompact`, `SessionEnd` | Register a session through `context_register_session.py`. |
 
 * Registration runs synchronously. `Stop` and `PreCompact` have a five-second timeout;
   `Interrupt` and `SessionEnd` retain the host's three-second maximum.
@@ -60,34 +60,29 @@ session_date,session_id,path,reviewed_date
 * Only the current CSV schema is supported. There is no migration or fallback reader.
 * Existing session IDs update the same row without creating duplicates, even during concurrent registration.
 
-## Import selected checkpoints
+## Review pending sessions
 
-* Use `context-import-sessions` with `context-gather` installed.
-* Inventory records through the helper shipped with the import skill:
-
-```text
-python /path/to/context-import-sessions/scripts/context_read_sessions.py /path/to/project
-```
-
-* Retain the selected row's `checkpoint` token from the helper output before reading its transcript.
-* Invoke gather with the loaded material and source locations.
-* Mark the checkpoint only after gather completes successfully:
+* Use `context-review-sessions` with `context-preserve` installed.
+* List pending sessions through the bundled helper:
 
 ```text
-python /path/to/context-import-sessions/scripts/context_read_sessions.py /path/to/project --mark-reviewed SESSION_ID --checkpoint CHECKPOINT_TOKEN
+python /path/to/context-review-sessions/scripts/context_read_sessions.py /path/to/project
 ```
 
-* Both options are required together.
-* Listing reports `available` or `missing-file`. An empty path in the log is invalid.
+* Use the file sizes and availability to choose sessions and delegate preservation as needed.
+* Mark fully reviewed sessions after context-preserve finishes successfully:
+
+```text
+python /path/to/context-review-sessions/scripts/context_read_sessions.py /path/to/project --mark-reviewed SESSION_ID [SESSION_ID ...]
+```
+
+* Listing reports `available`, `missing-file`, or `unavailable`. An empty path in the log is invalid.
 * It reads one log snapshot and transcript metadata, without reading transcript contents or creating a lock.
-* A checkpoint token combines the session ID, path, added date, and transcript size and file timestamps.
-* Marking requires the retained token and an available transcript. Changed file metadata rejects an older token.
-* Date-only columns cannot distinguish every registration event. The token detects file changes, not hook event order.
-* Use idle sessions or stable transcript snapshots. Metadata checks cannot detect edits that preserve all tracked metadata.
-* Leave missing evidence, incomplete processing, and report-only imports pending.
-* A completed gather pass with no durable findings may still mark the checkpoint.
-* A changed checkpoint remains pending; inspect new evidence before retrying.
-* Repeating a mark for the same checkpoint is harmless.
+* Marking checks all supplied IDs and transcript availability before saving the registry once.
+* Unknown IDs or unavailable transcripts prevent the entire update.
+* Leave missing evidence, incomplete processing, and report-only reviews pending.
+* A completed preservation pass with no new findings can still mark the sessions as reviewed.
+* Repeating a mark preserves existing review dates.
 
 ## Storage guarantees
 

@@ -9,11 +9,11 @@ Map project sources and tasks, apply project knowledge, gather durable learning,
 | Build or repair project routing | [context-map](skills/context-map/SKILL.md) | Choose entry points and map structures from project knowledge and its uses. |
 | Use stored knowledge in the current task | [context-apply](skills/context-apply/SKILL.md) | Read the index and relevant entries; reflect their rules in actions and checks. |
 | Save session learning or review existing knowledge | [context-gather](skills/context-gather/SKILL.md) | Create, update, merge, or withdraw entries; create and maintain the index. |
-| Process saved sessions or pending checkpoints | [context-import-sessions](skills/context-import-sessions/SKILL.md) | Load session material, invoke gather, and mark completed checkpoints. |
+| Review pending sessions | [context-review-sessions](skills/context-review-sessions/SKILL.md) | Preserve findings through context-preserve and record completed reviews. |
 
 * `context-gather` combines the former `context-consolidate` and `context-review` responsibilities.
 * Use `context-apply` during work and `context-gather` when knowledge should be saved or maintained.
-* `context-import-sessions` handles session files; it requires `context-gather` for knowledge processing.
+* `context-review-sessions` coordinates session processing through `context-preserve`.
 * No full skill sequence is required.
 
 ## Install
@@ -23,7 +23,7 @@ npx skills add LeszekKantorek/context-skills
 ```
 
 * Select a single skill with `npx skills add LeszekKantorek/context-skills@context-apply` or another name from the table.
-* Install `context-gather` alongside `context-import-sessions`.
+* Install `context-preserve` alongside `context-review-sessions`.
 * When updating an existing installation, remove the retired `context-consolidate` and `context-review` skill copies.
 
 ## Task routing with context-map
@@ -35,7 +35,6 @@ npx skills add LeszekKantorek/context-skills
 * Include relevant sources outside `.context/`. Keep knowledge and procedure steps at their sources.
 * Use Map when maintaining routing, not before every task. Do not require a row for every document.
 * Definitions, examples, and selection checks are contained in the single `SKILL.md`.
-* Apply, Gather, the session importer, and hooks retain their existing behavior in this iteration.
 * Adding Map does not migrate a project's existing index dependencies. Check callers before retiring old routers; report any compatibility content that still has to remain.
 
 ## Existing context index workflow
@@ -95,7 +94,7 @@ npx skills add LeszekKantorek/context-skills
 * Ignore `.context/sessions.log` and `.context/.sessions.lock` in Git; exclude them from project knowledge.
 * The CSV header is `session_date,session_id,path,reviewed_date`. Dates use `YYYY-MM-DD`.
 * Only this format is supported. There is no migration from older formats.
-* Use [context-import-sessions](skills/context-import-sessions/SKILL.md) to process selected checkpoints.
+* Use [context-review-sessions](skills/context-review-sessions/SKILL.md) to process pending sessions.
 
 ## Development checks
 
@@ -104,5 +103,5 @@ python -m unittest discover -s tests -v
 ```
 
 * Use `python3` where that is the Python 3 executable.
-* Tests cover registration and checkpoint bookkeeping.
+* Tests cover registration and review bookkeeping.
 * Skill validation checks structure; it does not prove agent selection or knowledge quality.

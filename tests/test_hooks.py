@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CODEX = ROOT / "integrations" / "codex" / ".codex"
 HOOK = CODEX / "hooks" / "context_register_session.py"
-SCAN = ROOT / "skills" / "context-import-sessions" / "scripts" / "context_read_sessions.py"
+SCAN = ROOT / "skills" / "context-review-sessions" / "scripts" / "context_read_sessions.py"
 FIELDS = ["session_date", "session_id", "path", "reviewed_date"]
 
 
@@ -65,11 +65,8 @@ class HookTests(unittest.TestCase):
             self.assertEqual(reader.fieldnames, FIELDS)
             return {row["session_id"]: row for row in reader}
 
-    def token(self, identity="session-123"):
-        return SCAN_API.checkpoint(self.records()[identity])
-
-    def mark(self, identity="session-123", token=None):
-        return self.scan("--mark-reviewed", identity, "--checkpoint", token or self.token(identity))
+    def mark(self, identity="session-123"):
+        return self.scan("--mark-reviewed", identity)
 
     def write_rows(self, rows):
         self.state.mkdir(exist_ok=True)
@@ -108,12 +105,11 @@ class HookTests(unittest.TestCase):
         })
         self.assertNotIn("secret-canary", self.log.read_text(encoding="utf-8"))
         self.assertIn("transcript=available", self.scan().stdout)
-        token = self.token()
-        self.assertIn("pending: 0", self.mark(token=token).stdout)
+        self.assertIn("pending: 0", self.mark().stdout)
         reviewed = self.records()["session-123"]
         self.assertEqual(reviewed["reviewed_date"], datetime.date.today().isoformat())
         before = self.log.read_bytes()
-        self.mark(token=token)
+        self.mark()
         self.assertEqual(self.log.read_bytes(), before)
         self.invoke(self.event())
         self.assertEqual(self.records()["session-123"], reviewed)
@@ -172,26 +168,23 @@ class HookTests(unittest.TestCase):
         self.assertEqual(self.records()["session-123"]["path"],
                          str(self.repo / "logs" / "not-yet-created.jsonl"))
         self.assertIn("transcript=missing-file", self.scan().stdout)
-        result = self.scan("--mark-reviewed", "session-123", "--checkpoint", "-", check=False)
+        result = self.scan("--mark-reviewed", "session-123", check=False)
         self.assertEqual(result.returncode, 2)
         self.assertEqual(self.records()["session-123"]["reviewed_date"], "")
 
-    def test_same_day_transcript_change_rejects_old_review(self):
+    def test_same_day_transcript_change_does_not_block_review(self):
         self.invoke(self.event())
-        token = self.token()
         self.transcript.write_text("new evidence after listing\n", encoding="utf-8")
         self.invoke(self.event())
-        result = self.scan("--mark-reviewed", "session-123", "--checkpoint", token, check=False)
-        self.assertEqual(result.returncode, 2)
-        self.assertIn("checkpoint changed", result.stderr)
-        self.assertEqual(self.records()["session-123"]["reviewed_date"], "")
+        self.mark()
+        self.assertEqual(self.records()["session-123"]["reviewed_date"], datetime.date.today().isoformat())
 
     def test_separate_sessions_keep_independent_review_state(self):
         for identity in ("first", "second"):
             self.invoke(self.event(identity))
-        second_token = self.token("second")
+        second = self.records()["second"]
         self.mark("first")
-        self.assertEqual(self.token("second"), second_token)
+        self.assertEqual(self.records()["second"], second)
         self.invoke(self.event("second"))
         self.assertTrue(self.records()["first"]["reviewed_date"])
         self.assertEqual(self.records()["second"]["reviewed_date"], "")
@@ -264,21 +257,19 @@ class HookTests(unittest.TestCase):
         self.assertEqual(worker.returncode, 0, errors)
         self.assertEqual(self.records()["session-123"]["reviewed_date"], "2026-10-03")
 
-    def test_review_waits_for_lock_then_detects_changed_transcript(self):
+    def test_review_waits_for_lock_and_accepts_changed_transcript(self):
         self.invoke(self.event())
-        token = self.token()
         with HOOK_API.queue_lock(self.state):
             worker = subprocess.Popen(
-                [sys.executable, str(SCAN), str(self.repo), "--mark-reviewed", "session-123", "--checkpoint", token],
+                [sys.executable, str(SCAN), str(self.repo), "--mark-reviewed", "session-123"],
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
             )
             with self.assertRaises(subprocess.TimeoutExpired):
                 worker.wait(timeout=0.2)
             self.transcript.write_text("changed while reviewer waited", encoding="utf-8")
         _, errors = worker.communicate(timeout=10)
-        self.assertEqual(worker.returncode, 2, errors)
-        self.assertIn("checkpoint changed", errors)
-        self.assertEqual(self.records()["session-123"]["reviewed_date"], "")
+        self.assertEqual(worker.returncode, 0, errors)
+        self.assertEqual(self.records()["session-123"]["reviewed_date"], datetime.date.today().isoformat())
 
 
 if __name__ == "__main__":
