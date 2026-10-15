@@ -31,7 +31,7 @@ Identify why agent behavior fell short and determine a correction supported by e
 
 * Establish which knowledge and instructions could have influenced the behavior identified in Step 1.
 * Examine relevant project documents, routes, skills, and available records of their use.
-* Use the table to reconstruct what was available at the time, rather than assuming current content matches earlier instructions.
+* Use the table to reconstruct the context available at the time.
 
 | Question | Identify | Example |
 | --- | --- | --- |
@@ -40,8 +40,7 @@ Identify why agent behavior fell short and determine a correction supported by e
 | What evidence shows that it was read or used? | Records of retrieval and application, with their limits | A tool result contains the procedure, but the plan does not include its check. |
 | What other instructions affected the decision? | Related, competing, or conflicting guidance | Another document describes unit tests as sufficient for all interface changes. |
 
-* Examine other context relationships when the table does not explain what could have influenced the decision.
-* An instruction's existence does not establish that it was read; reading does not establish correct application.
+* Examine other relationships when the table does not explain the relevant context.
 * Continue when relevant context, access paths, and evidence of use are identified, with unavailable history explicit.
 
 3. **Evaluate possible causes against the evidence.**
