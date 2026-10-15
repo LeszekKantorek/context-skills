@@ -65,7 +65,6 @@ Identify why agent behavior fell short and determine a correction supported by e
 4. **Select and apply a targeted correction.**
 
 * Address the supported cause from Step 3 with a change tied to the expected behavior from Step 1.
-* For unresolved causes, first choose a check that can distinguish the remaining explanations.
 * Use the table to select a response suited to the diagnosis.
 
 | Finding | Possible response |
@@ -79,9 +78,9 @@ Identify why agent behavior fell short and determine a correction supported by e
 | Uncertain cause | Perform a check that distinguishes the plausible explanations. |
 
 * Adapt or combine responses when the listed options do not address the cause.
-* Apply the selected correction and identify the expected change in behavior. Some failures require no context change.
+* Apply the selected correction and identify the expected change in behavior.
 * Return to Step 3 when new evidence changes the diagnosis or leaves it unresolved.
-* Continue when the correction is ready for a behavioral check, or the remaining blocker is explicit.
+* Continue when the correction is ready for a behavioral check. If progress is blocked, identify what is needed to proceed.
 
 5. **Check whether the correction improves behavior.**
 
