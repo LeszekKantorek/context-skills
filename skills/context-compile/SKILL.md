@@ -81,8 +81,8 @@ Make established project procedures directly selectable and executable as skills
 
 * Check that the skill preserves the procedure, supports appropriate selection, and leads to the expected result.
 * Compare the integrated skill with the procedure from Step 1 and the boundaries and source arrangement from Step 2.
-* Use representative tasks and a relevant nonmatching task to assess selection and execution.
-* Use the table to identify lost meaning, missing instructions, and maintenance problems.
+* Check selection with matching and nonmatching tasks, and execution with a representative matching task.
+* Use the table to assess the results and identify corrections.
 
 | Check | Establish | Correction |
 | --- | --- | --- |
