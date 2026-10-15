@@ -1,6 +1,6 @@
 ---
 name: context-maintain
-description: Use to review and reorganize existing project knowledge. Resolve duplication, fragmentation, and outdated content while preserving meaning, rationale, and scope.
+description: Use to review and improve the coherence and organization of existing project knowledge.
 ---
 
 # Maintain Project Context
