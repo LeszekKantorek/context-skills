@@ -60,7 +60,7 @@ Make established project procedures directly selectable and executable as skills
 
 * Use another form when the listed expressions do not preserve a contribution needed for execution.
 * Choose steps and tables to fit the procedure.
-* Continue when the SKILL.md provides actionable instructions with necessary conditions, context, and completion checks.
+* Continue when the SKILL.md expresses the established procedure, with necessary context and unresolved gaps explicit.
 
 4. **Integrate the skill with its sources and entry points.**
 
@@ -70,7 +70,7 @@ Make established project procedures directly selectable and executable as skills
 | Arrangement | Action |
 | --- | --- |
 | Skill owns the procedure | Move the instructions into the skill and replace the previous procedure with an appropriate reference. |
-| Source document owns the procedure | Provide a way to reproduce the skill from its source and check whether the generated result is current. |
+| Source document owns the procedure | Generate the skill from the maintained source, preserving the instructions developed in Step 3, and provide a freshness check. |
 | Supporting documents remain separate | Retain necessary rationale and knowledge, linking them to the skill where needed. |
 | Existing routes reference the procedure | Update affected links and entry points to reach the skill or its supporting knowledge. |
 
