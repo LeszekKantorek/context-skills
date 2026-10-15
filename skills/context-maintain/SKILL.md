@@ -89,10 +89,10 @@ Improve the coherence and organization of existing project knowledge while prese
 
 5. **Check meaning, coherence, and access after the changes.**
 
-* Check that the changes resolve the identified problems without losing useful knowledge or making it harder to reach.
-* Compare the revised collection with the contributions from Step 1 and the changes selected in Step 3.
+* Check that the changes resolve the identified problems while preserving useful knowledge and access.
+* Compare the revised collection with the contributions from Step 1, problems from Step 2, and changes selected in Step 3.
 * Use representative needs from Step 1 to check whether readers can reach sufficient knowledge without unnecessary reading.
-* Use the table to identify omissions, changed meanings, and remaining maintenance problems.
+* Use the table to assess the results and identify corrections.
 
 | Check | Expected result | Correction |
 | --- | --- | --- |
@@ -104,5 +104,4 @@ Improve the coherence and organization of existing project knowledge while prese
 | Dependent tools | Affected readers and writers remain compatible with the revised content | Correct incompatible changes or identify the remaining migration need. |
 
 * Add a check when another consequence could affect interpretation, maintenance, or use.
-* Correct problems and repeat affected checks.
-* State remaining gaps and review limits without presenting unchecked content or proposed changes as verified.
+* Correct problems and repeat affected checks, keeping unresolved gaps and review limits explicit.
