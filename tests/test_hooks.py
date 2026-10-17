@@ -1,7 +1,11 @@
-"""Integration checks for the session registrar and checkpoint review helper."""
+"""Integration checks for the CSV session registrar and review helper."""
 
+from concurrent.futures import ThreadPoolExecutor
+import csv
+import datetime
 import importlib.util
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -11,8 +15,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CODEX = ROOT / "integrations" / "codex" / ".codex"
 HOOK = CODEX / "hooks" / "context_register_session.py"
-SCAN = ROOT / "skills" / "context-import-sessions" / "scripts" / "context_read_sessions.py"
-FIELDS = {"session_id", "updated_at", "transcript_path", "reviewed_at"}
+SCAN = ROOT / "skills" / "context-review-sessions" / "scripts" / "context_read_sessions.py"
+FIELDS = ["session_date", "session_id", "path", "reviewed_date"]
 
 
 def load_script(name, path):
@@ -33,7 +37,10 @@ class HookTests(unittest.TestCase):
         self.repo = Path(self.temp.name) / "project with spaces"
         self.repo.mkdir()
         subprocess.run(["git", "init", "-q", str(self.repo)], check=True)
-        self.state = self.repo / ".context" / "sessions"
+        self.state = self.repo / ".context"
+        self.log = self.state / "sessions.log"
+        self.transcript = self.repo / "session.jsonl"
+        self.transcript.write_text("secret-canary\n", encoding="utf-8")
 
     def event(self, session_id="session-123", name="Stop", **extra):
         return {"hook_event_name": name, "session_id": session_id,
@@ -42,210 +49,182 @@ class HookTests(unittest.TestCase):
     def invoke(self, event, check=True):
         return subprocess.run(
             [sys.executable, str(HOOK)], input=json.dumps(event),
-            text=True, capture_output=True, cwd=self.repo, check=check,
+            text=True, encoding="utf-8", capture_output=True, cwd=self.repo, check=check,
         )
 
     def scan(self, *args, check=True):
         return subprocess.run(
             [sys.executable, str(SCAN), str(self.repo), *args],
-            text=True, capture_output=True, check=check,
+            text=True, encoding="utf-8", capture_output=True, check=check,
         )
 
     def records(self):
-        return {row["session_id"]: (path, row)
-                for path in self.state.glob("*.json")
-                for row in [json.loads(path.read_text(encoding="utf-8"))]}
+        if not self.log.exists():
+            return {}
+        with self.log.open(encoding="utf-8", newline="") as handle:
+            reader = csv.DictReader(handle)
+            self.assertEqual(reader.fieldnames, FIELDS)
+            return {row["session_id"]: row for row in reader}
 
-    def mark(self, session_id, checkpoint):
-        return self.scan("--mark-reviewed", session_id, "--updated-at", checkpoint)
+    def mark(self, identity="session-123"):
+        return self.scan("--mark-reviewed", identity)
 
-    @unittest.skipUnless(sys.platform == "win32", "Windows command override")
-    def test_windows_hook_commands_from_subdirectory_with_spaces(self):
+    def write_rows(self, rows):
+        self.state.mkdir(exist_ok=True)
+        with self.log.open("w", encoding="utf-8", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=FIELDS)
+            writer.writeheader()
+            writer.writerows(rows)
+
+    def test_hook_commands_from_subdirectory_with_spaces(self):
         hook_dir = self.repo / ".codex" / "hooks"
         hook_dir.mkdir(parents=True)
         (hook_dir / HOOK.name).write_bytes(HOOK.read_bytes())
         cwd = self.repo / "nested directory"
         cwd.mkdir()
         config = json.loads((CODEX / "hooks.json").read_text(encoding="utf-8"))
+        command_field = "commandWindows" if sys.platform == "win32" else "command"
         for name, groups in config["hooks"].items():
             result = subprocess.run(
-                groups[0]["hooks"][0]["commandWindows"], shell=True, cwd=cwd,
+                groups[0]["hooks"][0][command_field], shell=True, cwd=cwd,
                 input=json.dumps(self.event("windows-session", name, cwd=str(cwd))),
                 text=True, capture_output=True, check=True,
             )
             if name == "SessionStart":
-                self.assertIn("context-apply", result.stdout)
-                self.assertFalse((self.repo / ".context").exists())
+                expected_skills = {
+                    path.parent.name for path in (ROOT / "skills").glob("*/SKILL.md")
+                }
+                mentioned_skills = set(re.findall(r"\bcontext-[a-z-]+\b", result.stdout))
+                self.assertEqual(mentioned_skills, expected_skills)
+                self.assertNotIn("index", result.stdout.lower())
+                self.assertIn(".context/sessions.log", result.stdout)
+                self.assertIn(".context/.sessions.lock", result.stdout)
+                self.assertFalse(self.state.exists())
         self.assertEqual(len(self.records()), 1)
-        self.assertIn("windows-session", self.records())
-        self.assertFalse((self.repo / ".context" / "INDEX.md").exists())
+        self.assertFalse((self.state / "INDEX.md").exists())
+        self.assertFalse((self.state / "sessions").exists())
 
-    @unittest.skipIf(sys.platform == "win32", "POSIX command")
-    def test_posix_hook_commands_from_subdirectory_with_spaces(self):
-        hook_dir = self.repo / ".codex" / "hooks"
-        hook_dir.mkdir(parents=True)
-        (hook_dir / HOOK.name).write_bytes(HOOK.read_bytes())
-        cwd = self.repo / "nested directory"
-        cwd.mkdir()
-        config = json.loads((CODEX / "hooks.json").read_text(encoding="utf-8"))
-        for name, groups in config["hooks"].items():
-            subprocess.run(
-                groups[0]["hooks"][0]["command"], shell=True, cwd=cwd,
-                input=json.dumps(self.event("posix-session", name, cwd=str(cwd))),
-                text=True, capture_output=True, check=True,
-            )
-        self.assertEqual(len(self.records()), 1)
-        self.assertIn("posix-session", self.records())
-
-    def test_exact_record_and_review_lifecycle_without_reading_transcript(self):
-        transcript = self.repo / "session.jsonl"
-        transcript.write_text("secret-canary\n", encoding="utf-8")
-        event = self.event("session-123", "SessionEnd", transcript_path=str(transcript))
-        self.assertEqual(self.invoke(event).stdout, "")
-        path, row = self.records()["session-123"]
-        self.assertEqual(set(row), FIELDS)
-        self.assertNotEqual(path.stem, row["session_id"])
-        self.assertEqual(row["transcript_path"], str(transcript))
-        self.assertIsNone(row["reviewed_at"])
-        self.assertNotIn("secret-canary", path.read_text(encoding="utf-8"))
+    def test_record_and_review_lifecycle(self):
+        self.assertEqual(self.invoke(self.event(name="SessionEnd")).stdout, "")
+        row = self.records()["session-123"]
+        self.assertEqual(row, {
+            "session_date": datetime.date.today().isoformat(), "session_id": "session-123",
+            "path": str(self.transcript), "reviewed_date": "",
+        })
+        self.assertNotIn("secret-canary", self.log.read_text(encoding="utf-8"))
         self.assertIn("transcript=available", self.scan().stdout)
-        self.assertIn("pending: 0", self.mark("session-123", row["updated_at"]).stdout)
-        reviewed = self.records()["session-123"][1]
-        self.assertTrue(reviewed["reviewed_at"])
-        self.mark("session-123", row["updated_at"])
-        self.assertEqual(self.records()["session-123"][1], reviewed)
-        self.invoke(event)
-        updated = self.records()["session-123"][1]
-        self.assertGreater(updated["updated_at"], row["updated_at"])
-        self.assertIsNone(updated["reviewed_at"])
-        self.assertEqual(len(self.records()), 1)
+        self.assertIn("pending: 0", self.mark().stdout)
+        reviewed = self.records()["session-123"]
+        self.assertEqual(reviewed["reviewed_date"], datetime.date.today().isoformat())
+        before = self.log.read_bytes()
+        self.mark()
+        self.assertEqual(self.log.read_bytes(), before)
+        self.invoke(self.event())
+        self.assertEqual(self.records()["session-123"], reviewed)
 
-    def test_all_events_update_one_record_and_do_not_store_message_content(self):
-        last = None
+    def test_all_events_keep_one_row_and_preserve_review(self):
+        self.invoke(self.event())
+        self.mark()
+        reviewed_date = self.records()["session-123"]["reviewed_date"]
         for name in ("Stop", "Interrupt", "PreCompact", "SessionEnd"):
-            result = self.invoke(self.event(name=name, turn_id="turn-1",
-                                           last_assistant_message="secret-canary" * 7000))
+            result = self.invoke(self.event(name=name, last_assistant_message="secret-canary" * 7000))
             self.assertEqual(result.stdout.strip(), "{}" if name in {"Stop", "PreCompact"} else "")
-            path, row = self.records()["session-123"]
-            if last:
-                self.assertGreater(row["updated_at"], last)
-            last = row["updated_at"]
-            self.assertEqual(set(row), FIELDS)
-            self.assertEqual(row["transcript_path"], str(self.repo / "session.jsonl"))
-            self.assertNotIn("secret-canary", path.read_text(encoding="utf-8"))
-        self.assertEqual(len(self.records()), 1)
-        self.assertIn("queued: 1, reviewed: 0, pending: 1", self.scan().stdout)
+            self.assertEqual(len(self.records()), 1)
+            self.assertEqual(self.records()["session-123"]["reviewed_date"], reviewed_date)
+        self.assertNotIn("secret-canary", self.log.read_text(encoding="utf-8"))
 
-    def test_record_identity_survives_rename(self):
+    def test_registration_preserves_dates_when_path_changes(self):
         self.invoke(self.event())
-        old_path, row = self.records()["session-123"]
-        renamed = old_path.with_name("delivery-investigation.json")
-        old_path.rename(renamed)
-        self.mark("session-123", row["updated_at"])
-        self.invoke(self.event())
-        path, current = self.records()["session-123"]
-        self.assertEqual(path, renamed)
-        self.assertIsNone(current["reviewed_at"])
-        self.assertEqual(len(self.records()), 1)
+        row = dict(self.records()["session-123"], **{"session_date": "2025-01-02", "reviewed_date": "2025-01-03"})
+        self.write_rows([row])
+        self.invoke(self.event(transcript_path="moved.jsonl"))
+        self.assertEqual(self.records()["session-123"]["session_date"], "2025-01-02")
+        self.assertEqual(self.records()["session-123"]["reviewed_date"], "2025-01-03")
+        self.assertEqual(self.records()["session-123"]["path"], str(self.repo / "moved.jsonl"))
 
-    def test_session_id_is_data_and_cannot_control_file_paths(self):
-        for identity in ("../escaped", "folder/session", "CON", "session:stream"):
-            self.invoke(self.event(identity))
-        self.assertEqual(len(self.records()), 4)
-        self.assertTrue(all(path.parent == self.state for path, _ in self.records().values()))
-        self.assertFalse((self.repo / ".context" / "escaped.json").exists())
+    def test_csv_round_trip_for_paths_and_identifiers(self):
+        path = self.repo / "żółć, flight logs" / "session.jsonl"
+        path.parent.mkdir()
+        path.write_text("example", encoding="utf-8")
+        identities = ("../escaped", "folder/session", "CON", 'id,"quoted"')
+        for identity in identities:
+            self.invoke(self.event(identity, transcript_path=str(path)))
+        self.assertEqual(set(self.records()), set(identities))
+        self.assertTrue(all(row["path"] == str(path) for row in self.records().values()))
+        self.assertEqual(len(list(self.state.glob("*.log"))), 1)
+        self.assertEqual(list(self.state.glob("*.json")), [])
+        self.assertFalse((self.repo / "escaped").exists())
 
-    def test_missing_or_relative_transcript(self):
-        self.invoke(self.event("missing", transcript_path=None))
-        self.assertFalse(self.state.exists())
-        self.assertEqual(self.records(), {})
-        self.invoke(self.event("relative", transcript_path="logs/session.jsonl"))
-        self.assertEqual(self.records()["relative"][1]["transcript_path"],
-                         str((self.repo / "logs" / "session.jsonl").resolve()))
-
-    def test_review_requires_exact_checkpoint_and_rejects_stale_one(self):
-        self.invoke(self.event())
-        _, old = self.records()["session-123"]
-        self.assertEqual(self.scan("--mark-reviewed", "session-123", check=False).returncode, 2)
-        self.invoke(self.event())
-        result = self.scan("--mark-reviewed", "session-123",
-                           "--updated-at", old["updated_at"], check=False)
-        self.assertEqual(result.returncode, 2)
-        self.assertIn("checkpoint changed", result.stderr)
-        self.assertIsNone(self.records()["session-123"][1]["reviewed_at"])
-
-    def test_pathless_events_skip_new_records_but_keep_known_path(self):
+    def test_pathless_events_do_not_create_or_change_records(self):
         for name in ("Stop", "Interrupt", "PreCompact", "SessionEnd"):
             for transcript in (None, "", "   ", 42):
-                with self.subTest(name=name, transcript=transcript):
-                    result = self.invoke(self.event(name=name, transcript_path=transcript))
-                    self.assertEqual(result.stdout.strip(), "{}" if name in {"Stop", "PreCompact"} else "")
-                    self.assertFalse((self.repo / ".context").exists())
-        # A path is sufficient even before the transcript appears on disk.
+                result = self.invoke(self.event(name=name, transcript_path=transcript))
+                self.assertEqual(result.stdout.strip(), "{}" if name in {"Stop", "PreCompact"} else "")
+                self.assertFalse(self.state.exists())
         self.invoke(self.event())
-        _, original = self.records()["session-123"]
-        self.mark("session-123", original["updated_at"])
+        self.mark()
         self.invoke(self.event("unknown", transcript_path=None))
+        self.assertTrue(self.records()["session-123"]["reviewed_date"])
+        before = self.log.read_bytes()
+        for empty_path in (None, "", "   ", 42):
+            self.invoke(self.event(transcript_path=empty_path))
+            self.assertEqual(self.log.read_bytes(), before)
         self.assertEqual(len(self.records()), 1)
-        self.assertTrue(self.records()["session-123"][1]["reviewed_at"])
-        for transcript in (None, "", "   "):
-            self.invoke(self.event(transcript_path=transcript))
-            _, updated = self.records()["session-123"]
-            self.assertEqual(updated["transcript_path"], original["transcript_path"])
-            self.assertGreater(updated["updated_at"], original["updated_at"])
-            self.assertIsNone(updated["reviewed_at"])
-            original = updated
 
-    def test_legacy_pathless_record_waits_for_evidence(self):
-        self.state.mkdir(parents=True)
-        path = self.state / "legacy.json"
-        original = {"session_id": "session-123", "updated_at": "2026-10-11T10:00:00+00:00",
-                    "transcript_path": None, "reviewed_at": None}
-        path.write_text(json.dumps(original), encoding="utf-8")
-        before = path.read_bytes()
-        self.invoke(self.event(transcript_path=None))
-        self.assertEqual(path.read_bytes(), before)
-        self.assertIn("transcript=missing-path", self.scan().stdout)
-        self.invoke(self.event(transcript_path="recovered.jsonl"))
-        current_path, row = self.records()["session-123"]
-        self.assertEqual(current_path, path)
-        self.assertEqual(row["transcript_path"], str(self.repo / "recovered.jsonl"))
+    def test_missing_transcript_is_registered_but_cannot_be_marked(self):
+        self.invoke(self.event(transcript_path="logs/not-yet-created.jsonl"))
+        self.assertEqual(self.records()["session-123"]["path"],
+                         str(self.repo / "logs" / "not-yet-created.jsonl"))
         self.assertIn("transcript=missing-file", self.scan().stdout)
-
-    def test_transcript_backed_subagent_is_not_filtered_by_session_source(self):
-        self.invoke(self.event("subagent", source={"subagent": {"thread_spawn": {}}}))
-        self.assertIn("subagent", self.records())
-
-    def test_empty_inventory_does_not_create_queue(self):
-        self.assertIn("queued: 0", self.scan().stdout)
-        result = self.scan("--mark-reviewed", "unknown", "--updated-at", "unknown", check=False)
+        result = self.scan("--mark-reviewed", "session-123", check=False)
         self.assertEqual(result.returncode, 2)
-        self.assertFalse(self.state.exists())
+        self.assertEqual(self.records()["session-123"]["reviewed_date"], "")
+
+    def test_same_day_transcript_change_does_not_block_review(self):
+        self.invoke(self.event())
+        self.transcript.write_text("new evidence after listing\n", encoding="utf-8")
+        self.invoke(self.event())
+        self.mark()
+        self.assertEqual(self.records()["session-123"]["reviewed_date"], datetime.date.today().isoformat())
 
     def test_separate_sessions_keep_independent_review_state(self):
-        for identity in ("first-session", "second-session"):
+        for identity in ("first", "second"):
             self.invoke(self.event(identity))
-        self.mark("first-session", self.records()["first-session"][1]["updated_at"])
-        self.assertTrue(self.records()["first-session"][1]["reviewed_at"])
-        self.assertIsNone(self.records()["second-session"][1]["reviewed_at"])
+        second = self.records()["second"]
+        self.mark("first")
+        self.assertEqual(self.records()["second"], second)
+        self.invoke(self.event("second"))
+        self.assertTrue(self.records()["first"]["reviewed_date"])
+        self.assertEqual(self.records()["second"]["reviewed_date"], "")
 
-    def test_duplicate_identity_is_reported_without_mutation(self):
-        self.invoke(self.event())
-        path, _ = self.records()["session-123"]
-        (path.parent / "duplicate.json").write_bytes(path.read_bytes())
-        before = {p.name: p.read_bytes() for p in self.state.glob("*.json")}
-        self.assertIn("duplicate session_id", self.scan(check=False).stderr)
-        self.assertEqual(self.invoke(self.event(), check=False).returncode, 1)
-        self.assertEqual(before, {p.name: p.read_bytes() for p in self.state.glob("*.json")})
+    def test_old_json_records_are_not_imported(self):
+        old_directory = self.state / "sessions"
+        old_directory.mkdir(parents=True)
+        old_record = old_directory / "old.json"
+        old_record.write_text('{"session_id":"old"}', encoding="utf-8")
+        self.assertIn("queued: 0, reviewed: 0, pending: 0", self.scan().stdout)
+        self.assertFalse(self.log.exists())
+        self.invoke(self.event("new"))
+        self.assertEqual(set(self.records()), {"new"})
 
-    def test_malformed_record_is_reported_without_mutation(self):
-        self.state.mkdir(parents=True)
-        path = self.state / "broken.json"
-        path.write_text("{broken", encoding="utf-8")
+    def test_old_csv_schema_is_rejected_without_conversion(self):
+        self.state.mkdir()
+        content = "date-added,guid,path,date-reviewd\n2026-10-14,old,old.jsonl,\n"
+        self.log.write_text(content, encoding="utf-8")
         self.assertEqual(self.scan(check=False).returncode, 2)
         self.assertEqual(self.invoke(self.event(), check=False).returncode, 1)
-        self.assertEqual(path.read_text(encoding="utf-8"), "{broken")
-        self.assertEqual(len(list(self.state.glob("*.json"))), 1)
+        self.assertEqual(self.log.read_text(encoding="utf-8"), content)
+
+    def test_duplicate_or_malformed_log_is_never_overwritten(self):
+        self.invoke(self.event())
+        row = self.records()["session-123"]
+        self.write_rows([row, row])
+        cases = [self.log.read_bytes(), b"broken\n", b"session_date,session_id,path,reviewed_date\n2026-99-01,id,path,\n"]
+        for content in cases:
+            self.log.write_bytes(content)
+            self.assertEqual(self.scan(check=False).returncode, 2)
+            self.assertEqual(self.invoke(self.event(), check=False).returncode, 1)
+            self.assertEqual(self.log.read_bytes(), content)
 
     def test_invalid_events_and_non_git_directory_are_ignored(self):
         for event in ({}, [], self.event(name="SessionStart"), self.event(session_id="")):
@@ -256,42 +235,19 @@ class HookTests(unittest.TestCase):
         self.invoke(self.event(cwd=str(other)))
         self.assertFalse((other / ".context").exists())
 
-    def test_concurrent_registration_deduplicates_session(self):
-        workers = [subprocess.Popen(
-            [sys.executable, str(HOOK)], stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
-        ) for _ in range(4)]
-        for worker in workers:
-            worker.stdin.write(json.dumps(self.event("shared")))
-            worker.stdin.close()
-            worker.stdin = None
-        for worker in workers:
-            out, err = worker.communicate(timeout=10)
-            self.assertEqual(worker.returncode, 0, err)
-            self.assertEqual(out.strip(), "{}")
-        self.assertEqual(len(self.records()), 1)
+    def test_subagent_with_transcript_is_not_filtered(self):
+        self.invoke(self.event("subagent", source={"subagent": {"thread_spawn": {}}}))
+        self.assertIn("subagent", self.records())
 
-    def test_review_waits_for_registration_lock_then_checks_current_record(self):
-        self.invoke(self.event())
-        path, row = self.records()["session-123"]
-        with HOOK_API.queue_lock(self.state):
-            worker = subprocess.Popen(
-                [sys.executable, str(SCAN), str(self.repo), "--mark-reviewed",
-                 row["session_id"], "--updated-at", row["updated_at"]],
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
-            )
-            with self.assertRaises(subprocess.TimeoutExpired):
-                worker.wait(timeout=0.2)
-            updated = dict(row, updated_at="2099-01-01T00:00:00+00:00")
-            HOOK_API.write_record(path, updated)
-        _, err = worker.communicate(timeout=10)
-        self.assertEqual(worker.returncode, 2, err)
-        self.assertIn("checkpoint changed", err)
-        self.assertEqual(self.records()["session-123"][1], updated)
+    def test_concurrent_registration_preserves_all_sessions_and_deduplicates(self):
+        identities = ["shared", "first", "shared", "second"]
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            results = list(executor.map(lambda identity: self.invoke(self.event(identity)), identities))
+        self.assertTrue(all(result.returncode == 0 for result in results))
+        self.assertEqual(set(self.records()), {"shared", "first", "second"})
 
-    def test_registration_waits_for_review_lock_then_resets_review(self):
+    def test_registration_waits_for_review_lock_then_preserves_review(self):
         self.invoke(self.event())
-        path, row = self.records()["session-123"]
         with SCAN_API.queue_lock(self.state):
             worker = subprocess.Popen(
                 [sys.executable, str(HOOK)], stdin=subprocess.PIPE,
@@ -302,11 +258,26 @@ class HookTests(unittest.TestCase):
             worker.stdin = None
             with self.assertRaises(subprocess.TimeoutExpired):
                 worker.wait(timeout=0.2)
-            SCAN_API.write_record(path, dict(row, reviewed_at="2026-10-03T12:00:00+00:00"))
-        _, err = worker.communicate(timeout=10)
-        self.assertEqual(worker.returncode, 0, err)
-        self.assertIsNone(self.records()["session-123"][1]["reviewed_at"])
-        self.assertGreater(self.records()["session-123"][1]["updated_at"], row["updated_at"])
+            rows = self.records()
+            rows["session-123"]["reviewed_date"] = "2026-10-03"
+            SCAN_API.write_sessions(self.log, rows)
+        _, errors = worker.communicate(timeout=10)
+        self.assertEqual(worker.returncode, 0, errors)
+        self.assertEqual(self.records()["session-123"]["reviewed_date"], "2026-10-03")
+
+    def test_review_waits_for_lock_and_accepts_changed_transcript(self):
+        self.invoke(self.event())
+        with HOOK_API.queue_lock(self.state):
+            worker = subprocess.Popen(
+                [sys.executable, str(SCAN), str(self.repo), "--mark-reviewed", "session-123"],
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+            )
+            with self.assertRaises(subprocess.TimeoutExpired):
+                worker.wait(timeout=0.2)
+            self.transcript.write_text("changed while reviewer waited", encoding="utf-8")
+        _, errors = worker.communicate(timeout=10)
+        self.assertEqual(worker.returncode, 0, errors)
+        self.assertEqual(self.records()["session-123"]["reviewed_date"], datetime.date.today().isoformat())
 
 
 if __name__ == "__main__":

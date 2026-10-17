@@ -1,4 +1,7 @@
 __pycache__/
 *.pyc
-.context/sessions/
+.context/sessions.log
+.context/.sessions.lock
 .references/
+.local/
+.agents/

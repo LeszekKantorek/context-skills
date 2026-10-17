@@ -4,11 +4,14 @@
   "groupings": [
     {
       "title": "Context",
-      "description": "Apply project knowledge, gather and maintain context, and import saved sessions.",
+      "description": "Preserve, map, and maintain project knowledge, review sessions, diagnose agent behavior, and compile procedures into skills.",
       "skills": [
-        "context-gather",
-        "context-apply",
-        "context-import-sessions"
+        "context-preserve",
+        "context-review-sessions",
+        "context-map",
+        "context-maintain",
+        "context-diagnose",
+        "context-compile"
       ]
     }
   ]
