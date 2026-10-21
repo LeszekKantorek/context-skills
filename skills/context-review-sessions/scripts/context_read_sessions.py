@@ -5,45 +5,12 @@ import argparse
 import csv
 import datetime
 import json
-import os
 import stat
 import subprocess
 import sys
-import tempfile
-import time
-from contextlib import contextmanager
 from pathlib import Path
 
 FIELDS = ("session_date", "session_id", "path", "reviewed_date")
-
-
-@contextmanager
-def queue_lock(directory):
-    """Shared protocol for the independently installed hook and queue reader."""
-    with (directory / ".sessions.lock").open("a+b") as handle:
-        deadline = time.monotonic() + 1
-        while True:
-            try:
-                if os.name == "nt":
-                    import msvcrt
-                    handle.seek(0)
-                    msvcrt.locking(handle.fileno(), msvcrt.LK_NBLCK, 1)
-                else:
-                    import fcntl
-                    fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                break
-            except OSError:
-                if time.monotonic() >= deadline:
-                    raise TimeoutError("session queue is busy; retry later")
-                time.sleep(0.02)
-        try:
-            yield
-        finally:
-            if os.name == "nt":
-                handle.seek(0)
-                msvcrt.locking(handle.fileno(), msvcrt.LK_UNLCK, 1)
-            else:
-                fcntl.flock(handle, fcntl.LOCK_UN)
 
 
 def validate_row(row, source):
@@ -84,33 +51,14 @@ def read_sessions(directory):
 
 
 def write_sessions(path, sessions):
-    """Write the log atomically, retrying one failed write under the caller's lock."""
+    """Write the session log."""
     for row in sessions.values():
         validate_row(row, path)
-    for attempt in range(2):
-        try:
-            write_sessions_once(path, sessions)
-            return
-        except OSError:
-            if attempt == 1:
-                raise
-            time.sleep(0.05)
-
-
-def write_sessions_once(path, sessions):
-    temporary = None
-    try:
-        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", newline="", dir=path.parent,
-                                         suffix=".tmp", delete=False) as handle:
-            temporary = Path(handle.name)
-            writer = csv.writer(handle, lineterminator="\n")
-            writer.writerow(FIELDS)
-            for row in sessions.values():
-                writer.writerow([row[field] for field in FIELDS])
-        os.replace(temporary, path)
-    finally:
-        if temporary is not None:
-            temporary.unlink(missing_ok=True)
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.writer(handle, lineterminator="\n")
+        writer.writerow(FIELDS)
+        for row in sessions.values():
+            writer.writerow([row[field] for field in FIELDS])
 
 
 def inventory(directory, session_ids=None):
@@ -119,25 +67,24 @@ def inventory(directory, session_ids=None):
             raise ValueError("session is not in the queue")
         return {}
     if session_ids is None:
-        # The complete log is replaced atomically; listing needs no writer lock.
+        # Listing does not modify the log.
         return read_sessions(directory)
-    with queue_lock(directory):
-        sessions = read_sessions(directory)
-        selected = []
-        for session_id in dict.fromkeys(session_ids):
-            if session_id not in sessions:
-                raise ValueError("session is not in the queue: " + session_id)
-            row = sessions[session_id]
-            if not Path(row["path"]).is_file():
-                raise ValueError("session transcript is unavailable: " + session_id)
-            if not row["reviewed_date"]:
-                selected.append(row)
-        if selected:
-            review_date = datetime.date.today().isoformat()
-            for row in selected:
-                row["reviewed_date"] = review_date
-            write_sessions(directory / "sessions.log", sessions)
-        return sessions
+    sessions = read_sessions(directory)
+    selected = []
+    for session_id in dict.fromkeys(session_ids):
+        if session_id not in sessions:
+            raise ValueError("session is not in the queue: " + session_id)
+        row = sessions[session_id]
+        if not Path(row["path"]).is_file():
+            raise ValueError("session transcript is unavailable: " + session_id)
+        if not row["reviewed_date"]:
+            selected.append(row)
+    if selected:
+        review_date = datetime.date.today().isoformat()
+        for row in selected:
+            row["reviewed_date"] = review_date
+        write_sessions(directory / "sessions.log", sessions)
+    return sessions
 
 
 def describe_session(row):

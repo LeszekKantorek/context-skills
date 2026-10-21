@@ -4,7 +4,7 @@
 
 * Copy the `.codex` directory from `integrations/codex/` into the target project.
 * Merge with existing configuration without overwriting unrelated hooks.
-* Add `.context/sessions.log` and `.context/.sessions.lock` to the project's `.gitignore`.
+* Add `.context/sessions.log` to the project's `.gitignore`.
 * Use `/hooks` in Codex to review and trust the project definitions.
 * See the [official hook documentation](https://learn.chatgpt.com/docs/hooks) for the host contract.
 
@@ -24,8 +24,8 @@
 
 | Hook | Action |
 | --- | --- |
-| `SessionStart` | Summarize the six context skills so the agent can choose one for the task. |
-| `Stop`, `Interrupt`, `PreCompact`, `SessionEnd` | Register a session through `context_register_session.py`. |
+| `SessionStart` | Summarize the six context skills and register the session when its transcript path is available. |
+| `Stop`, `Interrupt`, `PreCompact`, `SessionEnd` | Register the session when its transcript path is available. |
 
 * Registration runs synchronously. `Stop` and `PreCompact` have a five-second timeout;
   `Interrupt` and `SessionEnd` retain the host's three-second maximum.
@@ -50,15 +50,15 @@ session_date,session_id,path,reviewed_date
 * `session_id` contains the session ID. Row order does not establish identity.
 * `path` contains the absolute transcript path.
 * An empty `reviewed_date` means pending. A completed review sets today's date.
-* Repeated registration of an existing `session_id` preserves its `reviewed_date`.
+* Repeated registration of an existing `session_id` leaves its row unchanged.
 * CSV quoting preserves commas, quotes, and Unicode in paths and IDs.
-* The log contains metadata only. Exclude it and its lock file from project knowledge.
-* An event without a nonempty transcript path creates no row or context directory and does not change existing rows.
+* The log contains metadata only. Exclude it from project knowledge.
+* An event without a nonempty transcript path creates no row or context directory.
 * Empty, whitespace-only, and non-string paths count as absent.
 * A supplied path may precede the transcript file. New sessions start with an empty review date.
 
 * Only the current CSV schema is supported. There is no migration or fallback reader.
-* Existing session IDs update the same row without creating duplicates, even during concurrent registration.
+* Existing session IDs are skipped. A failed registration write is retried once after 500 ms.
 
 ## Review pending sessions
 
@@ -77,25 +77,16 @@ python /path/to/context-review-sessions/scripts/context_read_sessions.py /path/t
 ```
 
 * Listing reports `available`, `missing-file`, or `unavailable`. An empty path in the log is invalid.
-* It reads one log snapshot and transcript metadata, without reading transcript contents or creating a lock.
+* It reads one log snapshot and transcript metadata, without reading transcript contents or creating a lock file.
 * Marking checks all supplied IDs and transcript availability before saving the registry once.
 * Unknown IDs or unavailable transcripts prevent the entire update.
 * Leave missing evidence, incomplete processing, and report-only reviews pending.
 * A completed preservation pass with no new findings can still mark the sessions as reviewed.
 * Repeating a mark preserves existing review dates.
 
-## Storage guarantees
+## Storage behavior
 
-* Registration and review bookkeeping share an OS-backed `.context/.sessions.lock`.
-* Both writers read the current log under the lock and atomically replace the entire log through a temporary file.
-* Inventory listing reads the log without acquiring the writer lock.
-* After any I/O error while creating, writing, closing, or replacing the temporary file, the writer retries the full write once.
-* The retry waits 50 ms and runs under the same lock. A second failure returns an error and preserves the previous log.
-* Temporary files are removed after each attempt. Invalid data fails before writing and is not retried.
-* Git discovery and lock acquisition each have a one-second bound. Hook timeouts still apply to the complete process.
-* The lock prevents writers from discarding each other's rows or review dates.
-* Review validation compares the retained token with the current record and transcript metadata under the lock.
-* A busy queue returns an error after a bounded wait.
-* Malformed CSV, invalid dates, and duplicate session IDs return errors instead of overwriting ambiguous state.
-* The lock file remains after process exit; do not delete it while helpers are running.
+* The hook appends to `.context/sessions.log` without a separate lock file.
+* If registration fails, it retries once after 500 ms. A second failure returns an error.
+* Review bookkeeping rewrites the session log directly; do not run a review update at the same time as registration.
 * Each worktree owns its local queue; abrupt termination can prevent the final registration.
