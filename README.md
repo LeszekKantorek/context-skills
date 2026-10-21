@@ -31,7 +31,7 @@ To install in a project:
 
 1. Clone or download this repository and copy `integrations/codex/.codex/` into your project's root. Merge with any existing `.codex/` configuration, preserving unrelated hooks.
 2. Ensure Git and Python 3 are on `PATH`: `python3` on Linux/macOS, or `python` and PowerShell on Windows.
-3. Add `.context/sessions.log` and `.context/.sessions.lock` to the project's `.gitignore`.
+3. Add `.context/sessions.log` to the project's `.gitignore`.
 4. Use `/hooks` in Codex to review and trust the project hooks.
 
 Install `context-review-sessions` and `context-preserve` to process registered sessions. See the [Codex integration](integrations/codex/README.md) for details.
