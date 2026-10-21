@@ -10,7 +10,6 @@ import time
 from pathlib import Path
 
 FIELDS = ("session_date", "session_id", "path", "reviewed_date")
-REGISTER_EVENTS = {"SessionStart", "Stop", "Interrupt", "PreCompact", "SessionEnd"}
 
 
 def register(directory, session_id, transcript_path):
@@ -52,7 +51,7 @@ def main():
         event = json.load(sys.stdin)
     except (ValueError, OSError):
         return 0
-    if not isinstance(event, dict) or event.get("hook_event_name") not in REGISTER_EVENTS:
+    if not isinstance(event, dict):
         return 0
 
     session_id, cwd = event.get("session_id"), event.get("cwd")
@@ -73,7 +72,7 @@ def main():
         print("context-skills: could not register session: %s" % exc, file=sys.stderr)
         return 1
 
-    if event["hook_event_name"] in {"Stop", "PreCompact"}:
+    if event.get("hook_event_name") in {"Stop", "PreCompact"}:
         print("{}")
     return 0
 
