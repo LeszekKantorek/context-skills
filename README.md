@@ -20,7 +20,3 @@ Use the skill that fits the task; there is no required sequence.
 ```sh
 npx skills add LeszekKantorek/context-skills
 ```
-
-Choose the skills to install. Install `context-preserve` alongside `context-review-sessions`.
-
-`context-review-sessions` finds sessions directly using available session information. If it cannot locate them, it asks for an ID or a location to search. It does not track which sessions have already been reviewed.
