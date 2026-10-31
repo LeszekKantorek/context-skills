@@ -13,11 +13,12 @@ Review the selected project sessions through context-preserve and preserve their
 
 1. **Find sessions for review.**
 
-* Start with session IDs, GUIDs, and paths supplied by the user. Search available history and transcript storage for related sources.
-* Find available continuation files for each conversation. Use metadata to distinguish the main conversation, subagent work, and operation assessments.
-* Check session metadata and contents against the requested project and scope. A session can span multiple repositories.
-* If supplied information and available sources do not identify the sessions, ask the user for an ID or search location.
-* Use available sessions for review. Identify unavailable sources and unresolved matches.
+* Search session history and transcript storage, starting with the user's session IDs or paths.
+* Find all available parts of each conversation.
+* Use metadata to distinguish the main conversation, subagent work, and operation assessments.
+* Check each session against the requested project and scope, including sessions that span repositories.
+* If the search does not identify the sessions, ask the user for an ID or search location.
+* List missing sources and uncertain matches.
 
 2. **Preserve findings from the selected sessions.**
 
