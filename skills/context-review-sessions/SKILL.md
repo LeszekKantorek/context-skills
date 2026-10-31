@@ -35,9 +35,10 @@ Review the selected project sessions through context-preserve and preserve their
 
 3. **Report review results.**
 
-* Compare the review results with the selected sources and requested scope. Distinguish completed analysis from completed preservation.
-* Include source references for findings using file paths, message IDs, or line numbers supported by the source format.
-* Use the table to report the outcome.
+* Check the review results against the selected sources and requested scope.
+* Distinguish completed analysis from completed preservation.
+* Reference each finding by file path, message ID, or line number, as supported by the source format.
+* Report the outcome using the table.
 
 | Outcome | Report |
 | --- | --- |
@@ -46,4 +47,4 @@ Review the selected project sessions through context-preserve and preserve their
 | No new findings | Reviewed scope and that result |
 | Incomplete review | Missing sources or unfinished work, reasons, and effects on conclusions |
 
-* If outcomes differ across sessions, report each affected scope separately.
+* If session outcomes differ, report each affected scope separately.
