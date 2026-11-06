@@ -3,5 +3,29 @@
   "name": "context-skills",
   "version": "1.0.0",
   "description": "Preserve, retrieve, organize, and review project knowledge with reusable agent skills.",
-  "repository": "https://github.com/LeszekKantorek/context-skills"
+  "author": {
+    "name": "Leszek Kantorek",
+    "url": "https://github.com/LeszekKantorek"
+  },
+  "homepage": "https://github.com/LeszekKantorek/context-skills#readme",
+  "repository": "https://github.com/LeszekKantorek/context-skills",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "knowledge-management",
+    "context-management",
+    "documentation"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Context Skills",
+        "shortDescription": "Preserve, retrieve, and organize project knowledge.",
+        "longDescription": "Preserve decisions and findings with their rationale and evidence. Find relevant sources, map and maintain project knowledge, review past sessions, investigate agent mistakes, and turn established procedures into reusable skills.",
+        "developerName": "Leszek Kantorek",
+        "category": "Productivity",
+        "websiteURL": "https://github.com/LeszekKantorek/context-skills"
+      }
+    }
+  }
 }
