@@ -4,11 +4,12 @@
   "groupings": [
     {
       "title": "Context",
-      "description": "Preserve, map, and maintain project knowledge, review sessions, diagnose agent behavior, and compile procedures into skills.",
+      "description": "Preserve, map, retrieve, and maintain project knowledge, review sessions, diagnose agent behavior, and compile procedures into skills.",
       "skills": [
         "context-preserve",
         "context-review-sessions",
         "context-map",
+        "context-retrieve",
         "context-maintain",
         "context-diagnose",
         "context-compile"
