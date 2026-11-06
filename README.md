@@ -1,5 +1,7 @@
 # context-skills
 
+Version: 1.0.0
+
 Skills for AI agents to preserve project knowledge, organize it, and make it useful in future work. They work with your existing documents, decisions, and procedures.
 
 ## Skills

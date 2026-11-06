@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "context-skills",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Preserve, retrieve, organize, and review project knowledge with reusable agent skills.",
   "repository": "https://github.com/LeszekKantorek/context-skills"
 }
