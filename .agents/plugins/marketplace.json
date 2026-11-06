@@ -1,0 +1,20 @@
+{
+  "name": "context-skills",
+  "interface": {
+    "displayName": "Context Skills"
+  },
+  "plugins": [
+    {
+      "name": "context-skills",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
