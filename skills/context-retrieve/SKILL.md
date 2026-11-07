@@ -1,6 +1,8 @@
 ---
 name: context-retrieve
 description: Use to locate project sources relevant to a question before reasoning or planning.
+metadata:
+  version: "1.1.0"
 ---
 
 # Retrieve Project Sources

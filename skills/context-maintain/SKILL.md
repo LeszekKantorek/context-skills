@@ -1,6 +1,8 @@
 ---
 name: context-maintain
 description: Use to review and improve the coherence and organization of existing project knowledge.
+metadata:
+  version: "1.1.0"
 ---
 
 # Maintain Project Context
