@@ -2,7 +2,7 @@
 name: context-search
 description: Use to locate project sources relevant to a question before reasoning or planning.
 metadata:
-  version: "2026.11.11.1740"
+  version: "20261111.1740.0"
 ---
 
 # Retrieve Project Sources

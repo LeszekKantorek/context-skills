@@ -2,7 +2,7 @@
 name: context-diagnose
 description: Use to diagnose agent mistakes or behavior flagged by user corrections and check targeted improvements.
 metadata:
-  version: "2026.11.11.1740"
+  version: "20261111.1740.0"
 ---
 
 # Diagnose Agent Behavior
