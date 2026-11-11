@@ -1,8 +1,8 @@
 ---
-name: context-retrieve
+name: context-search
 description: Use to locate project sources relevant to a question before reasoning or planning.
 metadata:
-  version: "1.1.0"
+  version: "20261111.1740.0"
 ---
 
 # Retrieve Project Sources
@@ -19,7 +19,17 @@ Example question:
 
 Locate relevant sources and return verified references with brief descriptions and missing information identified.
 
-## Steps
+## Execution
+
+1. As the lead agent, gather the original question, the search scope, and any known paths or constraints.
+2. Delegate the search to a dedicated subagent. Include the inputs from step 1.
+
+   If delegation is unavailable, report that `context-search` requires a subagent.
+
+3. As the subagent, follow the [search procedure](#search-procedure) within the supplied scope.
+4. Return the verified source locations and any gaps to the lead agent.
+
+## Search Procedure
 
 1. **Extract search terms from the question.**
 
