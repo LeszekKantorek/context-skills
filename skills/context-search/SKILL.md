@@ -1,78 +1,78 @@
 ---
 name: context-search
-description: Use to locate and verify project sources relevant to a question before reasoning or planning. Search documentation, code, configuration, and other project text files.
+description: Use to locate project sources relevant to a question before reasoning or planning.
 metadata:
-  version: "1.1.0"
+  version: "2026.11.11.1740"
 ---
 
-# Search Project Sources
+# Retrieve Project Sources
+
+Ask where to find information about a specific subject, decision, or problem.
+Describe the information you need and include known names, references, or constraints.
+
+Example question:
+
+> Where can I find the reasons for changing the phase two delivery date and confirmation of its approval?
+> Locate the decision record and the revised schedule associated with REV-03.
 
 ## Goal
 
-Locate relevant sources and return verified references with brief descriptions and any information gaps.
+Locate relevant sources and return verified references with brief descriptions and missing information identified.
 
-When choosing how to run this skill, prefer a dedicated subagent if the question is likely to require several searches across files, following references, or substantial intermediate output. Give it the original question and search scope. Run the same procedure directly for simple lookups or when delegation is unavailable.
+## Execution
 
-## Steps
+1. As the lead agent, gather the original question, the search scope, and any known paths or constraints.
+2. Delegate the search to a dedicated subagent. Include the inputs from step 1.
 
-### 1. Extract search terms
+   If delegation is unavailable, report that `context-search` requires a subagent.
 
-Use the question to choose starting points and determine what a relevant source must establish.
+3. As the subagent, follow the [search procedure](#search-procedure) within the supplied scope.
+4. Return the verified source locations and any gaps to the lead agent.
 
-| Identify | What to look for | Example |
+## Search Procedure
+
+1. **Extract search terms from the question.**
+
+* Use the questions below to derive search phrases, identifiers, and simple synonyms.
+
+| Question | Identify | Example |
 | --- | --- | --- |
-| Subject | The main component, process, concept, or decision. | `delivery date` |
-| Aspects | The properties, actions, relationships, reasons, and constraints that define what is requested. Include scope qualifiers such as dates and versions. | Why the `phase two` date changed and whether it was `approved`. |
-| Exact references | Supplied identifiers, filenames, paths, symbols, versions, or quoted text. Preserve their spelling. | `REV-03` |
+| What does the question concern? | Named subjects that provide starting points for the search | A question about a delivery date suggests `delivery date`, rather than the entire project name. |
+| What does the requesting agent need to know about that subject? | Properties, actions, relationships, or reasons that distinguish the requested information | A question about why a date changed suggests `date change`, `reason`, and `decision`. |
+| What limits the question's scope? | Conditions, dates, versions, or other qualifications supplied in the question | A question about an approved date for phase two suggests `approved` and `phase two`. |
+| Which exact references does the question provide? | Names, identifiers, quotations, or paths to search literally | A supplied `REV-03` reference provides an exact search term. |
+| What other wording expresses the same subject? | Alternative phrases that preserve the meaning of the question | `date change` and `changed date` provide alternative searches for the same subject. |
+| What would a relevant source establish? | The contribution needed from a source | A decision record can explain a chosen date. A completion record can show whether the date was met. |
 
-Group alternative wording by aspect. Use the groups to choose and refine searches. Evidence for different aspects can appear in different sections or files. Preserve the original qualifications when checking coverage. Keep the term analysis internal.
+* Extend the questions to cover other details that affect source selection.
+* Prioritize exact references supplied in the question. Use descriptive terms to locate material that the question does not name.
 
-### 2. Grep & Follow relevant sources
+2. **Grep & Follow relevant sources.**
 
-* Use project maps, indexes, and known paths to scope the search. Start with exact references or distinctive subject terms. Use literal matching when the pattern is plain text. If `rg` is unavailable, use another search tool that can locate matching text and line numbers.
-* Search related expressions as alternatives within a relevant scope. Use another aspect to narrow or redirect the search as evidence warrants.
+* Use existing project maps, indexes, and headings to select sources.
+* Use the table to select the next action from the findings.
 
-For a question about SimConnect integration testing procedures, start with `SimConnect` and inspect the matching sources. If those sources point to `docs/testing/`, search there for wording used to describe tests.
+| Finding | Action | Example |
+| --- | --- | --- |
+| Matches concern the subject but differ in scope | Add a qualification from the question to narrow the search. | Add `phase two` to distinguish its delivery date from other phases. |
+| The selected sources contain no matches | Try alternative wording from Step 1, then expand to related sources through maps and references. | Search `changed date` as well as `date change`, then inspect the decisions index. |
+| A source supplies a relevant name or reference | Follow the reference or search the supplied name. | A schedule cites decision `D-17` as the reason for a changed date. |
+| A section answers only part of the question | Retain the relevant section and search for the missing information. | A decision explains the changed date but leaves approval status unresolved. |
+| A match provides neither requested information nor a relevant reference | Exclude the match from further reading. | A meeting agenda lists the delivery date but contains no discussion or reference to the change. |
+| A source cannot be opened or read | Retain its location and the access problem. Continue through other available sources. | An index points to a decision record that is unavailable. |
 
-```sh
-rg -n -F -e 'SimConnect' docs/
-rg -n -F -i -e 'testing' -e 'validation' -e 'tests' docs/testing/
-```
+* Use gaps in the selected sources to choose further searches, including cases not covered by the table.
+* Continue when the sources cover the requested information or the available terms and references provide no further relevant leads.
 
-A repository-wide OR query combining `SimConnect`, `testing`, `integration`, and `procedure` also matches unrelated tests and procedures. Use the filename, path, and enclosing heading to check whether a section concerns the subject, even when the matching line omits it.
+3. **Report verified source locations.**
 
-| Option | Use |
-| --- | --- |
-| `-n` | Show line numbers. |
-| `-F` | Match literal text. |
-| `-i` | Match regardless of case when spelling case is immaterial. |
-| `-e` | Supply a pattern. Repeat for alternatives or use it when a pattern starts with `-`. |
-| `-g` | Include or exclude paths by glob. |
-| `--hidden` | Include hidden files and directories, subject to ignore rules. |
-| `--no-ignore` | Bypass ignore rules when relevant material is ignored. |
-
-`rg` normally respects ignore rules and skips hidden paths during recursive searches. When a project map points to a hidden directory such as `.context/` or `.agents/`, scope the search to that directory and use `--hidden` as needed. Use `--no-ignore` only within a specific path when an ignore rule hides relevant material.
-
-Open promising matches and read the surrounding section. Follow references that could establish a requested fact, including links to headings and references elsewhere in the source.
-
-| Finding | Next action |
-| --- | --- |
-| Matches concern the subject but differ in scope | Narrow the search using a qualification from the question. |
-| The selected sources contain no matches | Try alternative wording, then expand through related maps and references. |
-| A source supplies a relevant term or reference | Follow it or use the term in another search if it helps answer the question. |
-| A section answers only part of the question | Keep the section and use the remaining gap to choose the next search. |
-| A match provides neither requested information nor a relevant lead | Move on to other matches. |
-| A source cannot be opened | Record its location and the access problem. Check other available sources. |
-
-Compare the verified findings with the original question. Continue while a useful lead could resolve a gap. Stop once the sources cover the request or the available leads are exhausted.
-
-### 3. Report verified source locations
-
-Return a compact message with project-relative paths, exact line ranges, and brief descriptions of what each source establishes. Check every range in the opened source before reporting it. Include `Not found` for unresolved information and `Unavailable` for relevant sources that could not be read. Omit either entry when it does not apply.
+* Return the report as a message following this fictional example:
 
 ```text
-- decisions/delivery-date.md:12-19 - Reasons for changing the phase two delivery date.
-- plans/schedule.md:30-38 - Revised dates and the reference to decision D-17.
+- decisions/delivery-date.md:12-19 — Reasons for changing the phase two delivery date.
+- plans/schedule.md:30-38 — Revised dates and the reference to decision D-17.
 Not found: confirmation that the revised date was approved.
-Unavailable: records/meeting-notes.md - access denied.
+Unavailable: records/meeting-notes.md — access denied.
 ```
+
+* Verify project-relative paths and exact line ranges against the opened sources.

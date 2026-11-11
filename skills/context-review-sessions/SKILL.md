@@ -2,7 +2,7 @@
 name: context-review-sessions
 description: Use to review project sessions through context-preserve for analysis or preservation of findings.
 metadata:
-  version: "1.1.0"
+  version: "2026.11.11.1740"
 ---
 
 # Review Project Sessions
