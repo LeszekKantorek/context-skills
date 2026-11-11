@@ -9,7 +9,7 @@
         "context-preserve",
         "context-review-sessions",
         "context-map",
-        "context-retrieve",
+        "context-search",
         "context-maintain",
         "context-diagnose",
         "context-compile"
